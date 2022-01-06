@@ -32,7 +32,7 @@ func Init() *gorm.DB {
 	}
 
 	db.AutoMigrate(&model.Book{})
-	db.AutoMigrate(&model.Person{})
+	db.AutoMigrate(&model.Author{})
 
 	return db
 }
