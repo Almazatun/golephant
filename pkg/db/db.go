@@ -33,6 +33,7 @@ func Init() *gorm.DB {
 
 	db.AutoMigrate(&model.Book{})
 	db.AutoMigrate(&model.Author{})
+	db.AutoMigrate(&model.User{})
 
 	return db
 }
