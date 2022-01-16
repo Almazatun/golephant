@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	usecase "github.com/Almazatun/golephant/domain"
 	handler "github.com/Almazatun/golephant/handler"
 	repository "github.com/Almazatun/golephant/infrastucture"
 	router "github.com/Almazatun/golephant/router"
@@ -19,10 +20,11 @@ func main() {
 	DB := db.Init()
 
 	userRepository := repository.InitUserRepo(DB)
-	userHandler := handler.InitUserHandler(userRepository)
+	userUseCase := usecase.InitUserUseCase(userRepository)
+	userHandler := handler.InitUserHandler(userUseCase)
 
 	handlers := router.Handler{
-		User: userHandler,
+		UserHandler: userHandler,
 	}
 
 	router := router.NewRouter(handlers)

@@ -4,26 +4,26 @@ import (
 	"encoding/json"
 	"net/http"
 
-	repository "github.com/Almazatun/golephant/infrastucture"
+	usecase "github.com/Almazatun/golephant/domain"
 )
 
 type handler struct {
-	userRepo repository.UserRepo
+	userUseCase usecase.UserUseCase
 }
 
 type UserHandler interface {
 	CreateUser(w http.ResponseWriter, r *http.Request)
 }
 
-func InitUserHandler(userRepo repository.UserRepo) UserHandler {
+func InitUserHandler(userUseCase usecase.UserUseCase) UserHandler {
 	return &handler{
-		userRepo: userRepo,
+		userUseCase: userUseCase,
 	}
 }
 
 func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	// ctx := r.Context()
-	h.userRepo.CreateUser()
+	h.userUseCase.CreateUser()
 	// fmt.Println(ctx)
 }
 
