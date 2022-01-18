@@ -1,9 +1,8 @@
 package usecase
 
 import (
-	"fmt"
-
 	repository "github.com/Almazatun/golephant/infrastucture"
+	"github.com/Almazatun/golephant/infrastucture/model"
 )
 
 type userUseCase struct {
@@ -11,7 +10,7 @@ type userUseCase struct {
 }
 
 type UserUseCase interface {
-	CreateUser()
+	CreateUser(createUserInput *model.User) (user *model.User, err error)
 }
 
 func InitUserUseCase(userRepo repository.UserRepo) UserUseCase {
@@ -20,7 +19,12 @@ func InitUserUseCase(userRepo repository.UserRepo) UserUseCase {
 	}
 }
 
-func (uc *userUseCase) CreateUser() {
-	fmt.Println("CreateUser UseCase")
-	uc.userRepo.Save()
+func (uc *userUseCase) CreateUser(createUserInput *model.User) (user *model.User, err error) {
+	userDB, err := uc.userRepo.Save(createUserInput)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return userDB, nil
 }

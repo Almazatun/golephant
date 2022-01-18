@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	usecase "github.com/Almazatun/golephant/domain"
+	"github.com/Almazatun/golephant/infrastucture/model"
 )
 
 type handler struct {
@@ -22,9 +23,22 @@ func InitUserHandler(userUseCase usecase.UserUseCase) UserHandler {
 }
 
 func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
-	// ctx := r.Context()
-	h.userUseCase.CreateUser()
-	// fmt.Println(ctx)
+	var createUserInput *model.User
+	err := json.NewDecoder(r.Body).Decode(&createUserInput)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	user, err := h.userUseCase.CreateUser(createUserInput)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(user)
 }
 
 func HelloWord(w http.ResponseWriter, r *http.Request) {
