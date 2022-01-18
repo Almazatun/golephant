@@ -13,7 +13,7 @@ type UserUseCase interface {
 	CreateUser(createUserInput *model.User) (user *model.User, err error)
 }
 
-func InitUserUseCase(userRepo repository.UserRepo) UserUseCase {
+func NewUserUseCase(userRepo repository.UserRepo) UserUseCase {
 	return &userUseCase{
 		userRepo: userRepo,
 	}

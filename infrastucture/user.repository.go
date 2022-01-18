@@ -18,7 +18,7 @@ type UserRepo interface {
 	FindByEmail(email string) (err error)
 }
 
-func InitUserRepo(db *gorm.DB) UserRepo {
+func NewUserRepo(db *gorm.DB) UserRepo {
 	return &userRepository{db: db}
 }
 

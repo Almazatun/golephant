@@ -16,7 +16,7 @@ type UserHandler interface {
 	CreateUser(w http.ResponseWriter, r *http.Request)
 }
 
-func InitUserHandler(userUseCase usecase.UserUseCase) UserHandler {
+func NewUserHandler(userUseCase usecase.UserUseCase) UserHandler {
 	return &handler{
 		userUseCase: userUseCase,
 	}
