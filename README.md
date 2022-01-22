@@ -23,7 +23,7 @@ $ ./golephant
 
 ```bash
 # Build and Up
-$ docker-compose up --build -t golephant .
+$ docker-compose up --build -d
 ```
 
 
