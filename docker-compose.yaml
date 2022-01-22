@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  postgres:
+    container_name: gl_postgres
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}  
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+      - DATABASE_HOST=${DB_HOST}
+    ports:
+      - '3001:5432'
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+  backend:
+    container_name: gl_backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: 
+     - .env
+      
+    depends_on:
+      - postgres
+    networks:
+      - default
+    ports:
+    - "3000:3000"
+volumes:
+  database_postgres:
+
+networks:
+  gl_postgres:
+    driver: bridge
