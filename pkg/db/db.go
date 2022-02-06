@@ -31,8 +31,9 @@ func Init() *gorm.DB {
 		fmt.Println("Successfully connected to databases")
 	}
 
-	db.AutoMigrate(&model.Book{})
-	db.AutoMigrate(&model.Author{})
+	db.AutoMigrate(&model.Company{})
+	db.AutoMigrate(&model.Position{})
+	db.AutoMigrate(&model.TypePosition{})
 	db.AutoMigrate(&model.User{})
 
 	return db

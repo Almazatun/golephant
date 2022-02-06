@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	loggerinfo "github.com/Almazatun/golephant/common/loggerInfo"
 	usecase "github.com/Almazatun/golephant/domain"
 	"github.com/Almazatun/golephant/infrastucture/model"
 )
@@ -34,7 +35,8 @@ func (h *handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	user, err := h.userUseCase.CreateUser(createUserInput)
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		loggerinfo.LoggerError(err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
