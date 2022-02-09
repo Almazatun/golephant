@@ -13,16 +13,15 @@ type userRepository struct {
 }
 
 type UserRepo interface {
-	// CreateUser(ctx context.Context, user *model.User) (err error)
-	Save(user *model.User) (createdUser *model.User, err error)
-	FindByEmail(email string) (err error)
+	Save(user *model.User) (registerUser *model.User, err error)
+	FindByEmail(email string) (user *model.User, err error)
 }
 
 func NewUserRepo(db *gorm.DB) UserRepo {
 	return &userRepository{db: db}
 }
 
-func (r *userRepository) Save(user *model.User) (createdUser *model.User, err error) {
+func (r *userRepository) Save(user *model.User) (registerUser *model.User, err error) {
 	createUser := &model.User{
 		Username: user.Username,
 		Email:    user.Email,
@@ -40,10 +39,9 @@ func (r *userRepository) Save(user *model.User) (createdUser *model.User, err er
 	return createUser, nil
 }
 
-func (r *userRepository) FindByEmail(email string) (err error) {
-	user := r.db.First(&model.User{}, "email = ?", email)
-
+func (r *userRepository) FindByEmail(email string) (userDB *model.User, err error) {
+	user := r.db.First(&model.User{})
 	fmt.Println(user)
 
-	return nil
+	return userDB, nil
 }

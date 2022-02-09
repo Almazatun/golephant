@@ -13,7 +13,8 @@ func NewRouter(h Handler) *mux.Router {
 	router := mux.NewRouter()
 
 	user := router.PathPrefix("/user").Subrouter()
-	user.HandleFunc("/register", h.UserHandler.CreateUser).Methods("POST")
+	user.HandleFunc("/register", h.UserHandler.RegisterUser).Methods("POST")
+	user.HandleFunc("/login", h.UserHandler.LogIn).Methods("POST")
 
 	router.HandleFunc("/helloWorld", handler.HelloWord).Methods("GET")
 

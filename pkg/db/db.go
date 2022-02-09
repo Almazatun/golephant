@@ -33,7 +33,7 @@ func Init() *gorm.DB {
 
 	db.AutoMigrate(&model.Company{})
 	db.AutoMigrate(&model.Position{})
-	db.AutoMigrate(&model.TypePosition{})
+	db.AutoMigrate(&model.PositionType{})
 	db.AutoMigrate(&model.User{})
 
 	return db
