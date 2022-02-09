@@ -13,15 +13,6 @@ go mod download
 ### Starting the application
 
 ```bash
-# build
-$ go build
-# run
-$ ./golephant
-```
-
-### Starting the application using Docker-Compose
-
-```bash
 # Build and Up
 $ docker-compose up --build -d
 ```
