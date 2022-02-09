@@ -10,5 +10,5 @@ type Position struct {
 	Description      string         `json:"name" gorm:"type:varchar(1000)"`
 	Requirements     pq.StringArray `gorm:"type:text[]" validate:"required"`
 	Responsibilities pq.StringArray `gorm:"type:text[]" validate:"required"`
-	Type             TypePosition   `gorm:"foreignKey:TypePositionID"`
+	Type             PositionType   `gorm:"foreignKey:PositionTypeID"`
 }
