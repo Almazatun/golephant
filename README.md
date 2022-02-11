@@ -17,5 +17,9 @@ go mod download
 $ docker-compose up --build -d
 ```
 
+<img src="./assets/uml-golephant.png">
+
+
+
 
 
