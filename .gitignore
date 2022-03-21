@@ -1,2 +1,9 @@
+# compiled output
 golephant
+
+
+# IDEs and editors
+/.idea
+
+
 .env
