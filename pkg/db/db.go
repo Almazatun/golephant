@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/Almazatun/golephant/infrastucture/model"
+	entity "github.com/Almazatun/golephant/infrastucture/entity"
 	"github.com/jinzhu/gorm"
 )
 
@@ -31,10 +31,11 @@ func Init() *gorm.DB {
 		fmt.Println("Successfully connected to databases")
 	}
 
-	db.AutoMigrate(&model.Company{})
-	db.AutoMigrate(&model.Position{})
-	db.AutoMigrate(&model.PositionType{})
-	db.AutoMigrate(&model.User{})
+	db.AutoMigrate(&entity.User{}, &entity.Company{}, &entity.Position{}, &entity.PositionType{}, &entity.UserEducation{}, &entity.UserExperience{})
+	db.Model(&entity.UserEducation{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
+	db.Model(&entity.UserExperience{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
+	db.Model(&entity.CompanyAddress{}).AddForeignKey("company_id", "companys(id)", "CASCADE", "CASCADE")
+	db.Model(&entity.PositionType{}).AddForeignKey("position_id", "positions(id)", "CASCADE", "CASCADE")
 
 	return db
 }
