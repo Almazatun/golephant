@@ -31,11 +31,18 @@ func Init() *gorm.DB {
 		fmt.Println("Successfully connected to databases")
 	}
 
-	db.AutoMigrate(&entity.User{}, &entity.Company{}, &entity.Position{}, &entity.PositionType{}, &entity.UserEducation{}, &entity.UserExperience{})
-	db.Model(&entity.UserEducation{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
-	db.Model(&entity.UserExperience{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
-	db.Model(&entity.CompanyAddress{}).AddForeignKey("company_id", "companys(id)", "CASCADE", "CASCADE")
-	db.Model(&entity.PositionType{}).AddForeignKey("position_id", "positions(id)", "CASCADE", "CASCADE")
+	db.AutoMigrate(&entity.User{})
+	db.AutoMigrate(&entity.Company{})
+	db.AutoMigrate(&entity.CompanyAddress{})
+	db.AutoMigrate(&entity.Position{})
+	db.AutoMigrate(&entity.PositionType{})
+	db.AutoMigrate(&entity.UserEducation{})
+	db.AutoMigrate(&entity.UserExperience{})
+
+	db.Model(&entity.UserEducation{}).AddForeignKey("user_id", "users(user_id)", "CASCADE", "CASCADE")
+	db.Model(&entity.UserExperience{}).AddForeignKey("user_id", "users(user_id)", "CASCADE", "CASCADE")
+	db.Model(&entity.CompanyAddress{}).AddForeignKey("company_id", "companies(company_id)", "CASCADE", "CASCADE")
+	db.Model(&entity.Position{}).AddForeignKey("position_type_id", "position_types(position_type_id)", "CASCADE", "CASCADE")
 
 	return db
 }

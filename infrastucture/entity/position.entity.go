@@ -6,10 +6,10 @@ import (
 )
 
 type Position struct {
-	Id               uuid.UUID      `json:"id" gorm:"type:uuid;default:uuid_generate_v4()"`
+	PositionID       uuid.UUID      `json:"position_id" gorm:"type:uuid;default:uuid_generate_v4();primary_key"`
 	Description      string         `json:"name" gorm:"type:varchar(1000)"`
 	Requirements     pq.StringArray `json:"requirements" gorm:"type:text[]" validate:"required"`
 	Responsibilities pq.StringArray `json:"responsibilities" gorm:"type:text[]" validate:"required"`
-	PositionTypeID   *uuid.UUID
+	PositionTypeID   *uuid.UUID     `json:"position_type_id"`
 	PositionType     PositionType
 }
