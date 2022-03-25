@@ -61,7 +61,7 @@ func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	tokenString, err := h.userUseCase.LogIn(logInInput)
 
 	if err != nil {
-		addHttpBodyResponse(w, err)
+		httpResponseBody(w, err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -74,7 +74,7 @@ func HelloWord(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("Hello World")
 }
 
-func addHttpBodyResponse(w http.ResponseWriter, err error) {
+func httpResponseBody(w http.ResponseWriter, err error) {
 	resp := make(map[string]string)
 
 	w.WriteHeader(http.StatusBadRequest)
