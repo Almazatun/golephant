@@ -5,6 +5,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 
+	error_message "github.com/Almazatun/golephant/common/error-message"
 	entity "github.com/Almazatun/golephant/infrastucture/entity"
 )
 
@@ -47,7 +48,7 @@ func (r *userRepository) FindByEmail(email string) (userDB *entity.User, err err
 	dbErr := result.Error
 
 	if dbErr != nil {
-		err := errors.New("User not found")
+		err := errors.New(error_message.USER_NOT_FOUND)
 
 		return nil, err
 	}
