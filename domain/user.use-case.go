@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"errors"
-	"os"
 	"time"
 
 	"github.com/Almazatun/golephant/infrastucture/entity"
@@ -10,6 +9,8 @@ import (
 	"github.com/Almazatun/golephant/util"
 	"github.com/dgrijalva/jwt-go"
 
+	common "github.com/Almazatun/golephant/common"
+	error_message "github.com/Almazatun/golephant/common/error-message"
 	repository "github.com/Almazatun/golephant/infrastucture"
 	"gopkg.in/go-playground/validator.v9"
 )
@@ -20,21 +21,18 @@ type userUseCase struct {
 
 type UserUseCase interface {
 	RegisterUser(registerUserInput *entity.User) (user *entity.User, err error)
-	LogIn(logInInput input.LogIn) (str string, err error)
-}
-
-var secretKey = os.Getenv("JWT_SECRET_KEY")
-var jwtKey = []byte(secretKey)
-
-type Claims struct {
-	UserEmail string `json:"user_email"`
-	jwt.StandardClaims
+	LogIn(logInInput input.LogIn) (resLogIn *ResLogIn, err error)
 }
 
 func NewUserUseCase(userRepo repository.UserRepo) UserUseCase {
 	return &userUseCase{
 		userRepo: userRepo,
 	}
+}
+
+type ResLogIn struct {
+	Token             string
+	ExperationTimeJWT time.Time
 }
 
 func (uc *userUseCase) RegisterUser(registerUserInput *entity.User) (user *entity.User, err error) {
@@ -66,29 +64,29 @@ func (uc *userUseCase) RegisterUser(registerUserInput *entity.User) (user *entit
 	return userDB, nil
 }
 
-func (uc *userUseCase) LogIn(logInInput input.LogIn) (str string, err error) {
+func (uc *userUseCase) LogIn(logInInput input.LogIn) (resLogIn *ResLogIn, err error) {
 	v := validator.New()
 	e := v.Struct(logInInput)
 
 	if e != nil {
-		return "", e
+		return nil, e
 	}
 
 	user, err := uc.userRepo.FindByEmail(logInInput.Email)
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	isCorrectPassword := util.CheckPassword(logInInput.Password, user.Password)
 
 	if !isCorrectPassword {
-		newErr := errors.New("Incorrect password")
-		return "", newErr
+		newErr := errors.New(error_message.INCCORECT_PASSWORD)
+		return nil, newErr
 	}
 
 	experationTimeJWT := time.Now().Add(time.Minute * 60)
-	claims := Claims{
+	claims := common.Claims{
 		UserEmail: user.Email,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: experationTimeJWT.Unix(),
@@ -96,11 +94,11 @@ func (uc *userUseCase) LogIn(logInInput input.LogIn) (str string, err error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(jwtKey)
+	tokenString, err := token.SignedString(common.JWT_KEY_BYTE)
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return tokenString, nil
+	return &ResLogIn{Token: tokenString, ExperationTimeJWT: experationTimeJWT}, nil
 }
