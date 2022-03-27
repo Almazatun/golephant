@@ -20,8 +20,9 @@ type userUseCase struct {
 }
 
 type UserUseCase interface {
-	RegisterUser(registerUserInput *entity.User) (user *entity.User, err error)
-	LogIn(logInInput input.LogIn) (resLogIn *ResLogIn, err error)
+	RegisterUser(registerUserInput entity.User) (user *entity.User, err error)
+	LogIn(logInInput input.LogInInput) (resLogIn *ResLogIn, err error)
+	UpdateUserData(userId string, updateUserDataInput input.UpdateUserDataInput) (user *entity.User, err error)
 }
 
 func NewUserUseCase(userRepo repository.UserRepo) UserUseCase {
@@ -35,7 +36,8 @@ type ResLogIn struct {
 	ExperationTimeJWT time.Time
 }
 
-func (uc *userUseCase) RegisterUser(registerUserInput *entity.User) (user *entity.User, err error) {
+func (uc *userUseCase) RegisterUser(registerUserInput entity.User) (user *entity.User, err error) {
+	// Validate register user input
 	v := validator.New()
 	e := v.Struct(registerUserInput)
 
@@ -45,17 +47,18 @@ func (uc *userUseCase) RegisterUser(registerUserInput *entity.User) (user *entit
 
 	// Hashing user password
 	hashedPassword, err := util.HashPassword(registerUserInput.Password)
+
+	if err != nil {
+		return nil, err
+	}
+
 	registerUserInput.Password = hashedPassword
 
 	now := time.Now()
 	registerUserInput.CreationTime = now
 	registerUserInput.UpdateTime = now
 
-	if err != nil {
-		return nil, err
-	}
-
-	userDB, err := uc.userRepo.Save(registerUserInput)
+	userDB, err := uc.userRepo.Create(registerUserInput)
 
 	if err != nil {
 		return nil, err
@@ -64,7 +67,8 @@ func (uc *userUseCase) RegisterUser(registerUserInput *entity.User) (user *entit
 	return userDB, nil
 }
 
-func (uc *userUseCase) LogIn(logInInput input.LogIn) (resLogIn *ResLogIn, err error) {
+func (uc *userUseCase) LogIn(logInInput input.LogInInput) (resLogIn *ResLogIn, err error) {
+	// Validate register user input
 	v := validator.New()
 	e := v.Struct(logInInput)
 
@@ -101,4 +105,71 @@ func (uc *userUseCase) LogIn(logInInput input.LogIn) (resLogIn *ResLogIn, err er
 	}
 
 	return &ResLogIn{Token: tokenString, ExperationTimeJWT: experationTimeJWT}, nil
+}
+
+func (uc *userUseCase) UpdateUserData(userId string, updateUserDataInput input.UpdateUserDataInput) (user *entity.User, err error) {
+
+	if isEmptyUpdateUserInput(updateUserDataInput) {
+		return nil, nil
+	}
+
+	userDB, err := uc.userRepo.FindById(userId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	updateUserData, err := updateUserColums(userDB, updateUserDataInput)
+
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := uc.userRepo.Update(*updateUserData)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func updateUserColums(userDB *entity.User, updateUserDataInput input.UpdateUserDataInput) (updateUserData *entity.User, err error) {
+
+	if updateUserDataInput.Age != "" {
+		userDB.Age = updateUserDataInput.Age
+	}
+
+	if updateUserDataInput.City != "" {
+		userDB.City = updateUserDataInput.City
+	}
+
+	if updateUserDataInput.Email != "" {
+		userDB.Email = updateUserDataInput.Email
+	}
+
+	if updateUserDataInput.Mobile != "" {
+		userDB.Mobile = updateUserDataInput.Mobile
+	}
+
+	if updateUserDataInput.Username != "" {
+		userDB.Username = updateUserDataInput.Username
+	}
+
+	if updateUserDataInput.Password != "" {
+		// Hashing user password
+		hashedPassword, err := util.HashPassword(updateUserDataInput.Password)
+
+		if err != nil {
+			return nil, err
+		}
+
+		userDB.Password = hashedPassword
+	}
+
+	return userDB, nil
+}
+
+func isEmptyUpdateUserInput(updateUserDataInput input.UpdateUserDataInput) bool {
+	return (input.UpdateUserDataInput{}) == updateUserDataInput
 }

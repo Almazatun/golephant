@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -13,6 +14,7 @@ import (
 	"github.com/Almazatun/golephant/infrastucture/entity"
 	"github.com/Almazatun/golephant/presentation/input"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gorilla/mux"
 )
 
 type userHandler struct {
@@ -23,6 +25,7 @@ type UserHandler interface {
 	RegisterUser(w http.ResponseWriter, r *http.Request)
 	LogIn(w http.ResponseWriter, r *http.Request)
 	AuthMe(w http.ResponseWriter, r *http.Request)
+	UpdateUserData(w http.ResponseWriter, r *http.Request)
 }
 
 func NewUserHandler(userUseCase usecase.UserUseCase) UserHandler {
@@ -40,7 +43,7 @@ func (h *userHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.userUseCase.RegisterUser(registerUserInput)
+	user, err := h.userUseCase.RegisterUser(*registerUserInput)
 
 	if err != nil {
 		loggerinfo.LoggerError(err)
@@ -52,7 +55,7 @@ func (h *userHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
-	var logInInput input.LogIn
+	var logInInput input.LogInInput
 	err := json.NewDecoder(r.Body).Decode(&logInInput)
 
 	if err != nil {
@@ -121,6 +124,29 @@ func (h *userHandler) AuthMe(w http.ResponseWriter, r *http.Request) {
 	// w.Write([]byte(fmt.Sprintf("You are successfully authorized: =>, %s", claims)))
 	json.NewEncoder(w).Encode(claims)
 
+}
+
+func (h *userHandler) UpdateUserData(w http.ResponseWriter, r *http.Request) {
+	var updateUserDataInput input.UpdateUserDataInput
+	params := mux.Vars(r)
+
+	err := json.NewDecoder(r.Body).Decode(&updateUserDataInput)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println(params["id"])
+
+	res, err := h.userUseCase.UpdateUserData(params["id"], updateUserDataInput)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
 }
 
 func HelloWord(w http.ResponseWriter, r *http.Request) {
