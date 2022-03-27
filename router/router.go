@@ -16,6 +16,7 @@ func NewRouter(h Handler) *mux.Router {
 	user.HandleFunc("/register", h.UserHandler.RegisterUser).Methods("POST")
 	user.HandleFunc("/login", h.UserHandler.LogIn).Methods("POST")
 	user.HandleFunc("/authMe", h.UserHandler.AuthMe).Methods("POST")
+	user.HandleFunc("/{id}", h.UserHandler.UpdateUserData).Methods("PATCH")
 
 	router.HandleFunc("/helloWorld", handler.HelloWord).Methods("GET")
 
