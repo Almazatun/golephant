@@ -32,6 +32,7 @@ func Init() *gorm.DB {
 	}
 
 	db.AutoMigrate(&entity.User{})
+	db.AutoMigrate(&entity.Resume{})
 	db.AutoMigrate(&entity.Company{})
 	db.AutoMigrate(&entity.CompanyAddress{})
 	db.AutoMigrate(&entity.Position{})
@@ -39,10 +40,11 @@ func Init() *gorm.DB {
 	db.AutoMigrate(&entity.UserEducation{})
 	db.AutoMigrate(&entity.UserExperience{})
 
-	db.Model(&entity.UserEducation{}).AddForeignKey("user_id", "users(user_id)", "CASCADE", "CASCADE")
-	db.Model(&entity.UserExperience{}).AddForeignKey("user_id", "users(user_id)", "CASCADE", "CASCADE")
+	db.Model(&entity.Resume{}).AddForeignKey("user_id", "users(user_id)", "CASCADE", "CASCADE")
 	db.Model(&entity.CompanyAddress{}).AddForeignKey("company_id", "companies(company_id)", "CASCADE", "CASCADE")
 	db.Model(&entity.Position{}).AddForeignKey("position_type_id", "position_types(position_type_id)", "CASCADE", "CASCADE")
+	db.Model(&entity.UserEducation{}).AddForeignKey("resume_id", "resumes(resume_id)", "CASCADE", "CASCADE")
+	db.Model(&entity.UserExperience{}).AddForeignKey("resume_id", "resumes(resume_id)", "CASCADE", "CASCADE")
 
 	return db
 }
