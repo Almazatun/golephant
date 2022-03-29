@@ -20,7 +20,7 @@ type userUseCase struct {
 }
 
 type UserUseCase interface {
-	RegisterUser(registerUserInput entity.User) (user *entity.User, err error)
+	RegisterUser(registerUserInput input.RegisterUserInput) (user *entity.User, err error)
 	LogIn(logInInput input.LogInInput) (resLogIn *ResLogIn, err error)
 	UpdateUserData(userId string, updateUserDataInput input.UpdateUserDataInput) (user *entity.User, err error)
 }
@@ -36,7 +36,7 @@ type ResLogIn struct {
 	ExperationTimeJWT time.Time
 }
 
-func (uc *userUseCase) RegisterUser(registerUserInput entity.User) (user *entity.User, err error) {
+func (uc *userUseCase) RegisterUser(registerUserInput input.RegisterUserInput) (user *entity.User, err error) {
 	// Validate register user input
 	v := validator.New()
 	e := v.Struct(registerUserInput)
@@ -45,6 +45,8 @@ func (uc *userUseCase) RegisterUser(registerUserInput entity.User) (user *entity
 		return nil, e
 	}
 
+	registerUser := registerUserColums(registerUserInput)
+
 	// Hashing user password
 	hashedPassword, err := util.HashPassword(registerUserInput.Password)
 
@@ -52,13 +54,13 @@ func (uc *userUseCase) RegisterUser(registerUserInput entity.User) (user *entity
 		return nil, err
 	}
 
-	registerUserInput.Password = hashedPassword
+	registerUser.Password = hashedPassword
 
 	now := time.Now()
-	registerUserInput.CreationTime = now
-	registerUserInput.UpdateTime = now
+	registerUser.CreationTime = now
+	registerUser.UpdateTime = now
 
-	userDB, err := uc.userRepo.Create(registerUserInput)
+	userDB, err := uc.userRepo.Create(registerUser)
 
 	if err != nil {
 		return nil, err
@@ -132,6 +134,35 @@ func (uc *userUseCase) UpdateUserData(userId string, updateUserDataInput input.U
 	}
 
 	return res, nil
+}
+
+func registerUserColums(registerUserInput input.RegisterUserInput) (registerUser entity.User) {
+
+	if registerUserInput.Age != "" {
+		registerUser.Age = registerUserInput.Age
+	}
+
+	if registerUserInput.City != "" {
+		registerUser.City = registerUserInput.City
+	}
+
+	if registerUserInput.Email != "" {
+		registerUser.Email = registerUserInput.Email
+	}
+
+	if registerUserInput.Mobile != "" {
+		registerUser.Mobile = registerUserInput.Mobile
+	}
+
+	if registerUserInput.Status != "" {
+		registerUser.Status = registerUserInput.Status
+	}
+
+	if registerUserInput.Username != "" {
+		registerUser.Username = registerUserInput.Username
+	}
+
+	return registerUser
 }
 
 func updateUserColums(userDB *entity.User, updateUserDataInput input.UpdateUserDataInput) (updateUserData *entity.User, err error) {

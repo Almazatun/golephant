@@ -3,7 +3,6 @@ package handler
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -11,7 +10,6 @@ import (
 	error_message "github.com/Almazatun/golephant/common/error-message"
 	loggerinfo "github.com/Almazatun/golephant/common/loggerInfo"
 	usecase "github.com/Almazatun/golephant/domain"
-	"github.com/Almazatun/golephant/infrastucture/entity"
 	"github.com/Almazatun/golephant/presentation/input"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
@@ -35,18 +33,20 @@ func NewUserHandler(userUseCase usecase.UserUseCase) UserHandler {
 }
 
 func (h *userHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
-	var registerUserInput *entity.User
+	var registerUserInput input.RegisterUserInput
 	err := json.NewDecoder(r.Body).Decode(&registerUserInput)
 
 	if err != nil {
+		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	user, err := h.userUseCase.RegisterUser(*registerUserInput)
+	user, err := h.userUseCase.RegisterUser(registerUserInput)
 
 	if err != nil {
 		loggerinfo.LoggerError(err)
+		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -66,7 +66,7 @@ func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	res, err := h.userUseCase.LogIn(logInInput)
 
 	if err != nil {
-		httpResponseBody(w, err)
+		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -88,7 +88,7 @@ func (h *userHandler) AuthMe(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == http.ErrNoCookie {
 			newErr := errors.New(error_message.UNAUTHORIZED)
-			httpResponseBody(w, newErr)
+			HttpResponseBody(w, newErr)
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
@@ -107,7 +107,7 @@ func (h *userHandler) AuthMe(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
 			newErr := errors.New(error_message.UNAUTHORIZED)
-			httpResponseBody(w, newErr)
+			HttpResponseBody(w, newErr)
 
 			w.WriteHeader(http.StatusUnauthorized)
 			return
@@ -137,8 +137,6 @@ func (h *userHandler) UpdateUserData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(params["id"])
-
 	res, err := h.userUseCase.UpdateUserData(params["id"], updateUserDataInput)
 
 	if err != nil {
@@ -153,7 +151,7 @@ func HelloWord(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("Hello World")
 }
 
-func httpResponseBody(w http.ResponseWriter, err error) {
+func HttpResponseBody(w http.ResponseWriter, err error) {
 	resp := make(map[string]string)
 
 	w.WriteHeader(http.StatusBadRequest)
