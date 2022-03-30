@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"time"
 
 	repository "github.com/Almazatun/golephant/infrastucture"
@@ -10,18 +11,30 @@ import (
 )
 
 type resumeUseCase struct {
-	resumeRepo repository.ResumeRepo
-	userRepo   repository.UserRepo
+	resumeRepo         repository.ResumeRepo
+	userRepo           repository.UserRepo
+	userEducationRepo  repository.UserEducationRepo
+	userExperienceRepo repository.UserExperienceRepo
 }
 
 type ResumeUseCase interface {
 	CreateResume(userId string, createResumeInput input.CreateResumeInput) (createResume *entity.Resume, err error)
+	DeleteResume(resumeId string) (str string, err error)
+	DeleteUserExperienceInResume(resumeId string, userExperienceId string) (str string, err error)
+	DeleteUserEducationInResume(resumeId string, userEducationId string) (str string, err error)
 }
 
-func NewResumeUseCase(resumeRepo repository.ResumeRepo, userRepo repository.UserRepo) ResumeUseCase {
+func NewResumeUseCase(
+	resumeRepo repository.ResumeRepo,
+	userRepo repository.UserRepo,
+	userEducationRepo repository.UserEducationRepo,
+	userExperienceRepo repository.UserExperienceRepo,
+) ResumeUseCase {
 	return &resumeUseCase{
-		resumeRepo: resumeRepo,
-		userRepo:   userRepo,
+		resumeRepo:         resumeRepo,
+		userRepo:           userRepo,
+		userEducationRepo:  userEducationRepo,
+		userExperienceRepo: userExperienceRepo,
 	}
 }
 
@@ -71,6 +84,59 @@ func (uc *resumeUseCase) CreateResume(userId string, createResumeInput input.Cre
 
 	if err != nil {
 		return nil, err
+	}
+
+	return res, nil
+}
+
+func (uc *resumeUseCase) DeleteResume(resumeId string) (str string, err error) {
+	res, err := uc.resumeRepo.DeleteById(resumeId)
+
+	if err != nil {
+		return "", err
+	}
+
+	return res, nil
+}
+
+func (uc *resumeUseCase) DeleteUserExperienceInResume(resumeId string, userExperienceId string) (str string, err error) {
+
+	userExperienceDB, err := uc.userExperienceRepo.FindById(userExperienceId)
+
+	if err != nil {
+		return "", err
+	}
+
+	if userExperienceDB.ResumeID.String() != resumeId {
+		newErr := errors.New("Bad request")
+		return "", newErr
+	}
+
+	res, err := uc.userExperienceRepo.DeleteById(userExperienceId)
+
+	if err != nil {
+		return "", err
+	}
+
+	return res, nil
+}
+
+func (uc *resumeUseCase) DeleteUserEducationInResume(resumeId string, userEducationId string) (str string, err error) {
+	userEducationDB, err := uc.userEducationRepo.FindById(userEducationId)
+
+	if err != nil {
+		return "", err
+	}
+
+	if userEducationDB.ResumeID.String() != resumeId {
+		newErr := errors.New("Bad request")
+		return "", newErr
+	}
+
+	res, err := uc.userEducationRepo.DeleteById(userEducationId)
+
+	if err != nil {
+		return "", err
 	}
 
 	return res, nil

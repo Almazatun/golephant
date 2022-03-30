@@ -23,7 +23,15 @@ func NewRouter(h Handler) *mux.Router {
 	// Resume
 	resume := router.PathPrefix("/resume").Subrouter()
 	resume.HandleFunc("/{userId}", h.ResumeHandler.CreateResume).Methods("POST")
+	resume.HandleFunc("/{resumeId}", h.ResumeHandler.DeleteResume).Methods("DELETE")
 
+	// User education in resume
+	resume.HandleFunc("/{resumeId}/userEducation/{userEducationId}", h.ResumeHandler.DeleteUserEducationInResume).Methods("DELETE")
+
+	// User experience in resume
+	resume.HandleFunc("/{resumeId}/userExperience/{userExperienceId}", h.ResumeHandler.DeleteUserExperienceInResume).Methods("DELETE")
+
+	// Test
 	router.HandleFunc("/helloWorld", handler.HelloWord).Methods("POST")
 
 	return router

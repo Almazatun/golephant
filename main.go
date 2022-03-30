@@ -24,9 +24,20 @@ func main() {
 	userUseCase := usecase.NewUserUseCase(userRepository)
 	userHandler := handler.NewUserHandler(userUseCase)
 
+	// UserEducation
+	userEducationRepository := repository.NewUserEducationRepo(DB)
+
+	// UserExperience
+	userExperienceRepository := repository.NewUserExperienceRepo(DB)
+
 	// Resume
 	resumeRepository := repository.NewResumeRepo(DB)
-	resumeUseCase := usecase.NewResumeUseCase(resumeRepository, userRepository)
+	resumeUseCase := usecase.NewResumeUseCase(
+		resumeRepository,
+		userRepository,
+		userEducationRepository,
+		userExperienceRepository,
+	)
 	resumeHandler := handler.NewResumeHandler(resumeUseCase)
 
 	handlers := router.Handler{

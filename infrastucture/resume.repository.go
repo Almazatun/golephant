@@ -11,6 +11,7 @@ type resumeRepository struct {
 
 type ResumeRepo interface {
 	Create(resume entity.Resume) (res *entity.Resume, err error)
+	DeleteById(resumeId string) (str string, err error)
 }
 
 func NewResumeRepo(db *gorm.DB) ResumeRepo {
@@ -33,4 +34,18 @@ func (r *resumeRepository) Create(resume entity.Resume) (res *entity.Resume, err
 	createResume = resume
 
 	return &createResume, nil
+}
+
+func (r *resumeRepository) DeleteById(resumeId string) (str string, err error) {
+	res := "Resume successfully deleted"
+
+	result := r.db.Delete(&entity.Resume{}, "resume_id = ?", resumeId)
+
+	er := result.Error
+
+	if er != nil {
+		return "", er
+	}
+
+	return res, nil
 }

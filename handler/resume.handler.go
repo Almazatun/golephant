@@ -16,6 +16,9 @@ type resumeHandler struct {
 
 type ResumeHandler interface {
 	CreateResume(w http.ResponseWriter, r *http.Request)
+	DeleteResume(w http.ResponseWriter, r *http.Request)
+	DeleteUserEducationInResume(w http.ResponseWriter, r *http.Request)
+	DeleteUserExperienceInResume(w http.ResponseWriter, r *http.Request)
 }
 
 func NewResumeHandler(resumeUseCase usecase.ResumeUseCase) ResumeHandler {
@@ -45,4 +48,49 @@ func (h *resumeHandler) CreateResume(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(user)
+}
+
+func (h *resumeHandler) DeleteResume(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	res, err := h.resumeUseCase.DeleteResume(params["resumeId"])
+
+	if err != nil {
+		loggerinfo.LoggerError(err)
+		HttpResponseBody(w, err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
+}
+
+func (h *resumeHandler) DeleteUserEducationInResume(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	res, err := h.resumeUseCase.DeleteUserEducationInResume(params["resumeId"], params["userEducationId"])
+
+	if err != nil {
+		loggerinfo.LoggerError(err)
+		HttpResponseBody(w, err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
+}
+
+func (h *resumeHandler) DeleteUserExperienceInResume(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	res, err := h.resumeUseCase.DeleteUserExperienceInResume(params["resumeId"], params["userExperienceId"])
+
+	if err != nil {
+		loggerinfo.LoggerError(err)
+		HttpResponseBody(w, err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
 }
