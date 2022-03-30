@@ -19,12 +19,19 @@ func main() {
 	loadENVs()
 	DB := db.Init()
 
+	// User
 	userRepository := repository.NewUserRepo(DB)
 	userUseCase := usecase.NewUserUseCase(userRepository)
 	userHandler := handler.NewUserHandler(userUseCase)
 
+	// Resume
+	resumeRepository := repository.NewResumeRepo(DB)
+	resumeUseCase := usecase.NewResumeUseCase(resumeRepository, userRepository)
+	resumeHandler := handler.NewResumeHandler(resumeUseCase)
+
 	handlers := router.Handler{
-		UserHandler: userHandler,
+		UserHandler:   userHandler,
+		ResumeHandler: resumeHandler,
 	}
 
 	router := router.NewRouter(handlers)
