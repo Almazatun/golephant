@@ -16,13 +16,14 @@ go mod download
 # Build and Up
 $ docker-compose up --build -d
 ```
-### Domain-Driven Design | Data flow
-<img src="./assets/ddd.png">
+## Endpoints
 
+### User
+
+| Description | http | path |
+|:--:|:--:|:--|
+| register | POST | /BASE_URL/user/register |
+| login  | PUT | /BASE_URL/user/login |
+| update | PATCH | /BASE_URL/user/:userId |
 ### UML diagram
 <img src="./assets/uml-golephant.png">
-
-
-
-
-
