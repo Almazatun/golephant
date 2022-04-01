@@ -13,9 +13,7 @@ type User struct {
 	Password     string    `json:"password" gorm:"type:varchar(100); not NULL"`
 	CreationTime time.Time `json:"creation_time" gorm:"type:date; not NULL"`
 	UpdateTime   time.Time `json:"update_time" gorm:"type:date; not NULL"`
-	Age          string    `json:"age" gorm:"type:text; default:0"`
 	Mobile       string    `json:"mobile" gorm:"type:varchar(30); default:NULL"`
 	Status       string    `json:"status" gorm:"type:text; default:0"`
-	City         string    `json:"city" gorm:"type:varchar(100);default:NUll"`
 	Resume       []Resume  `gorm:"ForeignKey:UserID;references:UserID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }

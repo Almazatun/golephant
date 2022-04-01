@@ -138,14 +138,6 @@ func (uc *userUseCase) UpdateUserData(userId string, updateUserDataInput input.U
 
 func registerUserColums(registerUserInput input.RegisterUserInput) (registerUser entity.User) {
 
-	if registerUserInput.Age != "" {
-		registerUser.Age = registerUserInput.Age
-	}
-
-	if registerUserInput.City != "" {
-		registerUser.City = registerUserInput.City
-	}
-
 	if registerUserInput.Email != "" {
 		registerUser.Email = registerUserInput.Email
 	}
@@ -166,14 +158,6 @@ func registerUserColums(registerUserInput input.RegisterUserInput) (registerUser
 }
 
 func updateUserColums(userDB *entity.User, updateUserDataInput input.UpdateUserDataInput) (updateUserData *entity.User, err error) {
-
-	if updateUserDataInput.Age != "" {
-		userDB.Age = updateUserDataInput.Age
-	}
-
-	if updateUserDataInput.City != "" {
-		userDB.City = updateUserDataInput.City
-	}
 
 	if updateUserDataInput.Email != "" {
 		userDB.Email = updateUserDataInput.Email
