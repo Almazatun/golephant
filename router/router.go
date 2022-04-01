@@ -1,7 +1,10 @@
 package router
 
 import (
+	"net/http"
+
 	handler "github.com/Almazatun/golephant/handler"
+	"github.com/Almazatun/golephant/middleware"
 	"github.com/gorilla/mux"
 )
 
@@ -16,23 +19,23 @@ func NewRouter(h Handler) *mux.Router {
 	//User
 	user := router.PathPrefix("/user").Subrouter()
 	user.HandleFunc("/register", h.UserHandler.RegisterUser).Methods("POST")
-	user.HandleFunc("/login", h.UserHandler.LogIn).Methods("POST")
+	user.HandleFunc("/login", h.UserHandler.LogIn).Methods("PUT")
 	user.HandleFunc("/authMe", h.UserHandler.AuthMe).Methods("POST")
-	user.HandleFunc("/{id}", h.UserHandler.UpdateUserData).Methods("PATCH")
+	user.Handle("/{id}", middleware.Authentication(http.HandlerFunc(h.UserHandler.UpdateUserData))).Methods("PATCH")
 
 	// Resume
 	resume := router.PathPrefix("/resume").Subrouter()
-	resume.HandleFunc("/{userId}", h.ResumeHandler.CreateResume).Methods("POST")
-	resume.HandleFunc("/{resumeId}", h.ResumeHandler.DeleteResume).Methods("DELETE")
+	resume.Handle("/{userId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.CreateResume))).Methods("POST")
+	resume.Handle("/{resumeId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteResume))).Methods("DELETE")
 
 	// User education in resume
-	resume.HandleFunc("/{resumeId}/userEducation/{userEducationId}", h.ResumeHandler.DeleteUserEducationInResume).Methods("DELETE")
+	resume.Handle("/{resumeId}/userEducation/{userEducationId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteUserEducationInResume))).Methods("DELETE")
 
 	// User experience in resume
-	resume.HandleFunc("/{resumeId}/userExperience/{userExperienceId}", h.ResumeHandler.DeleteUserExperienceInResume).Methods("DELETE")
+	resume.Handle("/{resumeId}/userExperience/{userExperienceId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteUserExperienceInResume))).Methods("DELETE")
 
 	// Test
-	router.HandleFunc("/helloWorld", handler.HelloWord).Methods("POST")
+	router.HandleFunc("/helloWorld", handler.HelloWord).Methods("GET")
 
 	return router
 }
