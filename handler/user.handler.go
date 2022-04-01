@@ -37,6 +37,7 @@ func (h *userHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&registerUserInput)
 
 	if err != nil {
+		loggerinfo.LoggerError(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -59,6 +60,7 @@ func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&logInInput)
 
 	if err != nil {
+		loggerinfo.LoggerError(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -66,24 +68,27 @@ func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	res, err := h.userUseCase.LogIn(logInInput)
 
 	if err != nil {
+		loggerinfo.LoggerError(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	http.SetCookie(w,
-		&http.Cookie{
-			Name:    "token",
-			Value:   res.Token,
-			Expires: res.ExperationTimeJWT,
-		})
+	cookie := http.Cookie{
+		Name:    common.HTTP_COOKIE,
+		Value:   res.Token,
+		Expires: res.ExperationTimeJWT,
+		Path:    common.SET_COOKIE_PATH,
+	}
+
+	http.SetCookie(w, &cookie)
 
 	json.NewEncoder(w).Encode("Successfuly log in")
 
 }
 
 func (h *userHandler) AuthMe(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("token")
+	cookie, err := r.Cookie(common.HTTP_COOKIE)
 
 	if err != nil {
 		if err == http.ErrNoCookie {
@@ -92,6 +97,8 @@ func (h *userHandler) AuthMe(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
+
+		loggerinfo.LoggerError(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -112,6 +119,8 @@ func (h *userHandler) AuthMe(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
+
+		loggerinfo.LoggerError(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -133,6 +142,7 @@ func (h *userHandler) UpdateUserData(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&updateUserDataInput)
 
 	if err != nil {
+		loggerinfo.LoggerError(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -140,6 +150,7 @@ func (h *userHandler) UpdateUserData(w http.ResponseWriter, r *http.Request) {
 	res, err := h.userUseCase.UpdateUserData(params["id"], updateUserDataInput)
 
 	if err != nil {
+		loggerinfo.LoggerError(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
