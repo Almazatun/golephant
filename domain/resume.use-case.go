@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	error_message "github.com/Almazatun/golephant/common/error-message"
 	repository "github.com/Almazatun/golephant/infrastucture"
 	"github.com/Almazatun/golephant/infrastucture/entity"
 	"github.com/Almazatun/golephant/presentation/input"
@@ -108,7 +109,7 @@ func (uc *resumeUseCase) DeleteUserExperienceInResume(resumeId string, userExper
 	}
 
 	if userExperienceDB.ResumeID.String() != resumeId {
-		newErr := errors.New("Bad request")
+		newErr := errors.New(error_message.BAD_REGUEST)
 		return "", newErr
 	}
 
@@ -129,7 +130,7 @@ func (uc *resumeUseCase) DeleteUserEducationInResume(resumeId string, userEducat
 	}
 
 	if userEducationDB.ResumeID.String() != resumeId {
-		newErr := errors.New("Bad request")
+		newErr := errors.New(error_message.BAD_REGUEST)
 		return "", newErr
 	}
 
