@@ -70,18 +70,261 @@ func (uc *resumeUseCase) CreateResume(userId string, createResumeInput input.Cre
 		return nil, err
 	}
 
-	resume.UserExperience = userExperiences
+	resume.UserExperiences = userExperiences
 
-	// append user educations in resume
-	userEducations, err := createUserEducations(createResumeInput)
+	res, err := uc.resumeRepo.Create(resume)
 
 	if err != nil {
 		return nil, err
 	}
 
-	resume.UserEducation = userEducations
+	return res, nil
+}
 
-	res, err := uc.resumeRepo.Create(resume)
+func (uc *resumeUseCase) UpdateBasicInfoResume(
+	userId string,
+	resumeId string,
+	updateBasicInfoResumeInput input.UpdateBasicInfoResume,
+) (updateResume *entity.Resume, err error) {
+
+	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resumeDB.UserID.String() != userId {
+		newErr := errors.New(error_message.BAD_REGUEST)
+		return nil, newErr
+	}
+
+	if updateBasicInfoResumeInput.FirstName != "" {
+		resumeDB.FirstName = updateBasicInfoResumeInput.FirstName
+	}
+
+	if updateBasicInfoResumeInput.LastName != "" {
+		resumeDB.LastName = updateBasicInfoResumeInput.LastName
+	}
+
+	if updateBasicInfoResumeInput.Gender != "" {
+		resumeDB.Gender = updateBasicInfoResumeInput.Gender
+	}
+
+	if updateBasicInfoResumeInput.DateOfBirght != "" {
+
+		date_of_birght, err := time.Parse(layoutISO, string(updateBasicInfoResumeInput.DateOfBirght))
+
+		if err != nil {
+			return nil, err
+
+		}
+
+		resumeDB.DateOfBirght = date_of_birght
+
+	}
+
+	now := time.Now()
+	resumeDB.CreationTime = now
+	resumeDB.UpdateTime = now
+
+	res, err := uc.resumeRepo.Update(*resumeDB)
+
+	if err != nil {
+		return nil, err
+
+	}
+
+	return res, nil
+}
+
+func (uc *resumeUseCase) UpdateAboutMeResume(
+	userId string,
+	resumeId string,
+	updateAboutMeResumeInput input.UpdateAboutMeResumeInput,
+) (updateAboutMeResume *entity.Resume, err error) {
+	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resumeDB.UserID.String() != userId {
+		newErr := errors.New(error_message.BAD_REGUEST)
+		return nil, newErr
+	}
+
+	if updateAboutMeResumeInput.AboutMe != "" {
+		resumeDB.About = updateAboutMeResumeInput.AboutMe
+	}
+
+	now := time.Now()
+	resumeDB.CreationTime = now
+	resumeDB.UpdateTime = now
+
+	res, err := uc.resumeRepo.Update(*resumeDB)
+
+	if err != nil {
+		return nil, err
+
+	}
+
+	return res, nil
+
+}
+
+func (uc *resumeUseCase) UpdateCitizenshipResume(
+	userId string,
+	resumeId string,
+	updateCitizenshipResumInput input.UpdateCitizenshipResumeInput,
+) (updateCitizenshipResume *entity.Resume, err error) {
+	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resumeDB.UserID.String() != userId {
+		newErr := errors.New(error_message.BAD_REGUEST)
+		return nil, newErr
+	}
+
+	if updateCitizenshipResumInput.City != "" {
+		resumeDB.Citizenship = updateCitizenshipResumInput.City
+	}
+
+	now := time.Now()
+	resumeDB.CreationTime = now
+	resumeDB.UpdateTime = now
+
+	res, err := uc.resumeRepo.Update(*resumeDB)
+
+	if err != nil {
+		return nil, err
+
+	}
+
+	return res, nil
+}
+
+func (uc *resumeUseCase) UpdateTagsResumeInput(
+	userId string,
+	resumeId string,
+	updateTagsResume input.UdateTagsResumeInput,
+) (updateTagsResum *entity.Resume, err error) {
+	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resumeDB.UserID.String() != userId {
+		newErr := errors.New(error_message.BAD_REGUEST)
+		return nil, newErr
+	}
+
+	if len(updateTagsResume.Tags) > 0 {
+		resumeDB.Tags = updateTagsResume.Tags
+	}
+
+	now := time.Now()
+	resumeDB.CreationTime = now
+	resumeDB.UpdateTime = now
+
+	res, err := uc.resumeRepo.Update(*resumeDB)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (uc *resumeUseCase) UpdateUserEducationResume(
+	userId string,
+	resumeId string,
+	updateUserEducationsResumeInput input.UpdateUserEducationsResumeInput,
+) (updateUserEducationsResum *entity.Resume, err error) {
+	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resumeDB.UserID.String() != userId {
+		newErr := errors.New(error_message.BAD_REGUEST)
+		return nil, newErr
+	}
+
+	if len(updateUserEducationsResumeInput.UserEducations) > 0 {
+
+		createUserEducationsInput := getCreateUserEducations(updateUserEducationsResumeInput)
+
+		createUserEducationsDB, err := createUserEducations(createUserEducationsInput)
+
+		if err != nil {
+			return nil, err
+		}
+
+		updateUserEducationsInput := getUpdateUserEducations(updateUserEducationsResumeInput)
+
+		updateUserEducationsDB, err := updateUserEducations(*resumeDB, updateUserEducationsInput)
+
+		if err != nil {
+			return nil, err
+		}
+
+		resumeDB.UserEducations = append(resumeDB.UserEducations, createUserEducationsDB...)
+		resumeDB.UserEducations = append(resumeDB.UserEducations, updateUserEducationsDB...)
+	}
+
+	res, err := uc.resumeRepo.Update(*resumeDB)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (uc *resumeUseCase) UpdateUserExperiencesResume(
+	userId string,
+	resumeId string,
+	updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput,
+) (updateUserEducationsResum *entity.Resume, err error) {
+	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resumeDB.UserID.String() != userId {
+		newErr := errors.New(error_message.BAD_REGUEST)
+		return nil, newErr
+	}
+
+	if len(updateUserExperiencesResumeInput.UserExperiences) > 0 {
+
+		createUserExperiencesInput := getCreateUserExperiences(updateUserExperiencesResumeInput)
+
+		createUserEducationsDB, err := createUserExperiencesToUpdate(createUserExperiencesInput)
+
+		if err != nil {
+			return nil, err
+		}
+
+		updateUserExperiencesInput := getUpdateUserExperiences(updateUserExperiencesResumeInput)
+
+		updateUserExperiencesDB, err := updateUserExperiences(*resumeDB, updateUserExperiencesInput)
+
+		if err != nil {
+			return nil, err
+		}
+
+		resumeDB.UserExperiences = append(resumeDB.UserExperiences, createUserEducationsDB...)
+		resumeDB.UserExperiences = append(resumeDB.UserExperiences, updateUserExperiencesDB...)
+	}
+
+	res, err := uc.resumeRepo.Update(*resumeDB)
 
 	if err != nil {
 		return nil, err
@@ -145,17 +388,15 @@ func (uc *resumeUseCase) DeleteUserEducationInResume(resumeId string, userEducat
 
 func createResumeColums(createResumeInput input.CreateResumeInput) (resume entity.Resume) {
 
-	if createResumeInput.About != "" {
-		resume.About = createResumeInput.About
+	if createResumeInput.FirstName != "" {
+		resume.FirstName = createResumeInput.FirstName
 	}
 
-	if len(createResumeInput.Tags) > 0 {
-		resume.Tags = createResumeInput.Tags
+	if createResumeInput.LastName != "" {
+		resume.LastName = createResumeInput.LastName
 	}
 
-	resume.Title = createResumeInput.Title
-	resume.Specialization = createResumeInput.Specialization
-	resume.WorkMode = createResumeInput.WorkMode
+	resume.Gender = setGender(createResumeInput.Gender)
 
 	now := time.Now()
 	resume.CreationTime = now
@@ -164,32 +405,30 @@ func createResumeColums(createResumeInput input.CreateResumeInput) (resume entit
 	return resume
 }
 
-func createUserEducations(createResumeInput input.CreateResumeInput) (userEducations []entity.UserEducation, e error) {
+func createUserEducations(
+	createUserEducationsResumeInput []input.UserEducationInput,
+) (userEducations []entity.UserEducation, err error) {
 
-	if len(createResumeInput.UserEducation) > 0 {
-		for _, userEducation := range createResumeInput.UserEducation {
+	if len(createUserEducationsResumeInput) > 0 {
+		for _, userEducation := range createUserEducationsResumeInput {
 			var createUserEducation entity.UserEducation
-
-			now := time.Now()
-			createUserEducation.CreationTime = now
-			createUserEducation.UpdateTime = now
 
 			createUserEducation.City = userEducation.City
 			createUserEducation.DegreePlacement = userEducation.DegreePlacement
 
-			startDate, err := time.Parse(layoutISO, string(userEducation.StartDate))
+			startDate, e := time.Parse(layoutISO, string(userEducation.StartDate))
 
-			if err != nil {
-				e = err
+			if e != nil {
+				err = e
 				break
 			}
 
 			createUserEducation.StartDate = startDate
 
-			endDate, err := time.Parse(layoutISO, string(userEducation.EndDate))
+			endDate, e := time.Parse(layoutISO, string(userEducation.EndDate))
 
-			if err != nil {
-				e = err
+			if e != nil {
+				err = e
 				break
 			}
 
@@ -199,40 +438,124 @@ func createUserEducations(createResumeInput input.CreateResumeInput) (userEducat
 		}
 	}
 
-	if e != nil {
-		return nil, e
+	if err != nil {
+		return nil, err
 	}
 
 	return userEducations, nil
 }
 
-func createUserExperiences(createResumeInput input.CreateResumeInput) (userExperiences []entity.UserExperience, e error) {
+func updateUserEducations(
+	resumeDB entity.Resume,
+	updateUserEducations []input.UserEducationInput,
+) (res []entity.UserEducation, err error) {
+	for _, updateUserEducation := range updateUserEducations {
+		for _, userEducationDB := range resumeDB.UserEducations {
+			if updateUserEducation.UserEducationID == userEducationDB.UserEducationID.String() {
+				userEducationDB.City = updateUserEducation.City
+				userEducationDB.DegreePlacement = updateUserEducation.DegreePlacement
 
-	if len(createResumeInput.UserExperience) > 0 {
-		for _, userExperience := range createResumeInput.UserExperience {
+				startDate, e := time.Parse(layoutISO, updateUserEducation.StartDate)
+
+				if e != nil {
+					err = e
+					break
+				}
+
+				userEducationDB.StartDate = startDate
+
+				endDate, e := time.Parse(layoutISO, updateUserEducation.EndDate)
+
+				if e != nil {
+					err = e
+					break
+				}
+
+				userEducationDB.EndDate = endDate
+
+			}
+		}
+
+		if err != nil {
+			break
+		}
+
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func updateUserExperiences(
+	resumeDB entity.Resume,
+	updateUserExperiences []input.UserExperienceInput,
+) (res []entity.UserExperience, err error) {
+	for _, updateUserExperience := range updateUserExperiences {
+		for _, userExperienceDB := range resumeDB.UserExperiences {
+			if updateUserExperience.UserExperienceID == userExperienceDB.UserExperienceID.String() {
+				userExperienceDB.City = updateUserExperience.City
+				userExperienceDB.CompanyName = updateUserExperience.CompanyName
+				userExperienceDB.Position = updateUserExperience.Position
+
+				startDate, e := time.Parse(layoutISO, updateUserExperience.StartDate)
+
+				if e != nil {
+					err = e
+					break
+				}
+
+				userExperienceDB.StartDate = startDate
+
+				endDate, e := time.Parse(layoutISO, updateUserExperience.EndDate)
+
+				if e != nil {
+					err = e
+					break
+				}
+
+				userExperienceDB.EndDate = endDate
+
+			}
+		}
+
+		if err != nil {
+			break
+		}
+
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func createUserExperiencesToUpdate(createUserExperiencesInput []input.UserExperienceInput) (userExperiences []entity.UserExperience, err error) {
+	if len(createUserExperiencesInput) > 0 {
+		for _, userExperience := range createUserExperiencesInput {
 			var createUserExperience entity.UserExperience
-
-			now := time.Now()
-			createUserExperience.CreationTime = now
-			createUserExperience.UpdateTime = now
 
 			createUserExperience.City = userExperience.City
 			createUserExperience.CompanyName = userExperience.CompanyName
 			createUserExperience.Position = userExperience.Position
 
-			startDate, err := time.Parse(layoutISO, userExperience.StartDate)
+			startDate, e := time.Parse(layoutISO, string(userExperience.StartDate))
 
-			if err != nil {
-				e = err
+			if e != nil {
+				err = e
 				break
 			}
 
 			createUserExperience.StartDate = startDate
 
-			endDate, err := time.Parse(layoutISO, userExperience.EndDate)
+			endDate, e := time.Parse(layoutISO, string(userExperience.EndDate))
 
-			if err != nil {
-				e = err
+			if e != nil {
+				err = e
 				break
 			}
 
@@ -242,9 +565,110 @@ func createUserExperiences(createResumeInput input.CreateResumeInput) (userExper
 		}
 	}
 
-	if e != nil {
-		return nil, e
+	if err != nil {
+		return nil, err
 	}
 
 	return userExperiences, nil
+}
+
+func createUserExperiences(createResumeInput input.CreateResumeInput) (userExperiences []entity.UserExperience, err error) {
+
+	if len(createResumeInput.UserExperiences) > 0 && createResumeInput.IsHaveExperience {
+		for _, userExperience := range createResumeInput.UserExperiences {
+			var createUserExperience entity.UserExperience
+
+			createUserExperience.City = userExperience.City
+			createUserExperience.CompanyName = userExperience.CompanyName
+			createUserExperience.Position = userExperience.Position
+
+			startDate, e := time.Parse(layoutISO, userExperience.StartDate)
+
+			if e != nil {
+				err = e
+				break
+			}
+
+			createUserExperience.StartDate = startDate
+
+			endDate, e := time.Parse(layoutISO, userExperience.EndDate)
+
+			if e != nil {
+				err = e
+				break
+			}
+
+			createUserExperience.EndDate = endDate
+
+			userExperiences = append(userExperiences, createUserExperience)
+		}
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return userExperiences, nil
+}
+
+func getCreateUserExperiences(
+	updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput,
+) (res []input.UserExperienceInput) {
+	for _, userExperience := range updateUserExperiencesResumeInput.UserExperiences {
+		if userExperience.UserExperienceID == "" {
+			res = append(res, userExperience)
+		}
+	}
+
+	return res
+}
+
+func getUpdateUserExperiences(
+	updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput,
+) (res []input.UserExperienceInput) {
+	for _, userExperience := range updateUserExperiencesResumeInput.UserExperiences {
+		if userExperience.UserExperienceID != "" {
+			res = append(res, userExperience)
+		}
+	}
+
+	return res
+}
+
+func getCreateUserEducations(
+	updateUserEducationsResumeInput input.UpdateUserEducationsResumeInput,
+) (res []input.UserEducationInput) {
+	for _, userEducation := range updateUserEducationsResumeInput.UserEducations {
+		if userEducation.UserEducationID == "" {
+			res = append(res, userEducation)
+		}
+	}
+
+	return res
+}
+
+func getUpdateUserEducations(
+	updateUserEducationsResumeInput input.UpdateUserEducationsResumeInput,
+) (res []input.UserEducationInput) {
+	for _, userEducation := range updateUserEducationsResumeInput.UserEducations {
+		if userEducation.UserEducationID != "" {
+			res = append(res, userEducation)
+		}
+	}
+
+	return res
+}
+
+func setGender(gender string) string {
+	if gender != "" {
+		if gender == "MALE" {
+			return gender
+		} else if gender == "FEMALE" {
+			return gender
+		} else {
+			return ""
+		}
+	}
+
+	return ""
 }
