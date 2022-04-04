@@ -2,7 +2,6 @@ package repository
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/jinzhu/gorm"
 
@@ -45,8 +44,6 @@ func (r *userRepository) FindByEmail(email string) (userDB *entity.User, err err
 	var user entity.User
 
 	result := r.db.First(&user, "email = ?", email)
-
-	fmt.Println(user)
 
 	dbErr := result.Error
 
