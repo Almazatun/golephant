@@ -1,5 +1,5 @@
 package input
 
 type UpdateUserEducationsResumeInput struct {
-	UserEducations []UserEducationInput
+	UserEducations []UserEducationInput `json:"user_educations"`
 }
