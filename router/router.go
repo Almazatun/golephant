@@ -25,14 +25,35 @@ func NewRouter(h Handler) *mux.Router {
 
 	// Resume
 	resume := router.PathPrefix("/resume").Subrouter()
-	resume.Handle("/{userId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.CreateResume))).Methods("POST")
+	resume.Handle("user/{userId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.CreateResume))).Methods("POST")
 	resume.Handle("/{resumeId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteResume))).Methods("DELETE")
 
+	resume.Handle("/{resumeId}/user/{userId}/basicInfo",
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateBasicInfoResume))).Methods("PUT")
+
+	resume.Handle("/{resumeId}/user/{userId}/aboutMe",
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateAboutMeResume))).Methods("PUT")
+
+	resume.Handle("/{resumeId}/user/{userId}/citizenship",
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateCitizenshipResume))).Methods("PUT")
+
+	resume.Handle("/{resumeId}/user/{userId}/desiredPosition",
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateDesiredPositionResume))).Methods("PUT")
+
+	resume.Handle("/{resumeId}/user/{userId}/tags",
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateTagsResumeInput))).Methods("PUT")
+
 	// User education in resume
-	resume.Handle("/{resumeId}/userEducation/{userEducationId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteUserEducationInResume))).Methods("DELETE")
+	resume.Handle("/{resumeId}/user/{userId}/userEducations",
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateUserEducationResume))).Methods("PUT")
+	resume.Handle("/{resumeId}/userEducation/{userEducationId}",
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteUserEducationInResume))).Methods("DELETE")
 
 	// User experience in resume
-	resume.Handle("/{resumeId}/userExperience/{userExperienceId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteUserExperienceInResume))).Methods("DELETE")
+	resume.Handle("/{resumeId}/user/{userId}/userExperiences",
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateUserExperiencesResume))).Methods("PUT")
+	resume.Handle("/{resumeId}/userExperience/{userExperienceId}",
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteUserExperienceInResume))).Methods("DELETE")
 
 	// Test
 	router.HandleFunc("/helloWorld", handler.HelloWord).Methods("GET")
