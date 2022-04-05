@@ -19,6 +19,7 @@ func Init() *gorm.DB {
 	user := os.Getenv("DB_USER")
 	dbName := os.Getenv("DB_DATABASE")
 	password := os.Getenv("DB_PASSWORD")
+	db_extensions := os.Getenv("POSTGRES_EXTENSIONS")
 
 	// Database connection strings
 	dbURI := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s port=%s", host, user, dbName, password, dbPort)
@@ -30,6 +31,9 @@ func Init() *gorm.DB {
 	} else {
 		fmt.Println("Successfully connected to databases")
 	}
+
+	//PostgresSQL extension
+	db.Exec(db_extensions)
 
 	db.AutoMigrate(&entity.User{})
 	db.AutoMigrate(&entity.Resume{})
