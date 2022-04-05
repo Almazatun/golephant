@@ -256,16 +256,31 @@ func (uc *resumeUseCase) UpdateUserEducationResume(
 	}
 
 	if len(updateUserEducationsResumeInput.UserEducations) > 0 {
+		var createUserEducationsInput []input.UserEducationInput
+		var updateUserEducationsInput []input.UserEducationInput
 
-		createUserEducationsInput := getCreateUserEducations(updateUserEducationsResumeInput)
+		сreateUserEducationСhannel := make(chan input.UserEducationInput, 2)
+		updateUserEducationСhannel := make(chan input.UserEducationInput, 3)
+
+		go getCreateAndUpdateUserEducations(
+			updateUserEducationsResumeInput,
+			сreateUserEducationСhannel,
+			updateUserEducationСhannel,
+		)
+
+		for createUserEducation := range сreateUserEducationСhannel {
+			createUserEducationsInput = append(createUserEducationsInput, createUserEducation)
+		}
+
+		for updateUserEducation := range updateUserEducationСhannel {
+			updateUserEducationsInput = append(updateUserEducationsInput, updateUserEducation)
+		}
 
 		createUserEducationsDB, err := createUserEducations(createUserEducationsInput)
 
 		if err != nil {
 			return nil, err
 		}
-
-		updateUserEducationsInput := getUpdateUserEducations(updateUserEducationsResumeInput)
 
 		updateUserEducationsDB, err := updateUserEducations(*resumeDB, updateUserEducationsInput)
 
@@ -303,16 +318,31 @@ func (uc *resumeUseCase) UpdateUserExperiencesResume(
 	}
 
 	if len(updateUserExperiencesResumeInput.UserExperiences) > 0 {
+		var createUserExperiencesInput []input.UserExperienceInput
+		var updateUserExperiencesInput []input.UserExperienceInput
 
-		createUserExperiencesInput := getCreateUserExperiences(updateUserExperiencesResumeInput)
+		сreateUserEducationChannel := make(chan input.UserExperienceInput, 2)
+		updateUserEducationChannel := make(chan input.UserExperienceInput, 3)
+
+		go getCreateAndUpdateUserExperiences(
+			updateUserExperiencesResumeInput,
+			сreateUserEducationChannel,
+			updateUserEducationChannel,
+		)
+
+		for createUserExperience := range сreateUserEducationChannel {
+			createUserExperiencesInput = append(createUserExperiencesInput, createUserExperience)
+		}
+
+		for updateUserExperience := range updateUserEducationChannel {
+			updateUserExperiencesInput = append(updateUserExperiencesInput, updateUserExperience)
+		}
 
 		createUserEducationsDB, err := createUserExperiencesToUpdate(createUserExperiencesInput)
 
 		if err != nil {
 			return nil, err
 		}
-
-		updateUserExperiencesInput := getUpdateUserExperiences(updateUserExperiencesResumeInput)
 
 		updateUserExperiencesDB, err := updateUserExperiences(*resumeDB, updateUserExperiencesInput)
 
@@ -611,52 +641,43 @@ func createUserExperiences(createResumeInput input.CreateResumeInput) (userExper
 	return userExperiences, nil
 }
 
-func getCreateUserExperiences(
+func getCreateAndUpdateUserExperiences(
 	updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput,
-) (res []input.UserExperienceInput) {
+	createUserExperience chan input.UserExperienceInput,
+	updateUserExperience chan input.UserExperienceInput,
+) {
 	for _, userExperience := range updateUserExperiencesResumeInput.UserExperiences {
 		if userExperience.UserExperienceID == "" {
-			res = append(res, userExperience)
+			// channel out put createUserExperience
+			createUserExperience <- userExperience
+		} else {
+			// channel out put updateUserExperience
+			updateUserExperience <- userExperience
 		}
 	}
-
-	return res
+	// Close channels
+	close(createUserExperience)
+	close(updateUserExperience)
 }
 
-func getUpdateUserExperiences(
-	updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput,
-) (res []input.UserExperienceInput) {
-	for _, userExperience := range updateUserExperiencesResumeInput.UserExperiences {
-		if userExperience.UserExperienceID != "" {
-			res = append(res, userExperience)
-		}
-	}
-
-	return res
-}
-
-func getCreateUserEducations(
+func getCreateAndUpdateUserEducations(
 	updateUserEducationsResumeInput input.UpdateUserEducationsResumeInput,
-) (res []input.UserEducationInput) {
+	createUserEducation chan input.UserEducationInput,
+	updateUserEducation chan input.UserEducationInput,
+) {
 	for _, userEducation := range updateUserEducationsResumeInput.UserEducations {
 		if userEducation.UserEducationID == "" {
-			res = append(res, userEducation)
+			// channel out put createUserEducation
+			createUserEducation <- userEducation
+		} else {
+			// channel out put updateUserEducation
+			updateUserEducation <- userEducation
 		}
 	}
 
-	return res
-}
-
-func getUpdateUserEducations(
-	updateUserEducationsResumeInput input.UpdateUserEducationsResumeInput,
-) (res []input.UserEducationInput) {
-	for _, userEducation := range updateUserEducationsResumeInput.UserEducations {
-		if userEducation.UserEducationID != "" {
-			res = append(res, userEducation)
-		}
-	}
-
-	return res
+	// Close channels
+	close(createUserEducation)
+	close(updateUserEducation)
 }
 
 func setGender(gender string) string {
