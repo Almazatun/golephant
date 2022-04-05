@@ -44,7 +44,7 @@ func NewRouter(h Handler) *mux.Router {
 		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateTagsResumeInput))).Methods("PUT")
 
 	// User education in resume
-	resume.Handle("/{resumeId}/user/{userId}/userEducations",
+	resume.Handle("/{resumeId}/user/{userId}/userEducation",
 		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateUserEducationResume))).Methods("PUT")
 	resume.Handle("/{resumeId}/userEducation/{userEducationId}",
 		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteUserEducationInResume))).Methods("DELETE")
