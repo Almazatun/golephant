@@ -20,6 +20,36 @@ type resumeUseCase struct {
 
 type ResumeUseCase interface {
 	CreateResume(userId string, createResumeInput input.CreateResumeInput) (createResume *entity.Resume, err error)
+	UpdateBasicInfoResume(
+		userId string,
+		resumeId string,
+		updateBasicInfoResumeInput input.UpdateBasicInfoResume,
+	) (updateResume *entity.Resume, err error)
+	UpdateAboutMeResume(
+		userId string,
+		resumeId string,
+		updateAboutMeResumeInput input.UpdateAboutMeResumeInput,
+	) (updateAboutMeResume *entity.Resume, err error)
+	UpdateCitizenshipResume(
+		userId string,
+		resumeId string,
+		updateCitizenshipResumInput input.UpdateCitizenshipResumeInput,
+	) (updateCitizenshipResume *entity.Resume, err error)
+	UpdateTagsResumeInput(
+		userId string,
+		resumeId string,
+		updateTagsResume input.UdateTagsResumeInput,
+	) (updateTagsResum *entity.Resume, err error)
+	UpdateUserEducationResume(
+		userId string,
+		resumeId string,
+		updateUserEducationsResumeInput input.UpdateUserEducationsResumeInput,
+	) (updateUserEducationsResum *entity.Resume, err error)
+	UpdateUserExperiencesResume(
+		userId string,
+		resumeId string,
+		updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput,
+	) (updateUserEducationsResum *entity.Resume, err error)
 	DeleteResume(resumeId string) (str string, err error)
 	DeleteUserExperienceInResume(resumeId string, userExperienceId string) (str string, err error)
 	DeleteUserEducationInResume(resumeId string, userEducationId string) (str string, err error)
