@@ -60,7 +60,7 @@ func (r *resumeRepository) FindById(resumeId string) (resumeDB *entity.Resume, e
 
 	result := r.db.Preload("UserEducations").Preload("UserExperiences").First(&resume, "resume_id = ?", resumeId)
 
-	r.db.Model(resume).Related(&resume.UserID)
+	r.db.Model(resume).Related(&resume.User)
 
 	er := result.Error
 
@@ -83,7 +83,7 @@ func (r *resumeRepository) Update(updateResume entity.Resume) (resumeDB *entity.
 		return nil, e
 	}
 
-	r.db.Model(result).Related(&result.UserID)
+	r.db.Model(result).Related(&result.User)
 
 	return &result, nil
 }
