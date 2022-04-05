@@ -50,6 +50,11 @@ type ResumeUseCase interface {
 		resumeId string,
 		updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput,
 	) (updateUserEducationsResum *entity.Resume, err error)
+	UpdateDesiredPositionResume(
+		userId string,
+		resumeId string,
+		updateDesiredPositionResumeInput input.UpdateDesiredPositionResumeInput,
+	) (updateAboutMeResume *entity.Resume, err error)
 	DeleteResume(resumeId string) (str string, err error)
 	DeleteUserExperienceInResume(resumeId string, userExperienceId string) (str string, err error)
 	DeleteUserEducationInResume(resumeId string, userEducationId string) (str string, err error)
@@ -202,6 +207,49 @@ func (uc *resumeUseCase) UpdateAboutMeResume(
 
 }
 
+func (uc *resumeUseCase) UpdateDesiredPositionResume(
+	userId string,
+	resumeId string,
+	updateDesiredPositionResumeInput input.UpdateDesiredPositionResumeInput,
+) (updateAboutMeResume *entity.Resume, err error) {
+	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resumeDB.UserID.String() != userId {
+		newErr := errors.New(error_message.BAD_REGUEST)
+		return nil, newErr
+	}
+
+	if updateDesiredPositionResumeInput.DesiredPosition != "" {
+		resumeDB.DesiredPosition = updateDesiredPositionResumeInput.DesiredPosition
+	}
+
+	if updateDesiredPositionResumeInput.Specialization != "" {
+		resumeDB.Specialization = updateDesiredPositionResumeInput.Specialization
+	}
+
+	if updateDesiredPositionResumeInput.WorkMode != "" {
+		resumeDB.WorkMode = updateDesiredPositionResumeInput.WorkMode
+	}
+
+	now := time.Now()
+	resumeDB.CreationTime = now
+	resumeDB.UpdateTime = now
+
+	res, err := uc.resumeRepo.Update(*resumeDB)
+
+	if err != nil {
+		return nil, err
+
+	}
+
+	return res, nil
+
+}
+
 func (uc *resumeUseCase) UpdateCitizenshipResume(
 	userId string,
 	resumeId string,
@@ -220,6 +268,10 @@ func (uc *resumeUseCase) UpdateCitizenshipResume(
 
 	if updateCitizenshipResumInput.City != "" {
 		resumeDB.Citizenship = updateCitizenshipResumInput.City
+	}
+
+	if updateCitizenshipResumInput.SubwayStation != "" {
+		resumeDB.SubwayStation = updateCitizenshipResumInput.SubwayStation
 	}
 
 	now := time.Now()
@@ -318,6 +370,8 @@ func (uc *resumeUseCase) UpdateUserEducationResume(
 			return nil, err
 		}
 
+		resumeDB.UserEducations = nil
+
 		resumeDB.UserEducations = append(resumeDB.UserEducations, createUserEducationsDB...)
 		resumeDB.UserEducations = append(resumeDB.UserEducations, updateUserEducationsDB...)
 	}
@@ -374,11 +428,13 @@ func (uc *resumeUseCase) UpdateUserExperiencesResume(
 			return nil, err
 		}
 
-		updateUserExperiencesDB, err := updateUserExperiences(*resumeDB, updateUserExperiencesInput)
+		updateUserExperiencesDB, err := updateUserExperiences(resumeDB, updateUserExperiencesInput)
 
 		if err != nil {
 			return nil, err
 		}
+
+		resumeDB.UserExperiences = nil
 
 		resumeDB.UserExperiences = append(resumeDB.UserExperiences, createUserEducationsDB...)
 		resumeDB.UserExperiences = append(resumeDB.UserExperiences, updateUserExperiencesDB...)
@@ -533,6 +589,7 @@ func updateUserEducations(
 
 				userEducationDB.EndDate = endDate
 
+				res = append(res, userEducationDB)
 			}
 		}
 
@@ -550,7 +607,7 @@ func updateUserEducations(
 }
 
 func updateUserExperiences(
-	resumeDB entity.Resume,
+	resumeDB *entity.Resume,
 	updateUserExperiences []input.UserExperienceInput,
 ) (res []entity.UserExperience, err error) {
 	for _, updateUserExperience := range updateUserExperiences {
@@ -578,6 +635,7 @@ func updateUserExperiences(
 
 				userExperienceDB.EndDate = endDate
 
+				res = append(res, userExperienceDB)
 			}
 		}
 
