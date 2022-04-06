@@ -5,10 +5,12 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/Almazatun/golephant/common"
 	usecase "github.com/Almazatun/golephant/domain"
 	handler "github.com/Almazatun/golephant/handler"
 	repository "github.com/Almazatun/golephant/infrastucture"
 	router "github.com/Almazatun/golephant/router"
+	mux_handlers "github.com/gorilla/handlers"
 
 	"github.com/Almazatun/golephant/pkg/db"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -47,7 +49,11 @@ func main() {
 
 	router := router.NewRouter(handlers)
 
-	log.Fatal(http.ListenAndServe(":3000", router))
+	log.Fatal(http.ListenAndServe(":3000",
+		mux_handlers.CORS(
+			mux_handlers.AllowedHeaders(common.CORS_ALLOWED_HEADERS),
+			mux_handlers.AllowedMethods(common.CORS_ALLOWED_METHODS),
+			mux_handlers.AllowedOrigins(common.CORS_ALLOWED_ORIGINS))(router)))
 
 	defer DB.Close()
 
