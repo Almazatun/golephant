@@ -761,7 +761,7 @@ func getCreateAndUpdateUserExperiences(
 			// channel out put updateUserExperience
 			userExperienceChannelOutData := UserExperienceChannel{
 				UserExperienceInput:    userExperience,
-				isUserExperienceUpdate: false,
+				isUserExperienceUpdate: true,
 			}
 			userExperienceChannel <- userExperienceChannelOutData
 		}
