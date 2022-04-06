@@ -8,4 +8,5 @@ const (
 	USER_EXPERIENCE_NOT_FOUND = "User experience not found"
 	RESUME_NOT_FOUND          = "Resume not found"
 	BAD_REGUEST               = "Bad request"
+	ERROR_404                 = "Error 404"
 )
