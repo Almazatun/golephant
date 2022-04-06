@@ -43,14 +43,14 @@ $ docker-compose up --build -d
 
 | Description | http | path |
 |:--:|:--:|:--|
-| CREATE | PUT | BASE_URL/resume/:resumeId/user/:userId/userEducation |
+| CREATE_AND_UPDATE | PUT | BASE_URL/resume/:resumeId/user/:userId/userEducation |
 | DELETE | DELETE | BASE_URL/resume/:resumeId/userEducation/:userEducationId |
 
 ### User Experiences
 
 | Description | http | path |
 |:--:|:--:|:--|
-| CREATE | PUT | BASE_URL/resume/:resumeId/user/:userId/userExperiences |
+| CREATE_AND_UPDATE | PUT | BASE_URL/resume/:resumeId/user/:userId/userExperiences |
 | DELETE | DELETE | BASE_URL/resume/:resumeId/userExperience/:userExperienceId |
 ### UML diagram
 <img src="./assets/uml-golephant.png">
