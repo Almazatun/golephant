@@ -1,8 +1,10 @@
 package router
 
 import (
+	"encoding/json"
 	"net/http"
 
+	error_message "github.com/Almazatun/golephant/common/error-message"
 	handler "github.com/Almazatun/golephant/handler"
 	"github.com/Almazatun/golephant/middleware"
 	"github.com/gorilla/mux"
@@ -57,6 +59,11 @@ func NewRouter(h Handler) *mux.Router {
 
 	// Test
 	router.HandleFunc("/helloWorld", handler.HelloWord).Methods("GET")
+
+	// Not found
+	router.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode(error_message.ERROR_404)
+	})
 
 	return router
 }
