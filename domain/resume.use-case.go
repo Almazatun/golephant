@@ -60,6 +60,16 @@ type ResumeUseCase interface {
 	DeleteUserEducationInResume(resumeId string, userEducationId string) (str string, err error)
 }
 
+type UserEducationChannel struct {
+	UserEducationInput    input.UserEducationInput
+	isUserEducationUpdate bool
+}
+
+type UserExperienceChannel struct {
+	UserExperienceInput    input.UserExperienceInput
+	isUserExperienceUpdate bool
+}
+
 func NewResumeUseCase(
 	resumeRepo repository.ResumeRepo,
 	userRepo repository.UserRepo,
@@ -341,21 +351,24 @@ func (uc *resumeUseCase) UpdateUserEducationResume(
 		var createUserEducationsInput []input.UserEducationInput
 		var updateUserEducationsInput []input.UserEducationInput
 
-		сreateUserEducationСhannel := make(chan input.UserEducationInput, 2)
-		updateUserEducationСhannel := make(chan input.UserEducationInput, 3)
+		userEducationСhannel := make(chan UserEducationChannel, 2)
 
 		go getCreateAndUpdateUserEducations(
 			updateUserEducationsResumeInput,
-			сreateUserEducationСhannel,
-			updateUserEducationСhannel,
+			userEducationСhannel,
 		)
 
-		for createUserEducation := range сreateUserEducationСhannel {
-			createUserEducationsInput = append(createUserEducationsInput, createUserEducation)
-		}
-
-		for updateUserEducation := range updateUserEducationСhannel {
-			updateUserEducationsInput = append(updateUserEducationsInput, updateUserEducation)
+		for userEducationChannelData := range userEducationСhannel {
+			if userEducationChannelData.isUserEducationUpdate {
+				updateUserEducationsInput = append(
+					updateUserEducationsInput,
+					userEducationChannelData.UserEducationInput,
+				)
+			}
+			createUserEducationsInput = append(
+				createUserEducationsInput,
+				userEducationChannelData.UserEducationInput,
+			)
 		}
 
 		createUserEducationsDB, err := createUserEducations(createUserEducationsInput)
@@ -405,21 +418,24 @@ func (uc *resumeUseCase) UpdateUserExperiencesResume(
 		var createUserExperiencesInput []input.UserExperienceInput
 		var updateUserExperiencesInput []input.UserExperienceInput
 
-		сreateUserEducationChannel := make(chan input.UserExperienceInput, 2)
-		updateUserEducationChannel := make(chan input.UserExperienceInput, 3)
+		userExperienceChannel := make(chan UserExperienceChannel, 2)
 
 		go getCreateAndUpdateUserExperiences(
 			updateUserExperiencesResumeInput,
-			сreateUserEducationChannel,
-			updateUserEducationChannel,
+			userExperienceChannel,
 		)
 
-		for createUserExperience := range сreateUserEducationChannel {
-			createUserExperiencesInput = append(createUserExperiencesInput, createUserExperience)
-		}
-
-		for updateUserExperience := range updateUserEducationChannel {
-			updateUserExperiencesInput = append(updateUserExperiencesInput, updateUserExperience)
+		for userExperienceChannelData := range userExperienceChannel {
+			if userExperienceChannelData.isUserExperienceUpdate {
+				updateUserExperiencesInput = append(
+					updateUserExperiencesInput,
+					userExperienceChannelData.UserExperienceInput,
+				)
+			}
+			createUserExperiencesInput = append(
+				createUserExperiencesInput,
+				userExperienceChannelData.UserExperienceInput,
+			)
 		}
 
 		createUserEducationsDB, err := createUserExperiencesToUpdate(createUserExperiencesInput)
@@ -731,41 +747,53 @@ func createUserExperiences(createResumeInput input.CreateResumeInput) (userExper
 
 func getCreateAndUpdateUserExperiences(
 	updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput,
-	createUserExperience chan input.UserExperienceInput,
-	updateUserExperience chan input.UserExperienceInput,
+	userExperienceChannel chan UserExperienceChannel,
 ) {
 	for _, userExperience := range updateUserExperiencesResumeInput.UserExperiences {
 		if userExperience.UserExperienceID == "" {
 			// channel out put createUserExperience
-			createUserExperience <- userExperience
+			userExperienceChannelOutData := UserExperienceChannel{
+				UserExperienceInput:    userExperience,
+				isUserExperienceUpdate: false,
+			}
+			userExperienceChannel <- userExperienceChannelOutData
 		} else {
 			// channel out put updateUserExperience
-			updateUserExperience <- userExperience
+			userExperienceChannelOutData := UserExperienceChannel{
+				UserExperienceInput:    userExperience,
+				isUserExperienceUpdate: false,
+			}
+			userExperienceChannel <- userExperienceChannelOutData
 		}
 	}
-	// Close channels
-	close(createUserExperience)
-	close(updateUserExperience)
+	// Close channel
+	close(userExperienceChannel)
 }
 
 func getCreateAndUpdateUserEducations(
 	updateUserEducationsResumeInput input.UpdateUserEducationsResumeInput,
-	createUserEducation chan input.UserEducationInput,
-	updateUserEducation chan input.UserEducationInput,
+	userEducationChannel chan UserEducationChannel,
 ) {
 	for _, userEducation := range updateUserEducationsResumeInput.UserEducations {
 		if userEducation.UserEducationID == "" {
 			// channel out put createUserEducation
-			createUserEducation <- userEducation
+			userEducationChannelOutData := UserEducationChannel{
+				UserEducationInput:    userEducation,
+				isUserEducationUpdate: false,
+			}
+			userEducationChannel <- userEducationChannelOutData
 		} else {
 			// channel out put updateUserEducation
-			updateUserEducation <- userEducation
+			userEducationChannelOutData := UserEducationChannel{
+				UserEducationInput:    userEducation,
+				isUserEducationUpdate: true,
+			}
+			userEducationChannel <- userEducationChannelOutData
 		}
 	}
 
-	// Close channels
-	close(createUserEducation)
-	close(updateUserEducation)
+	// Close channel
+	close(userEducationChannel)
 }
 
 func setGender(gender string) string {
