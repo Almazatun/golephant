@@ -18,6 +18,9 @@ type Handler struct {
 func NewRouter(h Handler) *mux.Router {
 	router := mux.NewRouter()
 
+	// Resumes
+	router.Handle("/resumes/{userId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UserResumes))).Methods("GET")
+
 	//User
 	user := router.PathPrefix("/user").Subrouter()
 	user.HandleFunc("/register", h.UserHandler.RegisterUser).Methods("POST")
@@ -27,7 +30,7 @@ func NewRouter(h Handler) *mux.Router {
 
 	// Resume
 	resume := router.PathPrefix("/resume").Subrouter()
-	resume.Handle("user/{userId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.CreateResume))).Methods("POST")
+	resume.Handle("/user/{userId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.CreateResume))).Methods("POST")
 	resume.Handle("/{resumeId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteResume))).Methods("DELETE")
 
 	resume.Handle("/{resumeId}/user/{userId}/basicInfo",

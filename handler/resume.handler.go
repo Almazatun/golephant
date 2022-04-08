@@ -7,15 +7,18 @@ import (
 
 	loggerinfo "github.com/Almazatun/golephant/common/loggerInfo"
 	usecase "github.com/Almazatun/golephant/domain"
+	repository "github.com/Almazatun/golephant/infrastucture"
 	"github.com/Almazatun/golephant/presentation/input"
 	"github.com/gorilla/mux"
 )
 
 type resumeHandler struct {
-	resumeUseCase usecase.ResumeUseCase
+	resumeUseCase    usecase.ResumeUseCase
+	resumeRepository repository.ResumeRepo
 }
 
 type ResumeHandler interface {
+	UserResumes(w http.ResponseWriter, r *http.Request)
 	CreateResume(w http.ResponseWriter, r *http.Request)
 	UpdateBasicInfoResume(w http.ResponseWriter, r *http.Request)
 	UpdateAboutMeResume(w http.ResponseWriter, r *http.Request)
@@ -29,10 +32,29 @@ type ResumeHandler interface {
 	DeleteUserExperienceInResume(w http.ResponseWriter, r *http.Request)
 }
 
-func NewResumeHandler(resumeUseCase usecase.ResumeUseCase) ResumeHandler {
+func NewResumeHandler(
+	resumeUseCase usecase.ResumeUseCase,
+	resumeRepository repository.ResumeRepo,
+) ResumeHandler {
 	return &resumeHandler{
-		resumeUseCase: resumeUseCase,
+		resumeUseCase:    resumeUseCase,
+		resumeRepository: resumeRepository,
 	}
+}
+
+func (h *resumeHandler) UserResumes(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	res, err := h.resumeRepository.ListByUserId(params["userId"])
+
+	if err != nil {
+		loggerinfo.LoggerError(err)
+		HttpResponseBody(w, err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
 }
 
 func (h *resumeHandler) CreateResume(w http.ResponseWriter, r *http.Request) {

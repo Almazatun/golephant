@@ -40,7 +40,10 @@ func main() {
 		userEducationRepository,
 		userExperienceRepository,
 	)
-	resumeHandler := handler.NewResumeHandler(resumeUseCase)
+	resumeHandler := handler.NewResumeHandler(
+		resumeUseCase,
+		resumeRepository,
+	)
 
 	handlers := router.Handler{
 		UserHandler:   userHandler,

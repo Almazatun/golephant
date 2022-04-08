@@ -13,6 +13,7 @@ type resumeRepository struct {
 }
 
 type ResumeRepo interface {
+	ListByUserId(userId string) (resumeDB *[]entity.Resume, err error)
 	Create(resume entity.Resume) (resumeDB *entity.Resume, err error)
 	DeleteById(resumeId string) (str string, err error)
 	GetById(resumeId string) (resumeDB *entity.Resume, err error)
@@ -23,6 +24,24 @@ func NewResumeRepo(db *gorm.DB) ResumeRepo {
 	return &resumeRepository{
 		db: db,
 	}
+}
+
+func (r *resumeRepository) ListByUserId(userId string) (resumeDB *[]entity.Resume, err error) {
+	var list []entity.Resume
+
+	result := r.db.Preload("UserEducations").Preload("UserExperiences").Find(&list, "user_id = ?", userId)
+
+	er := result.Error
+
+	if er != nil {
+		return nil, err
+	}
+
+	for _, resume := range list {
+		r.db.Model(resume).Related(&resume.User)
+	}
+
+	return &list, nil
 }
 
 func (r *resumeRepository) Create(resume entity.Resume) (resumeDB *entity.Resume, err error) {
