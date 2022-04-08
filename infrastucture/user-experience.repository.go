@@ -13,7 +13,7 @@ type userExperienceRepository struct {
 }
 
 type UserExperienceRepo interface {
-	FindById(userExperienceId string) (userExperienceDB *entity.UserExperience, err error)
+	GetById(userExperienceId string) (userExperienceDB *entity.UserExperience, err error)
 	DeleteById(userExperienceId string) (str string, err error)
 }
 
@@ -23,7 +23,7 @@ func NewUserExperienceRepo(db *gorm.DB) UserExperienceRepo {
 	}
 }
 
-func (r *userExperienceRepository) FindById(userExperienceId string) (userExperienceDB *entity.UserExperience, err error) {
+func (r *userExperienceRepository) GetById(userExperienceId string) (userExperienceDB *entity.UserExperience, err error) {
 	var userEducation entity.UserExperience
 
 	result := r.db.First(&userEducation, "user_experience_id = ?", userExperienceId)

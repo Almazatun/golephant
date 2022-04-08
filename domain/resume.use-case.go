@@ -477,7 +477,7 @@ func (uc *resumeUseCase) DeleteResume(resumeId string) (str string, err error) {
 
 func (uc *resumeUseCase) DeleteUserExperienceInResume(resumeId string, userExperienceId string) (str string, err error) {
 
-	userExperienceDB, err := uc.userExperienceRepo.FindById(userExperienceId)
+	userExperienceDB, err := uc.userExperienceRepo.GetById(userExperienceId)
 
 	if err != nil {
 		return "", err
@@ -498,7 +498,7 @@ func (uc *resumeUseCase) DeleteUserExperienceInResume(resumeId string, userExper
 }
 
 func (uc *resumeUseCase) DeleteUserEducationInResume(resumeId string, userEducationId string) (str string, err error) {
-	userEducationDB, err := uc.userEducationRepo.FindById(userEducationId)
+	userEducationDB, err := uc.userEducationRepo.GetById(userEducationId)
 
 	if err != nil {
 		return "", err
