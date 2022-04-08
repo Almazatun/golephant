@@ -95,7 +95,7 @@ func (uc *resumeUseCase) CreateResume(userId string, createResumeInput input.Cre
 		return nil, e
 	}
 
-	user, err := uc.userRepo.FindById(userId)
+	user, err := uc.userRepo.GetById(userId)
 
 	if err != nil {
 		return nil, err

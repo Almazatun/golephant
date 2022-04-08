@@ -15,8 +15,8 @@ type userRepository struct {
 
 type UserRepo interface {
 	Create(user entity.User) (registerUser *entity.User, err error)
-	FindByEmail(email string) (user *entity.User, err error)
-	FindById(userId string) (user *entity.User, err error)
+	GetByEmail(email string) (user *entity.User, err error)
+	GetById(userId string) (user *entity.User, err error)
 	Update(updateUserData entity.User) (updateUser *entity.User, err error)
 }
 
@@ -40,7 +40,7 @@ func (r *userRepository) Create(user entity.User) (registerUser *entity.User, er
 	return &createUser, nil
 }
 
-func (r *userRepository) FindByEmail(email string) (userDB *entity.User, err error) {
+func (r *userRepository) GetByEmail(email string) (userDB *entity.User, err error) {
 	var user entity.User
 
 	result := r.db.First(&user, "email = ?", email)
@@ -56,7 +56,7 @@ func (r *userRepository) FindByEmail(email string) (userDB *entity.User, err err
 	return &user, nil
 }
 
-func (r *userRepository) FindById(userId string) (userDB *entity.User, err error) {
+func (r *userRepository) GetById(userId string) (userDB *entity.User, err error) {
 	var user entity.User
 
 	result := r.db.First(&user, "user_id = ?", userId)

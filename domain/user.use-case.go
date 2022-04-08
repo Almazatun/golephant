@@ -78,7 +78,7 @@ func (uc *userUseCase) LogIn(logInInput input.LogInInput) (resLogIn *ResLogIn, e
 		return nil, e
 	}
 
-	user, err := uc.userRepo.FindByEmail(logInInput.Email)
+	user, err := uc.userRepo.GetByEmail(logInInput.Email)
 
 	if err != nil {
 		return nil, err
@@ -115,7 +115,7 @@ func (uc *userUseCase) UpdateUserData(userId string, updateUserDataInput input.U
 		return nil, nil
 	}
 
-	userDB, err := uc.userRepo.FindById(userId)
+	userDB, err := uc.userRepo.GetByEmail(userId)
 
 	if err != nil {
 		return nil, err
