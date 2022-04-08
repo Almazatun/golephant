@@ -132,7 +132,7 @@ func (uc *resumeUseCase) UpdateBasicInfoResume(
 	updateBasicInfoResumeInput input.UpdateBasicInfoResume,
 ) (updateResume *entity.Resume, err error) {
 
-	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+	resumeDB, err := uc.resumeRepo.GetById(resumeId)
 
 	if err != nil {
 		return nil, err
@@ -187,7 +187,7 @@ func (uc *resumeUseCase) UpdateAboutMeResume(
 	resumeId string,
 	updateAboutMeResumeInput input.UpdateAboutMeResumeInput,
 ) (updateAboutMeResume *entity.Resume, err error) {
-	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+	resumeDB, err := uc.resumeRepo.GetById(resumeId)
 
 	if err != nil {
 		return nil, err
@@ -222,7 +222,7 @@ func (uc *resumeUseCase) UpdateDesiredPositionResume(
 	resumeId string,
 	updateDesiredPositionResumeInput input.UpdateDesiredPositionResumeInput,
 ) (updateAboutMeResume *entity.Resume, err error) {
-	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+	resumeDB, err := uc.resumeRepo.GetById(resumeId)
 
 	if err != nil {
 		return nil, err
@@ -265,7 +265,7 @@ func (uc *resumeUseCase) UpdateCitizenshipResume(
 	resumeId string,
 	updateCitizenshipResumInput input.UpdateCitizenshipResumeInput,
 ) (updateCitizenshipResume *entity.Resume, err error) {
-	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+	resumeDB, err := uc.resumeRepo.GetById(resumeId)
 
 	if err != nil {
 		return nil, err
@@ -303,7 +303,7 @@ func (uc *resumeUseCase) UpdateTagsResumeInput(
 	resumeId string,
 	updateTagsResume input.UdateTagsResumeInput,
 ) (updateTagsResum *entity.Resume, err error) {
-	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+	resumeDB, err := uc.resumeRepo.GetById(resumeId)
 
 	if err != nil {
 		return nil, err
@@ -336,7 +336,7 @@ func (uc *resumeUseCase) UpdateUserEducationResume(
 	resumeId string,
 	updateUserEducationsResumeInput input.UpdateUserEducationsResumeInput,
 ) (updateUserEducationsResum *entity.Resume, err error) {
-	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+	resumeDB, err := uc.resumeRepo.GetById(resumeId)
 
 	if err != nil {
 		return nil, err
@@ -403,7 +403,7 @@ func (uc *resumeUseCase) UpdateUserExperiencesResume(
 	resumeId string,
 	updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput,
 ) (updateUserEducationsResum *entity.Resume, err error) {
-	resumeDB, err := uc.resumeRepo.FindById(resumeId)
+	resumeDB, err := uc.resumeRepo.GetById(resumeId)
 
 	if err != nil {
 		return nil, err

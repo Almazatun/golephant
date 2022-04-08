@@ -15,7 +15,7 @@ type resumeRepository struct {
 type ResumeRepo interface {
 	Create(resume entity.Resume) (resumeDB *entity.Resume, err error)
 	DeleteById(resumeId string) (str string, err error)
-	FindById(resumeId string) (resumeDB *entity.Resume, err error)
+	GetById(resumeId string) (resumeDB *entity.Resume, err error)
 	Update(resume entity.Resume) (resumeDB *entity.Resume, err error)
 }
 
@@ -55,7 +55,7 @@ func (r *resumeRepository) DeleteById(resumeId string) (str string, err error) {
 	return res, nil
 }
 
-func (r *resumeRepository) FindById(resumeId string) (resumeDB *entity.Resume, err error) {
+func (r *resumeRepository) GetById(resumeId string) (resumeDB *entity.Resume, err error) {
 	var resume entity.Resume
 
 	result := r.db.Preload("UserEducations").Preload("UserExperiences").First(&resume, "resume_id = ?", resumeId)
