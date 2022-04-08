@@ -10,6 +10,28 @@ cd golephant/
 go mod download
 ```
 
+### Parameters
+In order to run the server make the following steps:
+```bash
+# Step 1 (Create .env file)
+$ touch .env
+# Step 2 (ENV variables)
+* Include some env variables:
+    # DB
+     * DB_PG
+     * DB_DATABASE
+     * DB_USER
+     * DB_PASSWORD
+     * DB_HOST
+     * DB_PORT
+    # DB_EXTENSIONS
+     * POSTGRES_EXTENSIONS
+    # JWT
+     * JWT_SECRET_KEY
+    # COOKIE
+     * SET_COOKIE_PATH
+```
+
 ### Starting the application
 
 ```bash
@@ -31,6 +53,7 @@ $ docker-compose up --build -d
 
 | Description | http | path |
 |:--:|:--:|:--|
+| LIST | GET | BASE_URL/resumes/user/:userId |
 | CREATE | POST | BASE_URL/resume/user/:userId |
 | DELETE  | PUT | BASE_URL/resume/:resumeId|
 | BASIC_INFO | PUT | BASE_URL/resume/:resumeId/user/:userId/basicInfo |
