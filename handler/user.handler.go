@@ -52,7 +52,7 @@ func (h *userHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(user)
+	json.NewEncoder(w).Encode("Successfuly register user." + "Email:" + user.Email)
 }
 
 func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {

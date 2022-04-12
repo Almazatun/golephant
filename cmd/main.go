@@ -45,9 +45,15 @@ func main() {
 		resumeRepository,
 	)
 
+	// Company
+	companyRepository := repository.NewCompanyRepo(DB)
+	companyUseCase := usecase.NewCompanyUseCase(companyRepository)
+	companyHandler := handler.NewCompanyHandler(companyUseCase)
+
 	handlers := router.Handler{
-		UserHandler:   userHandler,
-		ResumeHandler: resumeHandler,
+		UserHandler:    userHandler,
+		ResumeHandler:  resumeHandler,
+		CompanyHandler: companyHandler,
 	}
 
 	router := router.NewRouter(handlers)

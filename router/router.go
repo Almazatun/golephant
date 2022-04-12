@@ -11,12 +11,18 @@ import (
 )
 
 type Handler struct {
-	UserHandler   handler.UserHandler
-	ResumeHandler handler.ResumeHandler
+	UserHandler    handler.UserHandler
+	ResumeHandler  handler.ResumeHandler
+	CompanyHandler handler.CompanyHandler
 }
 
 func NewRouter(h Handler) *mux.Router {
 	router := mux.NewRouter()
+
+	// Company
+	company := router.PathPrefix("/company").Subrouter()
+	company.HandleFunc("/register", h.CompanyHandler.RegisterCompany).Methods("POST")
+	company.HandleFunc("/login", h.CompanyHandler.LogIn).Methods("PUT")
 
 	// Resumes
 	router.Handle("/resumes/{userId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UserResumes))).Methods("GET")
