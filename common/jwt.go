@@ -3,6 +3,7 @@ package common
 import (
 	"errors"
 	"os"
+	"time"
 
 	error_message "github.com/Almazatun/golephant/common/error-message"
 	"github.com/dgrijalva/jwt-go"
@@ -17,8 +18,13 @@ const (
 )
 
 type Claims struct {
-	UserEmail string `json:"user_email"`
+	Email string `json:"email"`
 	jwt.StandardClaims
+}
+
+type GenerateJWT struct {
+	Token          string
+	ExperationTime time.Time
 }
 
 func IsValidJWTStr(tokenStr string) (res bool, err error) {
@@ -49,4 +55,24 @@ func IsValidJWTStr(tokenStr string) (res bool, err error) {
 	}
 
 	return true, nil
+}
+
+func GenerateJWTStr(email string) (res *GenerateJWT, err error) {
+	experationTimeJWT := time.Now().Add(time.Minute * 60)
+	claims := Claims{
+		Email: email,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: experationTimeJWT.Unix(),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString(JWT_KEY_BYTE)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &GenerateJWT{Token: tokenString, ExperationTime: experationTimeJWT}, nil
+
 }
