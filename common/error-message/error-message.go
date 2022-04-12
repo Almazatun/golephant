@@ -6,6 +6,7 @@ const (
 	USER_NOT_FOUND            = "User not found"
 	USER_EDUCATION_NOT_FOUND  = "User education not found"
 	USER_EXPERIENCE_NOT_FOUND = "User experience not found"
+	COMPANY_NOT_FOUND         = "Company not found"
 	RESUME_NOT_FOUND          = "Resume not found"
 	BAD_REGUEST               = "Bad request"
 	ERROR_404                 = "Error 404"
