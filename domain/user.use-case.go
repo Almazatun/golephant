@@ -21,7 +21,7 @@ type userUseCase struct {
 
 type UserUseCase interface {
 	RegisterUser(registerUserInput input.RegisterUserInput) (user *entity.User, err error)
-	LogIn(logInInput input.LogInInput) (resLogIn *ResLogIn, err error)
+	LogIn(logInInput input.LogInUserInput) (resLogIn *ResLogIn, err error)
 	UpdateUserData(userId string, updateUserDataInput input.UpdateUserDataInput) (user *entity.User, err error)
 }
 
@@ -69,7 +69,7 @@ func (uc *userUseCase) RegisterUser(registerUserInput input.RegisterUserInput) (
 	return userDB, nil
 }
 
-func (uc *userUseCase) LogIn(logInInput input.LogInInput) (resLogIn *ResLogIn, err error) {
+func (uc *userUseCase) LogIn(logInInput input.LogInUserInput) (resLogIn *ResLogIn, err error) {
 	// Validate register user input
 	v := validator.New()
 	e := v.Struct(logInInput)

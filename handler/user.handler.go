@@ -56,8 +56,8 @@ func (h *userHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
-	var logInInput input.LogInInput
-	err := json.NewDecoder(r.Body).Decode(&logInInput)
+	var logInUserInput input.LogInUserInput
+	err := json.NewDecoder(r.Body).Decode(&logInUserInput)
 
 	if err != nil {
 		loggerinfo.LoggerError(err)
@@ -65,7 +65,7 @@ func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := h.userUseCase.LogIn(logInInput)
+	res, err := h.userUseCase.LogIn(logInUserInput)
 
 	if err != nil {
 		loggerinfo.LoggerError(err)
