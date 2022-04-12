@@ -83,7 +83,7 @@ func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 
 	http.SetCookie(w, &cookie)
 
-	json.NewEncoder(w).Encode("Successfuly log in")
+	json.NewEncoder(w).Encode(res.LogInEntityData)
 
 }
 

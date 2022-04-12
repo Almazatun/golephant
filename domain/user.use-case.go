@@ -6,8 +6,8 @@ import (
 
 	"github.com/Almazatun/golephant/infrastucture/entity"
 	"github.com/Almazatun/golephant/presentation/input"
+	types "github.com/Almazatun/golephant/presentation/types"
 	"github.com/Almazatun/golephant/util"
-	"github.com/dgrijalva/jwt-go"
 
 	common "github.com/Almazatun/golephant/common"
 	error_message "github.com/Almazatun/golephant/common/error-message"
@@ -21,7 +21,7 @@ type userUseCase struct {
 
 type UserUseCase interface {
 	RegisterUser(registerUserInput input.RegisterUserInput) (user *entity.User, err error)
-	LogIn(logInInput input.LogInUserInput) (resLogIn *ResLogIn, err error)
+	LogIn(logInInput input.LogInUserInput) (res *types.ResLogIn[entity.User], err error)
 	UpdateUserData(userId string, updateUserDataInput input.UpdateUserDataInput) (user *entity.User, err error)
 }
 
@@ -29,11 +29,6 @@ func NewUserUseCase(userRepo repository.UserRepo) UserUseCase {
 	return &userUseCase{
 		userRepo: userRepo,
 	}
-}
-
-type ResLogIn struct {
-	Token             string
-	ExperationTimeJWT time.Time
 }
 
 func (uc *userUseCase) RegisterUser(registerUserInput input.RegisterUserInput) (user *entity.User, err error) {
@@ -69,7 +64,7 @@ func (uc *userUseCase) RegisterUser(registerUserInput input.RegisterUserInput) (
 	return userDB, nil
 }
 
-func (uc *userUseCase) LogIn(logInInput input.LogInUserInput) (resLogIn *ResLogIn, err error) {
+func (uc *userUseCase) LogIn(logInInput input.LogInUserInput) (res *types.ResLogIn[entity.User], err error) {
 	// Validate register user input
 	v := validator.New()
 	e := v.Struct(logInInput)
@@ -91,22 +86,16 @@ func (uc *userUseCase) LogIn(logInInput input.LogInUserInput) (resLogIn *ResLogI
 		return nil, newErr
 	}
 
-	experationTimeJWT := time.Now().Add(time.Minute * 60)
-	claims := common.Claims{
-		UserEmail: user.Email,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: experationTimeJWT.Unix(),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString(common.JWT_KEY_BYTE)
+	generateJWT, err := common.GenerateJWTStr(user.Email)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &ResLogIn{Token: tokenString, ExperationTimeJWT: experationTimeJWT}, nil
+	return &types.ResLogIn[entity.User]{
+		Token:             generateJWT.Token,
+		ExperationTimeJWT: generateJWT.ExperationTime,
+		LogInEntityData:   *user}, nil
 }
 
 func (uc *userUseCase) UpdateUserData(userId string, updateUserDataInput input.UpdateUserDataInput) (user *entity.User, err error) {
