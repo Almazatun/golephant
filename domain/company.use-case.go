@@ -43,11 +43,11 @@ func (uc *companyUseCase) RegisterCompany(registerCompanyInput input.RegisterCom
 		return nil, e
 	}
 
-	// delete white spaces
+	// Delete white space
 	password := util.TrimWhiteSpace(registerCompanyInput.Password)
 	email := util.TrimWhiteSpace(registerCompanyInput.Email)
 
-	// Hashing user password
+	// Hashing company password
 	hashedPassword, err := util.HashPassword(password)
 
 	if err != nil {
