@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/Almazatun/golephant/infrastucture/entity"
+	"github.com/Almazatun/golephant/presentation/_type"
 	"github.com/Almazatun/golephant/presentation/input"
-	types "github.com/Almazatun/golephant/presentation/types"
 	"github.com/Almazatun/golephant/util"
 
 	common "github.com/Almazatun/golephant/common"
@@ -21,7 +21,7 @@ type userUseCase struct {
 
 type UserUseCase interface {
 	RegisterUser(registerUserInput input.RegisterUserInput) (user *entity.User, err error)
-	LogIn(logInInput input.LogInUserInput) (res *types.ResLogIn[entity.User], err error)
+	LogIn(logInInput input.LogInUserInput) (res *_type.ResLogIn[entity.User], err error)
 	UpdateUserData(userId string, updateUserDataInput input.UpdateUserDataInput) (user *entity.User, err error)
 }
 
@@ -64,7 +64,7 @@ func (uc *userUseCase) RegisterUser(registerUserInput input.RegisterUserInput) (
 	return userDB, nil
 }
 
-func (uc *userUseCase) LogIn(logInInput input.LogInUserInput) (res *types.ResLogIn[entity.User], err error) {
+func (uc *userUseCase) LogIn(logInInput input.LogInUserInput) (res *_type.ResLogIn[entity.User], err error) {
 	// Validate register user input
 	v := validator.New()
 	e := v.Struct(logInInput)
@@ -92,7 +92,7 @@ func (uc *userUseCase) LogIn(logInInput input.LogInUserInput) (res *types.ResLog
 		return nil, err
 	}
 
-	return &types.ResLogIn[entity.User]{
+	return &_type.ResLogIn[entity.User]{
 		Token:             generateJWT.Token,
 		ExperationTimeJWT: generateJWT.ExperationTime,
 		LogInEntityData:   *user}, nil

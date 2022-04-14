@@ -8,8 +8,8 @@ import (
 	error_message "github.com/Almazatun/golephant/common/error-message"
 	repository "github.com/Almazatun/golephant/infrastucture"
 	"github.com/Almazatun/golephant/infrastucture/entity"
+	"github.com/Almazatun/golephant/presentation/_type"
 	"github.com/Almazatun/golephant/presentation/input"
-	types "github.com/Almazatun/golephant/presentation/types"
 	"github.com/Almazatun/golephant/util"
 	"gopkg.in/go-playground/validator.v9"
 )
@@ -20,7 +20,7 @@ type companyUseCase struct {
 
 type CompanyUseCase interface {
 	RegisterCompany(registerCompanyInput input.RegisterCompanyInput) (companyDB *entity.Company, err error)
-	LogIn(logInCompanyInput input.LogInCompanyInput) (res *types.ResLogIn[entity.Company], err error)
+	LogIn(logInCompanyInput input.LogInCompanyInput) (res *_type.ResLogIn[entity.Company], err error)
 }
 
 func NewCompanyUseCase(companyRepo repository.CompanyRepo) CompanyUseCase {
@@ -72,7 +72,7 @@ func (uc *companyUseCase) RegisterCompany(registerCompanyInput input.RegisterCom
 	return res, nil
 }
 
-func (uc *companyUseCase) LogIn(logInCompanyInput input.LogInCompanyInput) (res *types.ResLogIn[entity.Company], err error) {
+func (uc *companyUseCase) LogIn(logInCompanyInput input.LogInCompanyInput) (res *_type.ResLogIn[entity.Company], err error) {
 
 	company, err := uc.companyRepo.GetByEmail(logInCompanyInput.Email)
 
@@ -93,7 +93,7 @@ func (uc *companyUseCase) LogIn(logInCompanyInput input.LogInCompanyInput) (res 
 		return nil, err
 	}
 
-	return &types.ResLogIn[entity.Company]{
+	return &_type.ResLogIn[entity.Company]{
 		Token:             generateJWT.Token,
 		ExperationTimeJWT: generateJWT.ExperationTime,
 		LogInEntityData:   *company}, nil
