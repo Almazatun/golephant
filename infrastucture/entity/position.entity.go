@@ -10,6 +10,7 @@ type Position struct {
 	Description      string         `json:"name" gorm:"type:varchar(1000)"`
 	Requirements     pq.StringArray `json:"requirements" gorm:"type:text[]" validate:"required"`
 	Responsibilities pq.StringArray `json:"responsibilities" gorm:"type:text[]" validate:"required"`
-	PositionTypeID   *uuid.UUID     `json:"position_type_id"`
-	PositionType     PositionType
+	PositionType     PositionType   `json:"position_type"  gorm:"type:text"`
+	CompanyID        uuid.UUID      `json:"company_id" gorm:"OnDelete:SET NULL; not NULL"`
+	Company          Company
 }

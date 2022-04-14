@@ -15,4 +15,5 @@ type Company struct {
 	CreationTime   time.Time        `json:"creation_time" gorm:"type:date; not NULL;"`
 	UpdateTime     time.Time        `json:"update_time" gorm:"type:date; not NULL;"`
 	CompanyAddress []CompanyAddress `gorm:"ForeignKey:CompanyID;references:CompanyID;"`
+	Positions      []Position       `gorm:"ForeignKey:CompanyID;references:CompanyID;"`
 }
