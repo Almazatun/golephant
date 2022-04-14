@@ -1,5 +1,7 @@
 # 🦕 Golephant
 
+Golephant is a backend service for searching jobs and finding companies that are hiring candidates for their open positions. The service also allows people to create their own resumes to represent them-self.
+
 ## Installation
 ```bash
 # Clone the repository
@@ -9,7 +11,6 @@ cd golephant/
 # Install the dependencies
 go mod download
 ```
-
 ### Parameters
 In order to run the server make the following steps:
 ```bash
