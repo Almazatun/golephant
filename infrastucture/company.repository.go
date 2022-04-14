@@ -25,7 +25,6 @@ func NewCompanyRepo(db *gorm.DB) CompanyRepo {
 }
 
 func (r *companyRepository) Create(company entity.Company) (companyDB *entity.Company, err error) {
-
 	result := r.db.Create(&company)
 
 	er := result.Error

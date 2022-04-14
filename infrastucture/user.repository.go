@@ -25,8 +25,6 @@ func NewUserRepo(db *gorm.DB) UserRepo {
 }
 
 func (r *userRepository) Create(user entity.User) (registerUser *entity.User, err error) {
-	var createUser entity.User
-
 	result := r.db.Create(&user)
 
 	er := result.Error
@@ -35,9 +33,7 @@ func (r *userRepository) Create(user entity.User) (registerUser *entity.User, er
 		return nil, err
 	}
 
-	createUser = user
-
-	return &createUser, nil
+	return &user, nil
 }
 
 func (r *userRepository) GetByEmail(email string) (userDB *entity.User, err error) {

@@ -45,7 +45,6 @@ func (r *resumeRepository) ListByUserId(userId string) (resumeDB *[]entity.Resum
 }
 
 func (r *resumeRepository) Create(resume entity.Resume) (resumeDB *entity.Resume, err error) {
-	var createResume entity.Resume
 
 	result := r.db.Create(&resume)
 
@@ -55,9 +54,7 @@ func (r *resumeRepository) Create(resume entity.Resume) (resumeDB *entity.Resume
 		return nil, err
 	}
 
-	createResume = resume
-
-	return &createResume, nil
+	return &resume, nil
 }
 
 func (r *resumeRepository) DeleteById(resumeId string) (str string, err error) {
