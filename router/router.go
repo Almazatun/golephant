@@ -11,9 +11,10 @@ import (
 )
 
 type Handler struct {
-	UserHandler    handler.UserHandler
-	ResumeHandler  handler.ResumeHandler
-	CompanyHandler handler.CompanyHandler
+	UserHandler         handler.UserHandler
+	ResumeHandler       handler.ResumeHandler
+	CompanyHandler      handler.CompanyHandler
+	PositionTypeHandler handler.PositionTypeHandler
 }
 
 func NewRouter(h Handler) *mux.Router {
@@ -26,6 +27,8 @@ func NewRouter(h Handler) *mux.Router {
 
 	// Resumes
 	router.Handle("/resumes/{userId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UserResumes))).Methods("GET")
+	//Position types
+	router.Handle("/positionTypes", middleware.Authentication(http.HandlerFunc(h.PositionTypeHandler.PositionTypes))).Methods("GET")
 
 	//User
 	user := router.PathPrefix("/user").Subrouter()

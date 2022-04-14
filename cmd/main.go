@@ -32,6 +32,10 @@ func main() {
 	// UserExperience
 	userExperienceRepository := repository.NewUserExperienceRepo(DB)
 
+	// Position type
+	positionTypeRepository := repository.NewPositionTypeRepo()
+	positionTypeHandler := handler.NewPositionTypeHandler(positionTypeRepository)
+
 	// Resume
 	resumeRepository := repository.NewResumeRepo(DB)
 	resumeUseCase := usecase.NewResumeUseCase(
@@ -51,9 +55,10 @@ func main() {
 	companyHandler := handler.NewCompanyHandler(companyUseCase)
 
 	handlers := router.Handler{
-		UserHandler:    userHandler,
-		ResumeHandler:  resumeHandler,
-		CompanyHandler: companyHandler,
+		UserHandler:         userHandler,
+		ResumeHandler:       resumeHandler,
+		CompanyHandler:      companyHandler,
+		PositionTypeHandler: positionTypeHandler,
 	}
 
 	router := router.NewRouter(handlers)
