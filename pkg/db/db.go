@@ -46,7 +46,7 @@ func Init() *gorm.DB {
 
 	db.Model(&entity.Resume{}).AddForeignKey("user_id", "users(user_id)", "CASCADE", "CASCADE")
 	db.Model(&entity.CompanyAddress{}).AddForeignKey("company_id", "companies(company_id)", "CASCADE", "CASCADE")
-	db.Model(&entity.Position{}).AddForeignKey("position_type_id", "position_types(position_type_id)", "CASCADE", "CASCADE")
+	db.Model(&entity.Position{}).AddForeignKey("company_id", "companies(company_id)", "CASCADE", "CASCADE")
 	db.Model(&entity.UserEducation{}).AddForeignKey("resume_id", "resumes(resume_id)", "CASCADE", "CASCADE")
 	db.Model(&entity.UserExperience{}).AddForeignKey("resume_id", "resumes(resume_id)", "CASCADE", "CASCADE")
 
