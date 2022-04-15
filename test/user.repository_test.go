@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"time"
 
-	repository "github.com/Almazatun/golephant/infrastucture"
-	"github.com/Almazatun/golephant/infrastucture/entity"
+	repository "github.com/Almazatun/golephant/internal/infrastucture"
+	"github.com/Almazatun/golephant/internal/infrastucture/entity"
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jinzhu/gorm"
 

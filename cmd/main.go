@@ -5,14 +5,14 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Almazatun/golephant/common"
-	usecase "github.com/Almazatun/golephant/domain"
-	handler "github.com/Almazatun/golephant/handler"
-	repository "github.com/Almazatun/golephant/infrastucture"
-	router "github.com/Almazatun/golephant/router"
+	usecase "github.com/Almazatun/golephant/internal/domain"
+	repository "github.com/Almazatun/golephant/internal/infrastucture"
+	"github.com/Almazatun/golephant/pkg/common"
+	router "github.com/Almazatun/golephant/pkg/http"
+	handler "github.com/Almazatun/golephant/pkg/http/handler"
 	mux_handlers "github.com/gorilla/handlers"
 
-	"github.com/Almazatun/golephant/pkg/db"
+	db "github.com/Almazatun/golephant/pkg/postgresql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/joho/godotenv"
 )
@@ -21,9 +21,14 @@ func main() {
 	loadENVs()
 	DB := db.Init()
 
+	// Reset password token
+	resetPasswordToken := repository.NewResetPasswordTokenRepo(DB)
 	// User
 	userRepository := repository.NewUserRepo(DB)
-	userUseCase := usecase.NewUserUseCase(userRepository)
+	userUseCase := usecase.NewUserUseCase(
+		userRepository,
+		resetPasswordToken,
+	)
 	userHandler := handler.NewUserHandler(userUseCase)
 
 	// UserEducation
