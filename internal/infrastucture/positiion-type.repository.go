@@ -18,7 +18,7 @@ func NewPositionTypeRepo() PositionTypeRepo {
 }
 
 // File-path no the same current folder structure, because the app running inside docker
-var filePathPositionTypeList = "../app/common/constant/position-type-list.json"
+var filePathPositionTypeList = "../app/pkg/common/constant/position-type-list.json"
 
 func (r *positionTypeRepository) List() (positionTypes []_type.PositonType, err error) {
 	fileBytes, err := ioutil.ReadFile(filePathPositionTypeList)
