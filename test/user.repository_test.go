@@ -2,70 +2,70 @@ package test
 
 import (
 	"database/sql"
+	"fmt"
 	"regexp"
+	"testing"
 	"time"
 
 	repository "github.com/Almazatun/golephant/internal/infrastucture"
 	"github.com/Almazatun/golephant/internal/infrastucture/entity"
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/jinzhu/gorm"
-
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-var _ = Describe("Pg", func() {
-	var repo repository.UserRepo
+func TestUserRepository_Register(t *testing.T) {
+	var db *sql.DB
+	var err error
 	var mock sqlmock.Sqlmock
+	var repo repository.UserRepo
 
-	BeforeEach(func() {
-		var db *sql.DB
-		var err error
+	db, mock, err = sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherRegexp)) // mock sql.DB
 
-		db, mock, err = sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherRegexp)) // mock sql.DB
-		Expect(err).ShouldNot(HaveOccurred())
+	if err != nil {
+		panic(err)
+	}
 
-		gdb, err := gorm.Open("postgres", db) // open gorm db
-		Expect(err).ShouldNot(HaveOccurred())
-
-		repo = repository.NewUserRepo(gdb)
+	dialector := postgres.New(postgres.Config{
+		DSN:                  "test",
+		DriverName:           "sqlite3",
+		Conn:                 db,
+		PreferSimpleProtocol: true,
 	})
 
-	Context("Register", func() {
-		var userDB entity.User
+	gdb, err := gorm.Open(dialector, &gorm.Config{}) // open gorm db
 
-		rows := sqlmock.NewRows([]string{
-			"username", "email", "password",
-		}).AddRow(userDB.Username, userDB.Email, userDB.Password)
+	if err != nil {
+		panic(err)
+	}
 
-		BeforeEach(func() {
-			userDB = entity.User{
-				Email:        "test@mail.com",
-				Password:     "1234567",
-				Username:     "test",
-				CreationTime: time.Now(),
-				UpdateTime:   time.Now(),
-			}
-		})
+	repo = repository.NewUserRepo(gdb)
 
-		It("Create", func() {
-			mock.ExpectBegin()
+	defer db.Close()
 
-			const sqlInsert = `
+	user := entity.User{
+		Email:        "test@mail.com",
+		Password:     "1234567",
+		Username:     "test",
+		CreationTime: time.Now(),
+		UpdateTime:   time.Now(),
+	}
+
+	mock.ExpectBegin()
+
+	const sqlInsert = `
 					INSERT INTO "users" ("username","email","password")
 					VALUES ($1,$2,$3) RETURNING "users"."user_id"`
-			const user_id = 1
-			mock.ExpectQuery(regexp.QuoteMeta(sqlInsert)).
-				WithArgs(userDB.UserID, userDB.Email, userDB.Password).
-				WillReturnRows(rows)
-			mock.ExpectCommit() // commit transaction
-			Expect(userDB.Email).Should(Equal("test@mail.com"))
 
-			_, err := repo.Create(userDB)
-			Expect(err).ShouldNot(HaveOccurred())
+	mock.ExpectQuery(regexp.QuoteMeta(sqlInsert)).
+		WithArgs(user.UserID, user.Email, user.Password).
+		WillReturnRows(sqlmock.NewRows([]string{"user_id"}).AddRow(user.UserID))
+	mock.ExpectCommit() // commit transaction
 
-		})
+	res, err := repo.Create(user)
 
-	})
-
-})
+	if err != nil {
+		fmt.Println(res.UserID)
+		panic(err)
+	}
+}
