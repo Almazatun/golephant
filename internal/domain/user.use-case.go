@@ -112,7 +112,7 @@ func (uc *userUseCase) UpdateData(userId string, updateUserDataInput input.Updat
 		return nil, nil
 	}
 
-	userDB, err := uc.userRepo.GetByEmail(userId)
+	userDB, err := uc.userRepo.GetById(userId)
 
 	if err != nil {
 		return nil, err
@@ -124,7 +124,7 @@ func (uc *userUseCase) UpdateData(userId string, updateUserDataInput input.Updat
 		return nil, err
 	}
 
-	res, err := uc.userRepo.Update(*updateUserData)
+	res, err := uc.userRepo.Save(*updateUserData)
 
 	if err != nil {
 		return nil, err
@@ -182,7 +182,7 @@ func (uc *userUseCase) ResetPassword(userId, resetPasswordToken, newPassword str
 
 	TokenDB.User.Password = hashedPassword
 
-	updateUser, err := uc.userRepo.Update(TokenDB.User)
+	updateUser, err := uc.userRepo.Save(TokenDB.User)
 
 	if err != nil {
 		return nil, err

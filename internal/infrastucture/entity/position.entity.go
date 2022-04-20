@@ -12,6 +12,6 @@ type Position struct {
 	Responsibilities pq.StringArray `json:"responsibilities" gorm:"type:text[]"`
 	PositionType     string         `json:"position_type"  gorm:"type:text"`
 	Salary           int            `json:"salary" gorm:"type:int"`
-	CompanyID        uuid.UUID      `json:"company_id" gorm:"OnDelete:SET NULL; not NULL"`
+	CompanyID        uuid.UUID      `json:"company_id"`
 	Company          Company
 }

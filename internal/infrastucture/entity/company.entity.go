@@ -14,6 +14,6 @@ type Company struct {
 	Phone          string           `json:"phone" gorm:"type:varchar(100);"`
 	CreationTime   time.Time        `json:"creation_time" gorm:"type:date; not NULL;"`
 	UpdateTime     time.Time        `json:"update_time" gorm:"type:date; not NULL;"`
-	CompanyAddress []CompanyAddress `gorm:"ForeignKey:CompanyID;references:CompanyID;"`
-	Positions      []Position       `gorm:"ForeignKey:CompanyID;references:CompanyID;"`
+	CompanyAddress []CompanyAddress `gorm:"ForeignKey:CompanyID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Positions      []Position       `gorm:"ForeignKey:CompanyID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }

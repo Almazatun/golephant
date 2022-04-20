@@ -6,14 +6,14 @@ import (
 	"os"
 
 	entity "github.com/Almazatun/golephant/internal/infrastucture/entity"
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var db *gorm.DB
 var err error
 
 func Init() *gorm.DB {
-	pg := os.Getenv("DB_PG")
 	host := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	user := os.Getenv("DB_USER")
@@ -24,7 +24,7 @@ func Init() *gorm.DB {
 	// Database connection strings
 	dbURI := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s port=%s", host, user, dbName, password, dbPort)
 
-	db, err = gorm.Open(pg, dbURI)
+	db, err = gorm.Open(postgres.Open(dbURI), &gorm.Config{})
 
 	if err != nil {
 		log.Fatal(err)
@@ -42,12 +42,6 @@ func Init() *gorm.DB {
 	db.AutoMigrate(&entity.Position{})
 	db.AutoMigrate(&entity.UserEducation{})
 	db.AutoMigrate(&entity.UserExperience{})
-
-	db.Model(&entity.Resume{}).AddForeignKey("user_id", "users(user_id)", "CASCADE", "CASCADE")
-	db.Model(&entity.CompanyAddress{}).AddForeignKey("company_id", "companies(company_id)", "CASCADE", "CASCADE")
-	db.Model(&entity.Position{}).AddForeignKey("company_id", "companies(company_id)", "CASCADE", "CASCADE")
-	db.Model(&entity.UserEducation{}).AddForeignKey("resume_id", "resumes(resume_id)", "CASCADE", "CASCADE")
-	db.Model(&entity.UserExperience{}).AddForeignKey("resume_id", "resumes(resume_id)", "CASCADE", "CASCADE")
 
 	return db
 }

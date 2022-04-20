@@ -3,7 +3,7 @@ package repository
 import (
 	"errors"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	entity "github.com/Almazatun/golephant/internal/infrastucture/entity"
 	error_message "github.com/Almazatun/golephant/pkg/common/error-message"
@@ -14,10 +14,10 @@ type userRepository struct {
 }
 
 type UserRepo interface {
-	Create(user entity.User) (registerUser *entity.User, err error)
-	GetByEmail(email string) (user *entity.User, err error)
-	GetById(userId string) (user *entity.User, err error)
-	Update(updateUserData entity.User) (updateUser *entity.User, err error)
+	Create(user entity.User) (userDB *entity.User, err error)
+	GetByEmail(email string) (userDB *entity.User, err error)
+	GetById(userId string) (userDB *entity.User, err error)
+	Save(user entity.User) (userDB *entity.User, err error)
 }
 
 func NewUserRepo(db *gorm.DB) UserRepo {
@@ -68,10 +68,9 @@ func (r *userRepository) GetById(userId string) (userDB *entity.User, err error)
 	return &user, nil
 }
 
-func (r *userRepository) Update(updateUserData entity.User) (updateUser *entity.User, err error) {
-	var user entity.User
+func (r *userRepository) Save(user entity.User) (updateUser *entity.User, err error) {
 
-	result := r.db.Model(&user).Updates(updateUserData)
+	result := r.db.Save(&user)
 
 	e := result.Error
 

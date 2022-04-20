@@ -14,5 +14,4 @@ type UserExperience struct {
 	Position         string    `json:"position" gorm:"type:varchar(100); default:0;"`
 	City             string    `json:"city" gorm:"type:varchar(100); not NULL"`
 	ResumeID         uuid.UUID `json:"resume_id" gorm:"not NULL"`
-	Resume           Resume
 }

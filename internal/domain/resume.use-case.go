@@ -172,7 +172,7 @@ func (uc *resumeUseCase) UpdateBasicInfoResume(
 	resumeDB.CreationTime = now
 	resumeDB.UpdateTime = now
 
-	res, err := uc.resumeRepo.Update(*resumeDB)
+	res, err := uc.resumeRepo.Save(*resumeDB)
 
 	if err != nil {
 		return nil, err
@@ -206,7 +206,7 @@ func (uc *resumeUseCase) UpdateAboutMeResume(
 	resumeDB.CreationTime = now
 	resumeDB.UpdateTime = now
 
-	res, err := uc.resumeRepo.Update(*resumeDB)
+	res, err := uc.resumeRepo.Save(*resumeDB)
 
 	if err != nil {
 		return nil, err
@@ -249,7 +249,7 @@ func (uc *resumeUseCase) UpdateDesiredPositionResume(
 	resumeDB.CreationTime = now
 	resumeDB.UpdateTime = now
 
-	res, err := uc.resumeRepo.Update(*resumeDB)
+	res, err := uc.resumeRepo.Save(*resumeDB)
 
 	if err != nil {
 		return nil, err
@@ -288,7 +288,7 @@ func (uc *resumeUseCase) UpdateCitizenshipResume(
 	resumeDB.CreationTime = now
 	resumeDB.UpdateTime = now
 
-	res, err := uc.resumeRepo.Update(*resumeDB)
+	res, err := uc.resumeRepo.Save(*resumeDB)
 
 	if err != nil {
 		return nil, err
@@ -322,7 +322,7 @@ func (uc *resumeUseCase) UpdateTagsResumeInput(
 	resumeDB.CreationTime = now
 	resumeDB.UpdateTime = now
 
-	res, err := uc.resumeRepo.Update(*resumeDB)
+	res, err := uc.resumeRepo.Save(*resumeDB)
 
 	if err != nil {
 		return nil, err
@@ -389,7 +389,7 @@ func (uc *resumeUseCase) UpdateUserEducationResume(
 		resumeDB.UserEducations = append(resumeDB.UserEducations, updateUserEducationsDB...)
 	}
 
-	res, err := uc.resumeRepo.Update(*resumeDB)
+	res, err := uc.resumeRepo.Save(*resumeDB)
 
 	if err != nil {
 		return nil, err
@@ -456,7 +456,7 @@ func (uc *resumeUseCase) UpdateUserExperiencesResume(
 		resumeDB.UserExperiences = append(resumeDB.UserExperiences, updateUserExperiencesDB...)
 	}
 
-	res, err := uc.resumeRepo.Update(*resumeDB)
+	res, err := uc.resumeRepo.Save(*resumeDB)
 
 	if err != nil {
 		return nil, err

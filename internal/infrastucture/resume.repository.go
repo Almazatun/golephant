@@ -5,7 +5,7 @@ import (
 
 	"github.com/Almazatun/golephant/internal/infrastucture/entity"
 	error_message "github.com/Almazatun/golephant/pkg/common/error-message"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type resumeRepository struct {
@@ -17,7 +17,7 @@ type ResumeRepo interface {
 	Create(resume entity.Resume) (resumeDB *entity.Resume, err error)
 	DeleteById(resumeId string) (str string, err error)
 	GetById(resumeId string) (resumeDB *entity.Resume, err error)
-	Update(resume entity.Resume) (resumeDB *entity.Resume, err error)
+	Save(resume entity.Resume) (resumeDB *entity.Resume, err error)
 }
 
 func NewResumeRepo(db *gorm.DB) ResumeRepo {
@@ -29,16 +29,16 @@ func NewResumeRepo(db *gorm.DB) ResumeRepo {
 func (r *resumeRepository) ListByUserId(userId string) (resumeDB *[]entity.Resume, err error) {
 	var list []entity.Resume
 
-	result := r.db.Preload("UserEducations").Preload("UserExperiences").Find(&list, "user_id = ?", userId)
+	result := r.db.
+		Preload("UserEducations").
+		Preload("UserExperiences").
+		// Preload("User").
+		Find(&list, "user_id = ?", userId)
 
 	er := result.Error
 
 	if er != nil {
 		return nil, err
-	}
-
-	for _, resume := range list {
-		r.db.Model(resume).Related(&resume.User)
 	}
 
 	return &list, nil
@@ -74,9 +74,11 @@ func (r *resumeRepository) DeleteById(resumeId string) (str string, err error) {
 func (r *resumeRepository) GetById(resumeId string) (resumeDB *entity.Resume, err error) {
 	var resume entity.Resume
 
-	result := r.db.Preload("UserEducations").Preload("UserExperiences").First(&resume, "resume_id = ?", resumeId)
-
-	r.db.Model(resume).Related(&resume.User)
+	result := r.db.
+		Preload("UserEducations").
+		Preload("UserExperiences").
+		// Preload("User").
+		First(&resume, "resume_id = ?", resumeId)
 
 	er := result.Error
 
@@ -88,18 +90,18 @@ func (r *resumeRepository) GetById(resumeId string) (resumeDB *entity.Resume, er
 	return &resume, nil
 }
 
-func (r *resumeRepository) Update(updateResume entity.Resume) (resumeDB *entity.Resume, err error) {
+func (r *resumeRepository) Save(resume entity.Resume) (resumeDB *entity.Resume, err error) {
 	var result entity.Resume
 
-	res := r.db.Model(&result).Preload("UserEducations").Preload("UserExperiences").Updates(updateResume)
+	res := r.db.Save(&result).
+		Preload("UserEducations").
+		Preload("UserExperiences")
 
 	e := res.Error
 
 	if e != nil {
 		return nil, e
 	}
-
-	r.db.Model(result).Related(&result.User)
 
 	return &result, nil
 }

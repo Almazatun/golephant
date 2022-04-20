@@ -74,8 +74,6 @@ func main() {
 			mux_handlers.AllowedMethods(common.CORS_ALLOWED_METHODS),
 			mux_handlers.AllowedOrigins(common.CORS_ALLOWED_ORIGINS))(router)))
 
-	defer DB.Close()
-
 }
 
 func loadENVs() {

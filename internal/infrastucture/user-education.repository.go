@@ -5,7 +5,7 @@ import (
 
 	"github.com/Almazatun/golephant/internal/infrastucture/entity"
 	error_message "github.com/Almazatun/golephant/pkg/common/error-message"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type userEducationRepository struct {
