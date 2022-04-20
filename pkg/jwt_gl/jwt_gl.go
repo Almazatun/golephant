@@ -1,4 +1,4 @@
-package common
+package jwt_gl
 
 import (
 	"errors"
