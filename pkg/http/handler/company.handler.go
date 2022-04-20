@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	usecase "github.com/Almazatun/golephant/internal/domain"
-	common "github.com/Almazatun/golephant/pkg/common"
 	"github.com/Almazatun/golephant/pkg/http/presentation/input"
+	jwt_gl "github.com/Almazatun/golephant/pkg/jwt_gl"
 	logger "github.com/Almazatun/golephant/pkg/logger"
 )
 
@@ -70,10 +70,10 @@ func (h *companyHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cookie := http.Cookie{
-		Name:    common.HTTP_COOKIE,
+		Name:    jwt_gl.HTTP_COOKIE,
 		Value:   res.Token,
 		Expires: res.ExperationTimeJWT,
-		Path:    common.SET_COOKIE_PATH,
+		Path:    jwt_gl.SET_COOKIE_PATH,
 	}
 
 	http.SetCookie(w, &cookie)

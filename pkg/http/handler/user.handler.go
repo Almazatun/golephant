@@ -7,9 +7,9 @@ import (
 	"net/http"
 
 	usecase "github.com/Almazatun/golephant/internal/domain"
-	common "github.com/Almazatun/golephant/pkg/common"
 	error_message "github.com/Almazatun/golephant/pkg/common/error-message"
 	"github.com/Almazatun/golephant/pkg/http/presentation/input"
+	jwt_gl "github.com/Almazatun/golephant/pkg/jwt_gl"
 	logger "github.com/Almazatun/golephant/pkg/logger"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
@@ -75,10 +75,10 @@ func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cookie := http.Cookie{
-		Name:    common.HTTP_COOKIE,
+		Name:    jwt_gl.HTTP_COOKIE,
 		Value:   res.Token,
 		Expires: res.ExperationTimeJWT,
-		Path:    common.SET_COOKIE_PATH,
+		Path:    jwt_gl.SET_COOKIE_PATH,
 	}
 
 	http.SetCookie(w, &cookie)
@@ -88,7 +88,7 @@ func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *userHandler) AuthMe(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie(common.HTTP_COOKIE)
+	cookie, err := r.Cookie(jwt_gl.HTTP_COOKIE)
 
 	if err != nil {
 		if err == http.ErrNoCookie {
@@ -104,11 +104,11 @@ func (h *userHandler) AuthMe(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tokenString := cookie.Value
-	claims := &common.Claims{}
+	claims := &jwt_gl.Claims{}
 
 	token, err := jwt.ParseWithClaims(tokenString, claims,
 		func(t *jwt.Token) (interface{}, error) {
-			return common.JWT_KEY_BYTE, nil
+			return jwt_gl.JWT_KEY_BYTE, nil
 		})
 
 	if err != nil {

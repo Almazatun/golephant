@@ -12,6 +12,7 @@ import (
 	repository "github.com/Almazatun/golephant/internal/infrastucture"
 	common "github.com/Almazatun/golephant/pkg/common"
 	error_message "github.com/Almazatun/golephant/pkg/common/error-message"
+	jwt_gl "github.com/Almazatun/golephant/pkg/jwt_gl"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -94,7 +95,7 @@ func (uc *userUseCase) LogIn(logInInput input.LogInUserInput) (res *_type.ResLog
 		return nil, newErr
 	}
 
-	generateJWT, err := common.GenerateJWTStr(user.Email)
+	generateJWT, err := jwt_gl.GenerateJWTStr(user.Email)
 
 	if err != nil {
 		return nil, err

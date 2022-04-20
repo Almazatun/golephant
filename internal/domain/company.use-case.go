@@ -6,10 +6,10 @@ import (
 
 	repository "github.com/Almazatun/golephant/internal/infrastucture"
 	"github.com/Almazatun/golephant/internal/infrastucture/entity"
-	common "github.com/Almazatun/golephant/pkg/common"
 	error_message "github.com/Almazatun/golephant/pkg/common/error-message"
 	"github.com/Almazatun/golephant/pkg/http/presentation/_type"
 	"github.com/Almazatun/golephant/pkg/http/presentation/input"
+	jwt_gl "github.com/Almazatun/golephant/pkg/jwt_gl"
 	"github.com/Almazatun/golephant/pkg/util"
 	"gopkg.in/go-playground/validator.v9"
 )
@@ -87,7 +87,7 @@ func (uc *companyUseCase) LogIn(logInCompanyInput input.LogInCompanyInput) (res 
 		return nil, newErr
 	}
 
-	generateJWT, err := common.GenerateJWTStr(company.Email)
+	generateJWT, err := jwt_gl.GenerateJWTStr(company.Email)
 
 	if err != nil {
 		return nil, err
