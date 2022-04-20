@@ -2,7 +2,9 @@ version: "3.7"
 services:
   postgres:
     container_name: gl_postgres
-    image: postgres
+    build:
+      context: ./pkg/postgresql
+      dockerfile: ./Dockerfile
     restart: always
     env_file:
       - .env
