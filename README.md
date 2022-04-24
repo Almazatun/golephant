@@ -31,6 +31,11 @@ $ touch .env
      * JWT_SECRET_KEY
     # COOKIE
      * SET_COOKIE_PATH
+    # SMTP(GMAIL)
+     * SMTP_MAIL_FROM
+     * SMTP_MAIL_PASSWORD
+     * SMTP_MAIL_PORT
+     * SMTP_MAIL_HOST
 ```
 
 ### Starting the application
