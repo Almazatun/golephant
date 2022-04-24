@@ -42,6 +42,7 @@ func Init() *gorm.DB {
 	db.AutoMigrate(&entity.Position{})
 	db.AutoMigrate(&entity.UserEducation{})
 	db.AutoMigrate(&entity.UserExperience{})
+	db.AutoMigrate(&entity.ResetPasswordToken{})
 
 	return db
 }

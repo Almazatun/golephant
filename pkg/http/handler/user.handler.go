@@ -24,6 +24,8 @@ type UserHandler interface {
 	LogIn(w http.ResponseWriter, r *http.Request)
 	AuthMe(w http.ResponseWriter, r *http.Request)
 	UpdateUserData(w http.ResponseWriter, r *http.Request)
+	GetLinkResetPassword(w http.ResponseWriter, r *http.Request)
+	ResetPassword(w http.ResponseWriter, r *http.Request)
 }
 
 func NewUserHandler(userUseCase usecase.UserUseCase) UserHandler {
@@ -147,7 +149,48 @@ func (h *userHandler) UpdateUserData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := h.userUseCase.UpdateData(params["id"], updateUserDataInput)
+	res, err := h.userUseCase.UpdateData(params["userId"], updateUserDataInput)
+
+	if err != nil {
+		logger.InfoError(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
+}
+
+func (h *userHandler) GetLinkResetPassword(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	res, err := h.userUseCase.GetLinkResetPassword(params["userId"])
+
+	if err != nil {
+		logger.InfoError(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
+}
+
+func (h *userHandler) ResetPassword(w http.ResponseWriter, r *http.Request) {
+	var resetUserPasswordInput input.ResetUserPasswordInput
+	params := mux.Vars(r)
+
+	err := json.NewDecoder(r.Body).Decode(&resetUserPasswordInput)
+
+	if err != nil {
+		logger.InfoError(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	res, err := h.userUseCase.ResetPassword(
+		params["userId"],
+		params["token"],
+		resetUserPasswordInput.Password,
+	)
 
 	if err != nil {
 		logger.InfoError(err)

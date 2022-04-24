@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type resetPasswordTokenRepo struct {
+type resetPasswordTokenRepository struct {
 	db *gorm.DB
 }
 
@@ -19,12 +19,10 @@ type ResetPasswordTokenRepo interface {
 }
 
 func NewResetPasswordTokenRepo(db *gorm.DB) ResetPasswordTokenRepo {
-	return &resetPasswordTokenRepo{
-		db: db,
-	}
+	return &resetPasswordTokenRepository{db: db}
 }
 
-func (r *resetPasswordTokenRepo) Create(
+func (r *resetPasswordTokenRepository) Create(
 	resetPasswordToken entity.ResetPasswordToken,
 ) (resetPasswordTokenDB *entity.ResetPasswordToken, err error) {
 	result := r.db.Create(&resetPasswordToken)
@@ -38,7 +36,7 @@ func (r *resetPasswordTokenRepo) Create(
 	return &resetPasswordToken, nil
 }
 
-func (r *resetPasswordTokenRepo) Delete(resetPasswordTokenId string) (str *string, err error) {
+func (r *resetPasswordTokenRepository) Delete(resetPasswordTokenId string) (str *string, err error) {
 	res := "Reset Password token successfully deleted"
 
 	result := r.db.Delete(&entity.ResetPasswordToken{}, "reset_password_token_id = ?", resetPasswordTokenId)
@@ -52,7 +50,7 @@ func (r *resetPasswordTokenRepo) Delete(resetPasswordTokenId string) (str *strin
 	return &res, nil
 }
 
-func (r *resetPasswordTokenRepo) GetByToken(token string) (resetPasswordTokenDB *entity.ResetPasswordToken, err error) {
+func (r *resetPasswordTokenRepository) GetByToken(token string) (resetPasswordTokenDB *entity.ResetPasswordToken, err error) {
 	var resetPasswordToken entity.ResetPasswordToken
 
 	result := r.db.First(&resetPasswordToken, "token = ?", token)

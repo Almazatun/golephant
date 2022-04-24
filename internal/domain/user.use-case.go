@@ -25,7 +25,7 @@ type UserUseCase interface {
 	Register(registerUserInput input.RegisterUserInput) (user *entity.User, err error)
 	LogIn(logInInput input.LogInUserInput) (res *_type.ResLogIn[entity.User], err error)
 	UpdateData(userId string, updateUserDataInput input.UpdateUserDataInput) (user *entity.User, err error)
-	RequestResetPassword(userId string) (str *string, err error)
+	GetLinkResetPassword(userId string) (str *string, err error)
 	ResetPassword(userId, resetPasswordToken, newPassword string) (str *string, err error)
 }
 
@@ -34,7 +34,8 @@ func NewUserUseCase(
 	resetPasswordTokenRepo repository.ResetPasswordTokenRepo,
 ) UserUseCase {
 	return &userUseCase{
-		userRepo: userRepo,
+		userRepo:               userRepo,
+		resetPasswordTokenRepo: resetPasswordTokenRepo,
 	}
 }
 
@@ -134,7 +135,7 @@ func (uc *userUseCase) UpdateData(userId string, updateUserDataInput input.Updat
 	return res, nil
 }
 
-func (uc *userUseCase) RequestResetPassword(userId string) (str *string, err error) {
+func (uc *userUseCase) GetLinkResetPassword(userId string) (str *string, err error) {
 	user, err := uc.userRepo.GetById(userId)
 
 	if err != nil {
@@ -142,8 +143,9 @@ func (uc *userUseCase) RequestResetPassword(userId string) (str *string, err err
 	}
 
 	createResetPasswordTokenDB := entity.ResetPasswordToken{
-		User:  *user,
-		Token: util.GenerateRandomStr(),
+		User:         *user,
+		Token:        util.GenerateRandomStr(),
+		CreationTime: time.Now(),
 	}
 
 	resetPassworkTokenDB, err := uc.resetPasswordTokenRepo.Create(createResetPasswordTokenDB)
@@ -154,7 +156,7 @@ func (uc *userUseCase) RequestResetPassword(userId string) (str *string, err err
 
 	common.SendEmail(user.Email, resetPassworkTokenDB.Token)
 
-	resStr := "Pleace check you email"
+	resStr := "Pleace check your email"
 
 	return &resStr, nil
 }
@@ -167,7 +169,7 @@ func (uc *userUseCase) ResetPassword(userId, resetPasswordToken, newPassword str
 		return nil, err
 	}
 
-	if TokenDB.UserID.String() != userId {
+	if TokenDB.User.UserID.String() != userId {
 		newErr := errors.New(error_message.BAD_REGUEST)
 		return nil, newErr
 	}

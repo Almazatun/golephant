@@ -35,7 +35,11 @@ func NewRouter(h Handler) *mux.Router {
 	user.HandleFunc("/register", h.UserHandler.RegisterUser).Methods("POST")
 	user.HandleFunc("/login", h.UserHandler.LogIn).Methods("PUT")
 	user.HandleFunc("/authMe", h.UserHandler.AuthMe).Methods("POST")
-	user.Handle("/{id}", middleware.Authentication(http.HandlerFunc(h.UserHandler.UpdateUserData))).Methods("PATCH")
+	user.Handle("/{userId}", middleware.Authentication(http.HandlerFunc(h.UserHandler.UpdateUserData))).Methods("PATCH")
+
+	// User reset password
+	user.Handle("/{userId}/resetPassword", middleware.Authentication(http.HandlerFunc(h.UserHandler.GetLinkResetPassword))).Methods("POST")
+	user.HandleFunc("/{userId}/resetPassword/{token}", h.UserHandler.ResetPassword).Methods("PUT")
 
 	// Resume
 	resume := router.PathPrefix("/resume").Subrouter()
