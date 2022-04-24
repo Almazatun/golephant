@@ -54,6 +54,8 @@ $ docker-compose up --build -d
 | LOGIN  | PUT | BASE_URL/user/login |
 | UPDATE_USER_DATA | PATCH | BASE_URL/user/:userId |
 | AUTH_ME | POST | BASE_URL/authMe/:userId |
+| GET_LINK_RESET_PASSWORD | POST | BASE_URL/user/:userId/resetPassword |
+| RESET_PASSWORD | PUT | BASE_URL/user/:userId/resetPassword/:token |
 
 ### Resume
 
