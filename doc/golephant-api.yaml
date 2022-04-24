@@ -1,0 +1,9 @@
+openapi: 3.0.0
+info:
+  title: 🦕 Golephant API documentation
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/
+paths:
+  /helloWorld:
+    $ref: './resources/hello-world.yaml#HelloWorld'

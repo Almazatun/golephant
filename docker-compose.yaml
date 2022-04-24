@@ -32,6 +32,18 @@ services:
       - default
     ports:
     - "3000:3000"
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: gl_swagger_ui
+    ports:
+    - "9000:8080"
+    volumes:
+    - ./doc:/usr/share/nginx/html/doc
+    environment:
+        # API_URL: doc/golephant-api.yaml
+        URLS: "[{ url: \"doc/golephant-api.yaml\", name: \"🦕 Golephant\" },
+              ]"
+
 volumes:
   database_postgres:
 

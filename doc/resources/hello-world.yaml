@@ -1,0 +1,8 @@
+HelloWorld:
+  get:
+    tags:
+    - Hello
+    summary: Get Hello World 🌍
+    responses:
+      '200':
+       $ref: '../responses/success_response.yaml'
