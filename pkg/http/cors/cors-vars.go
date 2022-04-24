@@ -1,4 +1,4 @@
-package common
+package cors
 
 var (
 	CORS_ALLOWED_HEADERS = []string{"*"}

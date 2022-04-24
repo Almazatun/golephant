@@ -39,8 +39,6 @@ func NewUserUseCase(
 	}
 }
 
-type genericChan[T any] chan T
-
 func (uc *userUseCase) Register(registerUserInput input.RegisterUserInput) (user *entity.User, err error) {
 	// Validate register user input
 	v := validator.New()

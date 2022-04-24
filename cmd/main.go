@@ -7,8 +7,8 @@ import (
 
 	usecase "github.com/Almazatun/golephant/internal/domain"
 	repository "github.com/Almazatun/golephant/internal/infrastucture"
-	"github.com/Almazatun/golephant/pkg/common"
 	router "github.com/Almazatun/golephant/pkg/http"
+	"github.com/Almazatun/golephant/pkg/http/cors"
 	handler "github.com/Almazatun/golephant/pkg/http/handler"
 	mux_handlers "github.com/gorilla/handlers"
 
@@ -70,9 +70,9 @@ func main() {
 
 	log.Fatal(http.ListenAndServe(":3000",
 		mux_handlers.CORS(
-			mux_handlers.AllowedHeaders(common.CORS_ALLOWED_HEADERS),
-			mux_handlers.AllowedMethods(common.CORS_ALLOWED_METHODS),
-			mux_handlers.AllowedOrigins(common.CORS_ALLOWED_ORIGINS))(router)))
+			mux_handlers.AllowedHeaders(cors.CORS_ALLOWED_HEADERS),
+			mux_handlers.AllowedMethods(cors.CORS_ALLOWED_METHODS),
+			mux_handlers.AllowedOrigins(cors.CORS_ALLOWED_ORIGINS))(router)))
 
 }
 
