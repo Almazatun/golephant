@@ -38,12 +38,17 @@ $ touch .env
      * SMTP_MAIL_HOST
 ```
 
-### Starting the application
-
+### Run app with docker-compose
 ```bash
 # Build and Up
 $ docker-compose up --build -d
+# Stop
+$ docker-compose down
 ```
+
+## Checking API documents with swagger UI
+Browse to http://localhost:3002
+You can see all the documented endpoints in UI
 ## Endpoints
 
 ### User
