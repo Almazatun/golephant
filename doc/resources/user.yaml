@@ -1,0 +1,77 @@
+UserRegisterPath:
+  post:
+    tags:
+    - User
+    summary: Register
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/register_user_schema.yaml'
+            example:
+              email: person@gmail.com
+              password: 1234567
+    responses:
+      '200':
+        description: Successfuly register user. User email.
+      '400':
+        description: Bad request.
+      '5XX':
+          description: Unexpected error.
+UserLogInPath:
+  put:
+    tags:
+    - User
+    summary: LogIn
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/logIn_user_schema.yaml'
+            example:
+              email: person@gmail.com
+              password: 1234567
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/user_schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+          description: Unexpected error.
+UserUpdateDataPathWithID:
+  patch:
+    tags:
+    - User
+    summary: Update user data
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/update_user_data_schema.yaml'
+            example:
+              username: sometext
+              mobile: nums
+              email: person@gmail.com
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/user_schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+          description: Unexpected error.

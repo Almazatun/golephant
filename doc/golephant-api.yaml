@@ -7,3 +7,9 @@ servers:
 paths:
   /helloWorld:
     $ref: './resources/hello-world.yaml#HelloWorld'
+  /user/register:
+    $ref: './resources/user.yaml#UserRegisterPath'
+  /user/login:
+    $ref: './resources/user.yaml#UserLogInPath'
+  /user/{id}:
+    $ref: './resources/user.yaml#UserUpdateDataPathWithID'
