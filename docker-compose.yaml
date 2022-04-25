@@ -36,7 +36,7 @@ services:
     image: swaggerapi/swagger-ui
     container_name: gl_swagger_ui
     ports:
-    - "9000:8080"
+    - "3002:8080"
     volumes:
     - ./doc:/usr/share/nginx/html/doc
     environment:
