@@ -1,5 +1,6 @@
 HelloWorld:
   get:
+    security: []
     tags:
     - Hello
     summary: Get Hello World 🌍

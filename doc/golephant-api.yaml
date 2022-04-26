@@ -13,3 +13,12 @@ paths:
     $ref: './resources/user.yaml#UserLogInPath'
   /user/{id}:
     $ref: './resources/user.yaml#UserUpdateDataPathWithID'
+  /user/authMe:
+    $ref: './resources/user.yaml#AuthMePath'
+# 1) Cookie
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: Token
