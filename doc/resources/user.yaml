@@ -55,7 +55,6 @@ UserUpdateDataPathWithID:
             example:
               username: sometext
               mobile: nums
-              email: person@gmail.com
     parameters:
       - in: path
         name: id
