@@ -1,0 +1,77 @@
+CreateResumePathWithID:
+  post:
+    tags:
+    - Resume
+    summary: Create resume
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/CreateResume'
+    security:
+        - cookieAuth: []
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              $ref: '../schemas/resume.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+definitions:
+  CreateResume:
+    type: object
+    required:
+      - first_name
+      - last_name
+      - date_of_birght
+      - gender
+      - is_have_experience
+      - user_experiences
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      gender:
+        type: string
+        enum: [FEMALE, MALE]
+      is_have_experience:
+        type: boolean
+      user_experiences:
+        type: array
+        items:
+          $ref: '#/definitions/UserExperience'
+    xml:
+      name: "CreateResume"
+  UserExperience:
+    type: object
+    required:
+      - start_date
+      - end_date
+      - companyName
+      - position
+      - city
+    properties:
+      start_date:
+        type: string
+      end_date:
+        type: string
+      companyName:
+        type: string
+      position:
+        type: string
+      city:
+        type: string
+    xml:
+      name: "UserExperience"

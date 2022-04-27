@@ -1,0 +1,22 @@
+
+type: object
+properties:
+  user_experience_id:
+    #year-month-day
+    type: string
+  start_date:
+    #year-month-day
+    type: string
+  end_date:
+    #year-month-day
+    type: string
+  companyName:
+    type: string
+  position:
+    type: string
+  city:
+    type: string
+  resume_id:
+    type: string
+  
+  

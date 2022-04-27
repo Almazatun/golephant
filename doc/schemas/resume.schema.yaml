@@ -1,0 +1,35 @@
+type: object
+properties:
+  resume_id:
+    type: string
+  first_name:
+    type: string
+  last_name:
+    type: string
+  date_of_birght:
+    type: string
+  gender:
+    type: string
+  citizenship:
+    type: string
+  desired_position:
+    type: string
+  subway_station:
+    type: string
+  specialization:
+    type: string
+  work_mode:
+    type: string
+  about:
+    type: string
+  tags:
+    type: array
+    items:
+      type: string
+    example: ["str1", "str2", "str3"]
+  UserExperiences:
+    type: array
+    items:
+      $ref: './user_experience.schema.yaml'
+  UserEducations:
+    type: ['null']

@@ -47,7 +47,7 @@ UserLogInPath:
         content:
           application/json:
             schema:
-              $ref: '../schemas/user_schema.yaml'
+              $ref: '../schemas/user.schema.yaml'
       '400':
         description: Bad request.
       '5XX':
@@ -81,7 +81,7 @@ UserUpdateDataPathWithID:
         content:
           application/json:
             schema:
-              $ref: '../schemas/user_schema.yaml'
+              $ref: '../schemas/user.schema.yaml'
       '400':
         description: Bad request.
       '5XX':
@@ -99,7 +99,7 @@ AuthMePath:
         content:
           application/json:
             schema:
-              $ref: '../schemas/user_schema.yaml'
+              $ref: '../schemas/user.schema.yaml'
       '400':
         description: Message Unauthorized
       '5XX':

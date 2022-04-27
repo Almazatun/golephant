@@ -1,14 +1,4 @@
 type: object
-required:
-  - user_id
-  - username
-  - email
-  - password
-  - creation_time
-  - update_time
-  - mobile
-  - status
-  - Resume
 properties:
   user_id:
     type: string
@@ -27,4 +17,6 @@ properties:
   status:
     type: string
   Resume:
-    type: ['null']
+    type: array
+    items:
+      $ref: './resume.schema.yaml'
