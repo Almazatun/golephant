@@ -63,7 +63,7 @@ UserUpdateDataPathWithID:
       content:
         application/json:
           schema:
-            $ref: '../schemas/update_user_data_schema.yaml'
+            $ref: '#/definitions/UpdateUserData'
             example:
               username: sometext
               mobile: nums
@@ -136,3 +136,5 @@ definitions:
         type: string
       mobile:
         type: string
+    xml:
+      name: "UpdateUserData"
