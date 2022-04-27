@@ -7,7 +7,7 @@ UserRegisterPath:
       content:
         application/json:
           schema:
-            $ref: '../schemas/register_user_schema.yaml'
+            $ref: '#/definitions/RegisterUser'
             example:
               email: person@gmail.com
               password: 1234567
@@ -29,7 +29,7 @@ UserLogInPath:
       content:
         application/json:
           schema:
-            $ref: '../schemas/logIn_user_schema.yaml'
+            $ref: '#/definitions/UserLogIn'
             example:
               email: person@gmail.com
               password: 1234567
@@ -104,3 +104,35 @@ AuthMePath:
         description: Message Unauthorized
       '5XX':
         description: Unexpected error.
+definitions:
+  RegisterUser:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    xml:
+      name: "RegisterUser"
+  UserLogIn:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    xml:
+      name: "UserLogIn"
+  UpdateUserData:
+    type: object
+    properties:
+      username:
+        type: string
+      mobile:
+        type: string
