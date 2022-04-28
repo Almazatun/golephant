@@ -44,6 +44,8 @@ $ touch .env
 $ docker-compose up --build -d
 # Stop
 $ docker-compose down
+# Build and Up with Swagger UI
+$ docker-compose up --profile devGT up --build
 ```
 
 ## Checking API documents with swagger UI
