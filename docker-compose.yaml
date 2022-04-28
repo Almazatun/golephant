@@ -35,6 +35,8 @@ services:
   swagger-ui:
     image: swaggerapi/swagger-ui
     container_name: gl_swagger_ui
+    profiles:
+      - devGT
     ports:
     - "3002:8080"
     volumes:
