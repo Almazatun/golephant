@@ -8,7 +8,7 @@ import (
 	logger "github.com/Almazatun/golephant/pkg/logger"
 )
 
-type positionTypeHanler struct {
+type positionTypeHandler struct {
 	positionTypeRepo repository.PositionTypeRepo
 }
 
@@ -17,12 +17,12 @@ type PositionTypeHandler interface {
 }
 
 func NewPositionTypeHandler(positionTypeRepo repository.PositionTypeRepo) PositionTypeHandler {
-	return &positionTypeHanler{
+	return &positionTypeHandler{
 		positionTypeRepo: positionTypeRepo,
 	}
 }
 
-func (h *positionTypeHanler) PositionTypes(w http.ResponseWriter, r *http.Request) {
+func (h *positionTypeHandler) PositionTypes(w http.ResponseWriter, r *http.Request) {
 	res, err := h.positionTypeRepo.List()
 
 	if err != nil {

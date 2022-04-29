@@ -41,6 +41,14 @@ func main() {
 	positionTypeRepository := repository.NewPositionTypeRepo()
 	positionTypeHandler := handler.NewPositionTypeHandler(positionTypeRepository)
 
+	// Specialization
+	specializationRepository := repository.NewSpecializationRepo()
+	specializationHandler := handler.NewSpecializationHandler(specializationRepository)
+
+	// Resume status
+	resumeStatusRepository := repository.NewResumeStatusRepo()
+	resumeStatusHandler := handler.NewResumeStatusHandler(resumeStatusRepository)
+
 	// Resume
 	resumeRepository := repository.NewResumeRepo(DB)
 	resumeUseCase := usecase.NewResumeUseCase(
@@ -65,10 +73,12 @@ func main() {
 	companyHandler := handler.NewCompanyHandler(companyUseCase)
 
 	handlers := router.Handler{
-		UserHandler:         userHandler,
-		ResumeHandler:       resumeHandler,
-		CompanyHandler:      companyHandler,
-		PositionTypeHandler: positionTypeHandler,
+		UserHandler:           userHandler,
+		ResumeHandler:         resumeHandler,
+		CompanyHandler:        companyHandler,
+		PositionTypeHandler:   positionTypeHandler,
+		SpecializationHandler: specializationHandler,
+		ResumeStatusHandler:   resumeStatusHandler,
 	}
 
 	router := router.NewRouter(handlers)

@@ -20,6 +20,7 @@ type Resume struct {
 	WorkMode        string         `json:"work_mode" gorm:"type:text;default:0; not NULL"`
 	About           string         `json:"about" gorm:"type:text"`
 	Tags            pq.StringArray `json:"tags" gorm:"type:text[]"`
+	Status          string         `json:"status" gorm:"type:text"`
 	CreationTime    time.Time      `json:"creation_time" gorm:"type:date; not NULL"`
 	UpdateTime      time.Time      `json:"update_time" gorm:"type:date; not NULL"`
 	UserID          uuid.UUID      `json:"user_id" gorm:"not NULL; index:idx_member"`

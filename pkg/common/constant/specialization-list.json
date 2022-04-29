@@ -1,0 +1,65 @@
+[
+    {
+        "title":"Software Development",
+        "types" : [
+           "Backend Developer",
+           "Frontend Developer",
+           "Web Developer",
+           "Game Developer",
+           "Software Architect",
+           "Database Architect",
+           "Other"
+        ]
+    },
+    {
+        "title":"Administration",
+        "types" : [
+           "DevOps",
+           "System Administration",
+           "Database Administrator",
+           "Server Administrator",
+           "Network Administrator",
+           "Other"
+        ]
+    },
+    {
+        "title":"Management",
+        "types" : [
+           "Project Manager",
+           "Project Director",
+           "Product Manager",
+           "Scrum Master",
+           "Product Director",
+           "Other"
+        ]
+    },
+    {
+        "title":"Marketing",
+        "types" : [
+           "Marketing Manager",
+           "Marketing Director",
+           "Marketing Analyst",
+           "SEO Specialist",
+           "SMM Specialist",
+           "Other"
+        ]
+    },
+    {
+        "title":"Information Security",
+        "types" : [
+           "Pentester",
+           "Security Administrator",
+           "Reverse Engineer",
+           "Other"
+        ]
+    },
+    {
+        "title":"Information Security",
+        "types" : [
+           "Pentester",
+           "Security Administrator",
+           "Reverse Engineer",
+           "Other"
+        ]
+    }
+]
