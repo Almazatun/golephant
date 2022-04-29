@@ -8,6 +8,7 @@ import (
 	"github.com/Almazatun/golephant/pkg/http/presentation/input"
 	jwt_gl "github.com/Almazatun/golephant/pkg/jwt_gl"
 	logger "github.com/Almazatun/golephant/pkg/logger"
+	"github.com/gorilla/mux"
 )
 
 type companyHandler struct {
@@ -17,6 +18,8 @@ type companyHandler struct {
 type CompanyHandler interface {
 	RegisterCompany(w http.ResponseWriter, r *http.Request)
 	LogIn(w http.ResponseWriter, r *http.Request)
+	AddCompanyAddress(w http.ResponseWriter, r *http.Request)
+	DeleteCompanyAddress(w http.ResponseWriter, r *http.Request)
 }
 
 func NewCompanyHandler(
@@ -47,7 +50,7 @@ func (h *companyHandler) RegisterCompany(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	json.NewEncoder(w).Encode("Successfuly register" + company.Email + "company")
+	json.NewEncoder(w).Encode("Successfuly register " + company.Email + "company")
 }
 
 func (h *companyHandler) LogIn(w http.ResponseWriter, r *http.Request) {
@@ -79,4 +82,48 @@ func (h *companyHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &cookie)
 
 	json.NewEncoder(w).Encode(res.LogInEntityData)
+}
+
+func (h *companyHandler) AddCompanyAddress(w http.ResponseWriter, r *http.Request) {
+	var createCompanyAddressInput input.CreateCompanyAddressInput
+	params := mux.Vars(r)
+	err := json.NewDecoder(r.Body).Decode(&createCompanyAddressInput)
+
+	if err != nil {
+		logger.InfoError(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	res, err := h.companyUseCase.AddCompanyAddress(
+		params["companyId"],
+		createCompanyAddressInput,
+	)
+
+	if err != nil {
+		logger.InfoError(err)
+		HttpResponseBody(w, err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
+}
+
+func (h *companyHandler) DeleteCompanyAddress(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	res, err := h.companyUseCase.DeleteCompanyAddress(
+		params["companyId"],
+		params["companyAddressId"],
+	)
+
+	if err != nil {
+		logger.InfoError(err)
+		HttpResponseBody(w, err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
 }

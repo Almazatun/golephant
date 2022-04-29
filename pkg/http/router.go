@@ -25,6 +25,12 @@ func NewRouter(h Handler) *mux.Router {
 	company.HandleFunc("/register", h.CompanyHandler.RegisterCompany).Methods("POST")
 	company.HandleFunc("/login", h.CompanyHandler.LogIn).Methods("PUT")
 
+	// Company Address
+	company.Handle("/{companyId}/address",
+		middleware.Authentication(http.HandlerFunc(h.CompanyHandler.AddCompanyAddress))).Methods("POST")
+	company.Handle("/{companyId}/address/{companyAddressId}",
+		middleware.Authentication(http.HandlerFunc(h.CompanyHandler.DeleteCompanyAddress))).Methods("DELETE")
+
 	// Resumes
 	router.Handle("/resumes/{userId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UserResumes))).Methods("GET")
 	//Position types
@@ -38,8 +44,10 @@ func NewRouter(h Handler) *mux.Router {
 	user.Handle("/{userId}", middleware.Authentication(http.HandlerFunc(h.UserHandler.UpdateUserData))).Methods("PATCH")
 
 	// User reset password
-	user.Handle("/{userId}/resetPassword", middleware.Authentication(http.HandlerFunc(h.UserHandler.GetLinkResetPassword))).Methods("POST")
-	user.HandleFunc("/{userId}/resetPassword/{token}", h.UserHandler.ResetPassword).Methods("PUT")
+	user.Handle("/{userId}/resetPassword",
+		middleware.Authentication(http.HandlerFunc(h.UserHandler.GetLinkResetPassword))).Methods("POST")
+	user.HandleFunc("/{userId}/resetPassword/{token}",
+		h.UserHandler.ResetPassword).Methods("PUT")
 
 	// Resume
 	resume := router.PathPrefix("/resume").Subrouter()

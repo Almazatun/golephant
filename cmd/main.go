@@ -53,10 +53,15 @@ func main() {
 		resumeUseCase,
 		resumeRepository,
 	)
+	// Company address
+	companyAddressRepository := repository.NewCompanyAddressRepo(DB)
 
 	// Company
 	companyRepository := repository.NewCompanyRepo(DB)
-	companyUseCase := usecase.NewCompanyUseCase(companyRepository)
+	companyUseCase := usecase.NewCompanyUseCase(
+		companyRepository,
+		companyAddressRepository,
+	)
 	companyHandler := handler.NewCompanyHandler(companyUseCase)
 
 	handlers := router.Handler{

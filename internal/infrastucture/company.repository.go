@@ -16,6 +16,8 @@ type CompanyRepo interface {
 	Create(company entity.Company) (companyDB *entity.Company, err error)
 	GetByEmail(email string) (companyDB *entity.Company, err error)
 	GetByPhone(phone string) (companyDB *entity.Company, err error)
+	GetById(companyId string) (companyDB *entity.Company, err error)
+	Save(company entity.Company) (companyDB *entity.Company, err error)
 }
 
 func NewCompanyRepo(db *gorm.DB) CompanyRepo {
@@ -39,7 +41,27 @@ func (r *companyRepository) Create(company entity.Company) (companyDB *entity.Co
 func (r *companyRepository) GetByEmail(email string) (companyDB *entity.Company, err error) {
 	var company entity.Company
 
-	result := r.db.First(&company, "email = ?", email)
+	result := r.db.
+		Preload("CompanyAddresses").
+		First(&company, "email = ?", email)
+
+	dbErr := result.Error
+
+	if dbErr != nil {
+		err := errors.New(error_message.COMPANY_NOT_FOUND)
+
+		return nil, err
+	}
+
+	return &company, nil
+}
+
+func (r *companyRepository) GetById(companyId string) (companyDB *entity.Company, err error) {
+	var company entity.Company
+
+	result := r.db.
+		Preload("CompanyAddresses").
+		First(&company, "company_id = ?", companyId)
 
 	dbErr := result.Error
 
@@ -55,7 +77,9 @@ func (r *companyRepository) GetByEmail(email string) (companyDB *entity.Company,
 func (r *companyRepository) GetByPhone(phone string) (companyDB *entity.Company, err error) {
 	var company entity.Company
 
-	result := r.db.First(&company, "phone = ?", phone)
+	result := r.db.
+		Preload("CompanyAddresses").
+		First(&company, "phone = ?", phone)
 
 	dbErr := result.Error
 
@@ -63,6 +87,20 @@ func (r *companyRepository) GetByPhone(phone string) (companyDB *entity.Company,
 		err := errors.New(error_message.COMPANY_NOT_FOUND)
 
 		return nil, err
+	}
+
+	return &company, nil
+}
+
+func (r *companyRepository) Save(company entity.Company) (companyDB *entity.Company, err error) {
+	result := r.db.
+		Preload("CompanyAddresses").
+		Save(&company)
+
+	e := result.Error
+
+	if e != nil {
+		return nil, e
 	}
 
 	return &company, nil
