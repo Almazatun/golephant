@@ -13,7 +13,7 @@ type positionTypeHandler struct {
 }
 
 type PositionTypeHandler interface {
-	PositionTypes(w http.ResponseWriter, r *http.Request)
+	List(w http.ResponseWriter, r *http.Request)
 }
 
 func NewPositionTypeHandler(positionTypeRepo repository.PositionTypeRepo) PositionTypeHandler {
@@ -22,7 +22,7 @@ func NewPositionTypeHandler(positionTypeRepo repository.PositionTypeRepo) Positi
 	}
 }
 
-func (h *positionTypeHandler) PositionTypes(w http.ResponseWriter, r *http.Request) {
+func (h *positionTypeHandler) List(w http.ResponseWriter, r *http.Request) {
 	res, err := h.positionTypeRepo.List()
 
 	if err != nil {

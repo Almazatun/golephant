@@ -16,7 +16,7 @@ type companyHandler struct {
 }
 
 type CompanyHandler interface {
-	RegisterCompany(w http.ResponseWriter, r *http.Request)
+	Register(w http.ResponseWriter, r *http.Request)
 	LogIn(w http.ResponseWriter, r *http.Request)
 	AddCompanyAddress(w http.ResponseWriter, r *http.Request)
 	DeleteCompanyAddress(w http.ResponseWriter, r *http.Request)
@@ -30,7 +30,7 @@ func NewCompanyHandler(
 	}
 }
 
-func (h *companyHandler) RegisterCompany(w http.ResponseWriter, r *http.Request) {
+func (h *companyHandler) Register(w http.ResponseWriter, r *http.Request) {
 	var registerCompanyInput input.RegisterCompanyInput
 	err := json.NewDecoder(r.Body).Decode(&registerCompanyInput)
 
@@ -41,7 +41,7 @@ func (h *companyHandler) RegisterCompany(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	company, err := h.companyUseCase.RegisterCompany(registerCompanyInput)
+	company, err := h.companyUseCase.Register(registerCompanyInput)
 
 	if err != nil {
 		logger.InfoError(err)

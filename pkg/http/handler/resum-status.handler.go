@@ -13,7 +13,7 @@ type resumeStatusHandler struct {
 }
 
 type ResumeStatusHandler interface {
-	ResumeStatuses(w http.ResponseWriter, r *http.Request)
+	List(w http.ResponseWriter, r *http.Request)
 }
 
 func NewResumeStatusHandler(resumeStatusRepo repository.ResumeStatusRepo) ResumeStatusHandler {
@@ -22,7 +22,7 @@ func NewResumeStatusHandler(resumeStatusRepo repository.ResumeStatusRepo) Resume
 	}
 }
 
-func (h *resumeStatusHandler) ResumeStatuses(w http.ResponseWriter, r *http.Request) {
+func (h *resumeStatusHandler) List(w http.ResponseWriter, r *http.Request) {
 	res, err := h.resumeStatusRepo.List()
 
 	if err != nil {

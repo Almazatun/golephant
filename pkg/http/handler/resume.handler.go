@@ -18,18 +18,18 @@ type resumeHandler struct {
 }
 
 type ResumeHandler interface {
-	UserResumes(w http.ResponseWriter, r *http.Request)
-	CreateResume(w http.ResponseWriter, r *http.Request)
-	UpdateBasicInfoResume(w http.ResponseWriter, r *http.Request)
-	UpdateAboutMeResume(w http.ResponseWriter, r *http.Request)
-	UpdateCitizenshipResume(w http.ResponseWriter, r *http.Request)
-	UpdateTagsResumeInput(w http.ResponseWriter, r *http.Request)
-	UpdateUserEducationResume(w http.ResponseWriter, r *http.Request)
-	UpdateUserExperiencesResume(w http.ResponseWriter, r *http.Request)
-	UpdateDesiredPositionResume(w http.ResponseWriter, r *http.Request)
-	DeleteResume(w http.ResponseWriter, r *http.Request)
-	DeleteUserEducationInResume(w http.ResponseWriter, r *http.Request)
-	DeleteUserExperienceInResume(w http.ResponseWriter, r *http.Request)
+	List(w http.ResponseWriter, r *http.Request)
+	Create(w http.ResponseWriter, r *http.Request)
+	UpdateBasicInfo(w http.ResponseWriter, r *http.Request)
+	UpdateAboutMe(w http.ResponseWriter, r *http.Request)
+	UpdateCitizenship(w http.ResponseWriter, r *http.Request)
+	UpdateTags(w http.ResponseWriter, r *http.Request)
+	UpdateUserEducation(w http.ResponseWriter, r *http.Request)
+	UpdateUserExperiences(w http.ResponseWriter, r *http.Request)
+	UpdateDesiredPosition(w http.ResponseWriter, r *http.Request)
+	Delete(w http.ResponseWriter, r *http.Request)
+	DeleteUserEducation(w http.ResponseWriter, r *http.Request)
+	DeleteUserExperience(w http.ResponseWriter, r *http.Request)
 }
 
 func NewResumeHandler(
@@ -42,7 +42,7 @@ func NewResumeHandler(
 	}
 }
 
-func (h *resumeHandler) UserResumes(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) List(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	res, err := h.resumeRepository.ListByUserId(params["userId"])
@@ -57,7 +57,7 @@ func (h *resumeHandler) UserResumes(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(res)
 }
 
-func (h *resumeHandler) CreateResume(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var createResumeInput input.CreateResumeInput
 	params := mux.Vars(r)
 
@@ -68,7 +68,7 @@ func (h *resumeHandler) CreateResume(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := h.resumeUseCase.CreateResume(params["userId"], createResumeInput)
+	res, err := h.resumeUseCase.Create(params["userId"], createResumeInput)
 
 	if err != nil {
 		logger.InfoError(err)
@@ -80,7 +80,7 @@ func (h *resumeHandler) CreateResume(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(res)
 }
 
-func (h *resumeHandler) UpdateBasicInfoResume(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) UpdateBasicInfo(w http.ResponseWriter, r *http.Request) {
 	var updateBasicInfoResumeInput input.UpdateBasicInfoResume
 	params := mux.Vars(r)
 
@@ -93,7 +93,11 @@ func (h *resumeHandler) UpdateBasicInfoResume(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	res, err := h.resumeUseCase.UpdateBasicInfoResume(params["userId"], params["resumeId"], updateBasicInfoResumeInput)
+	res, err := h.resumeUseCase.UpdateBasicInfo(
+		params["userId"],
+		params["resumeId"],
+		updateBasicInfoResumeInput,
+	)
 
 	if err != nil {
 		logger.InfoError(err)
@@ -106,7 +110,7 @@ func (h *resumeHandler) UpdateBasicInfoResume(w http.ResponseWriter, r *http.Req
 
 }
 
-func (h *resumeHandler) UpdateAboutMeResume(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) UpdateAboutMe(w http.ResponseWriter, r *http.Request) {
 	var updateAboutMeResumeInput input.UpdateAboutMeResumeInput
 	params := mux.Vars(r)
 
@@ -117,7 +121,11 @@ func (h *resumeHandler) UpdateAboutMeResume(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	res, err := h.resumeUseCase.UpdateAboutMeResume(params["userId"], params["resumeId"], updateAboutMeResumeInput)
+	res, err := h.resumeUseCase.UpdateAboutMe(
+		params["userId"],
+		params["resumeId"],
+		updateAboutMeResumeInput,
+	)
 
 	if err != nil {
 		logger.InfoError(err)
@@ -130,7 +138,7 @@ func (h *resumeHandler) UpdateAboutMeResume(w http.ResponseWriter, r *http.Reque
 
 }
 
-func (h *resumeHandler) UpdateCitizenshipResume(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) UpdateCitizenship(w http.ResponseWriter, r *http.Request) {
 	var updateCitizenshipResumeInput input.UpdateCitizenshipResumeInput
 	params := mux.Vars(r)
 
@@ -141,7 +149,11 @@ func (h *resumeHandler) UpdateCitizenshipResume(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	res, err := h.resumeUseCase.UpdateCitizenshipResume(params["userId"], params["resumeId"], updateCitizenshipResumeInput)
+	res, err := h.resumeUseCase.UpdateCitizenship(
+		params["userId"],
+		params["resumeId"],
+		updateCitizenshipResumeInput,
+	)
 
 	if err != nil {
 		logger.InfoError(err)
@@ -154,7 +166,7 @@ func (h *resumeHandler) UpdateCitizenshipResume(w http.ResponseWriter, r *http.R
 
 }
 
-func (h *resumeHandler) UpdateTagsResumeInput(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) UpdateTags(w http.ResponseWriter, r *http.Request) {
 	var udateTagsResumeInput input.UdateTagsResumeInput
 	params := mux.Vars(r)
 
@@ -165,7 +177,11 @@ func (h *resumeHandler) UpdateTagsResumeInput(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	res, err := h.resumeUseCase.UpdateTagsResumeInput(params["userId"], params["resumeId"], udateTagsResumeInput)
+	res, err := h.resumeUseCase.UpdateTags(
+		params["userId"],
+		params["resumeId"],
+		udateTagsResumeInput,
+	)
 
 	if err != nil {
 		logger.InfoError(err)
@@ -178,7 +194,7 @@ func (h *resumeHandler) UpdateTagsResumeInput(w http.ResponseWriter, r *http.Req
 
 }
 
-func (h *resumeHandler) UpdateUserEducationResume(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) UpdateUserEducation(w http.ResponseWriter, r *http.Request) {
 	var updateUserEducationsResumeInput input.UpdateUserEducationsResumeInput
 	params := mux.Vars(r)
 
@@ -189,7 +205,11 @@ func (h *resumeHandler) UpdateUserEducationResume(w http.ResponseWriter, r *http
 		return
 	}
 
-	res, err := h.resumeUseCase.UpdateUserEducationResume(params["userId"], params["resumeId"], updateUserEducationsResumeInput)
+	res, err := h.resumeUseCase.UpdateUserEducation(
+		params["userId"],
+		params["resumeId"],
+		updateUserEducationsResumeInput,
+	)
 
 	if err != nil {
 		logger.InfoError(err)
@@ -202,7 +222,7 @@ func (h *resumeHandler) UpdateUserEducationResume(w http.ResponseWriter, r *http
 
 }
 
-func (h *resumeHandler) UpdateUserExperiencesResume(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) UpdateUserExperiences(w http.ResponseWriter, r *http.Request) {
 	var updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput
 	params := mux.Vars(r)
 
@@ -213,7 +233,11 @@ func (h *resumeHandler) UpdateUserExperiencesResume(w http.ResponseWriter, r *ht
 		return
 	}
 
-	res, err := h.resumeUseCase.UpdateUserExperiencesResume(params["userId"], params["resumeId"], updateUserExperiencesResumeInput)
+	res, err := h.resumeUseCase.UpdateUserExperiences(
+		params["userId"],
+		params["resumeId"],
+		updateUserExperiencesResumeInput,
+	)
 
 	if err != nil {
 		logger.InfoError(err)
@@ -226,7 +250,7 @@ func (h *resumeHandler) UpdateUserExperiencesResume(w http.ResponseWriter, r *ht
 
 }
 
-func (h *resumeHandler) UpdateDesiredPositionResume(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) UpdateDesiredPosition(w http.ResponseWriter, r *http.Request) {
 	var updateDesiredPositionResumeInput input.UpdateDesiredPositionResumeInput
 	params := mux.Vars(r)
 
@@ -237,7 +261,11 @@ func (h *resumeHandler) UpdateDesiredPositionResume(w http.ResponseWriter, r *ht
 		return
 	}
 
-	res, err := h.resumeUseCase.UpdateDesiredPositionResume(params["userId"], params["resumeId"], updateDesiredPositionResumeInput)
+	res, err := h.resumeUseCase.UpdateDesiredPosition(
+		params["userId"],
+		params["resumeId"],
+		updateDesiredPositionResumeInput,
+	)
 
 	if err != nil {
 		logger.InfoError(err)
@@ -250,10 +278,10 @@ func (h *resumeHandler) UpdateDesiredPositionResume(w http.ResponseWriter, r *ht
 
 }
 
-func (h *resumeHandler) DeleteResume(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
-	res, err := h.resumeUseCase.DeleteResume(params["resumeId"])
+	res, err := h.resumeUseCase.Delete(params["resumeId"])
 
 	if err != nil {
 		logger.InfoError(err)
@@ -265,10 +293,13 @@ func (h *resumeHandler) DeleteResume(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(res)
 }
 
-func (h *resumeHandler) DeleteUserEducationInResume(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) DeleteUserEducation(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
-	res, err := h.resumeUseCase.DeleteUserEducationInResume(params["resumeId"], params["userEducationId"])
+	res, err := h.resumeUseCase.DeleteUserEducation(
+		params["resumeId"],
+		params["userEducationId"],
+	)
 
 	if err != nil {
 		logger.InfoError(err)
@@ -280,10 +311,13 @@ func (h *resumeHandler) DeleteUserEducationInResume(w http.ResponseWriter, r *ht
 	json.NewEncoder(w).Encode(res)
 }
 
-func (h *resumeHandler) DeleteUserExperienceInResume(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) DeleteUserExperience(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
-	res, err := h.resumeUseCase.DeleteUserExperienceInResume(params["resumeId"], params["userExperienceId"])
+	res, err := h.resumeUseCase.DeleteUserExperience(
+		params["resumeId"],
+		params["userExperienceId"],
+	)
 
 	if err != nil {
 		logger.InfoError(err)

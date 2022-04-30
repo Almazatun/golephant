@@ -13,7 +13,7 @@ type specializationHandler struct {
 }
 
 type SpecializationHandler interface {
-	Specializations(w http.ResponseWriter, r *http.Request)
+	List(w http.ResponseWriter, r *http.Request)
 }
 
 func NewSpecializationHandler(specializationRepo repository.SpecializationRepo) SpecializationHandler {
@@ -22,7 +22,7 @@ func NewSpecializationHandler(specializationRepo repository.SpecializationRepo) 
 	}
 }
 
-func (h *specializationHandler) Specializations(w http.ResponseWriter, r *http.Request) {
+func (h *specializationHandler) List(w http.ResponseWriter, r *http.Request) {
 	res, err := h.specializationRepo.List()
 
 	if err != nil {

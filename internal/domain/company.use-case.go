@@ -21,7 +21,7 @@ type companyUseCase struct {
 }
 
 type CompanyUseCase interface {
-	RegisterCompany(
+	Register(
 		registerCompanyInput input.RegisterCompanyInput,
 	) (companyDB *entity.Company, err error)
 	LogIn(
@@ -51,7 +51,7 @@ type ResLogInCompany struct {
 	ExperationTimeJWT time.Time
 }
 
-func (uc *companyUseCase) RegisterCompany(registerCompanyInput input.RegisterCompanyInput) (comapanyDB *entity.Company, err error) {
+func (uc *companyUseCase) Register(registerCompanyInput input.RegisterCompanyInput) (comapanyDB *entity.Company, err error) {
 	// Validate register company input
 	v := validator.New()
 	e := v.Struct(registerCompanyInput)

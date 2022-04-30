@@ -19,38 +19,38 @@ type resumeUseCase struct {
 }
 
 type ResumeUseCase interface {
-	CreateResume(userId string, createResumeInput input.CreateResumeInput) (createResume *entity.Resume, err error)
-	UpdateBasicInfoResume(
+	Create(userId string, createResumeInput input.CreateResumeInput) (createResume *entity.Resume, err error)
+	UpdateBasicInfo(
 		userId, resumeId string,
 		updateBasicInfoResumeInput input.UpdateBasicInfoResume,
 	) (updateResume *entity.Resume, err error)
-	UpdateAboutMeResume(
+	UpdateAboutMe(
 		userId, resumeId string,
 		updateAboutMeResumeInput input.UpdateAboutMeResumeInput,
 	) (updateAboutMeResume *entity.Resume, err error)
-	UpdateCitizenshipResume(
+	UpdateCitizenship(
 		userId, resumeId string,
 		updateCitizenshipResumInput input.UpdateCitizenshipResumeInput,
 	) (updateCitizenshipResume *entity.Resume, err error)
-	UpdateTagsResumeInput(
+	UpdateTags(
 		userId, resumeId string,
 		updateTagsResume input.UdateTagsResumeInput,
 	) (updateTagsResum *entity.Resume, err error)
-	UpdateUserEducationResume(
+	UpdateUserEducation(
 		userId, resumeId string,
 		updateUserEducationsResumeInput input.UpdateUserEducationsResumeInput,
 	) (updateUserEducationsResum *entity.Resume, err error)
-	UpdateUserExperiencesResume(
+	UpdateUserExperiences(
 		userId, resumeId string,
 		updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput,
 	) (updateUserEducationsResum *entity.Resume, err error)
-	UpdateDesiredPositionResume(
+	UpdateDesiredPosition(
 		userId, resumeId string,
 		updateDesiredPositionResumeInput input.UpdateDesiredPositionResumeInput,
 	) (updateAboutMeResume *entity.Resume, err error)
-	DeleteResume(resumeId string) (str string, err error)
-	DeleteUserExperienceInResume(resumeId, userExperienceId string) (str string, err error)
-	DeleteUserEducationInResume(resumeId, userEducationId string) (str string, err error)
+	Delete(resumeId string) (str string, err error)
+	DeleteUserExperience(resumeId, userExperienceId string) (str string, err error)
+	DeleteUserEducation(resumeId, userEducationId string) (str string, err error)
 }
 
 type UserEducationChannel struct {
@@ -79,7 +79,7 @@ func NewResumeUseCase(
 
 const layoutISO = "2006-01-02"
 
-func (uc *resumeUseCase) CreateResume(userId string, createResumeInput input.CreateResumeInput) (createResume *entity.Resume, err error) {
+func (uc *resumeUseCase) Create(userId string, createResumeInput input.CreateResumeInput) (createResume *entity.Resume, err error) {
 	// Validate create resume input
 	v := validator.New()
 	e := v.Struct(createResumeInput)
@@ -119,7 +119,7 @@ func (uc *resumeUseCase) CreateResume(userId string, createResumeInput input.Cre
 	return res, nil
 }
 
-func (uc *resumeUseCase) UpdateBasicInfoResume(
+func (uc *resumeUseCase) UpdateBasicInfo(
 	userId, resumeId string,
 	updateBasicInfoResumeInput input.UpdateBasicInfoResume,
 ) (updateResume *entity.Resume, err error) {
@@ -174,7 +174,7 @@ func (uc *resumeUseCase) UpdateBasicInfoResume(
 	return res, nil
 }
 
-func (uc *resumeUseCase) UpdateAboutMeResume(
+func (uc *resumeUseCase) UpdateAboutMe(
 	userId, resumeId string,
 	updateAboutMeResumeInput input.UpdateAboutMeResumeInput,
 ) (updateAboutMeResume *entity.Resume, err error) {
@@ -208,7 +208,7 @@ func (uc *resumeUseCase) UpdateAboutMeResume(
 
 }
 
-func (uc *resumeUseCase) UpdateDesiredPositionResume(
+func (uc *resumeUseCase) UpdateDesiredPosition(
 	userId, resumeId string,
 	updateDesiredPositionResumeInput input.UpdateDesiredPositionResumeInput,
 ) (updateAboutMeResume *entity.Resume, err error) {
@@ -250,7 +250,7 @@ func (uc *resumeUseCase) UpdateDesiredPositionResume(
 
 }
 
-func (uc *resumeUseCase) UpdateCitizenshipResume(
+func (uc *resumeUseCase) UpdateCitizenship(
 	userId, resumeId string,
 	updateCitizenshipResumInput input.UpdateCitizenshipResumeInput,
 ) (updateCitizenshipResume *entity.Resume, err error) {
@@ -287,7 +287,7 @@ func (uc *resumeUseCase) UpdateCitizenshipResume(
 	return res, nil
 }
 
-func (uc *resumeUseCase) UpdateTagsResumeInput(
+func (uc *resumeUseCase) UpdateTags(
 	userId, resumeId string,
 	updateTagsResume input.UdateTagsResumeInput,
 ) (updateTagsResum *entity.Resume, err error) {
@@ -319,7 +319,7 @@ func (uc *resumeUseCase) UpdateTagsResumeInput(
 	return res, nil
 }
 
-func (uc *resumeUseCase) UpdateUserEducationResume(
+func (uc *resumeUseCase) UpdateUserEducation(
 	userId, resumeId string,
 	updateUserEducationsResumeInput input.UpdateUserEducationsResumeInput,
 ) (updateUserEducationsResum *entity.Resume, err error) {
@@ -385,7 +385,7 @@ func (uc *resumeUseCase) UpdateUserEducationResume(
 	return res, nil
 }
 
-func (uc *resumeUseCase) UpdateUserExperiencesResume(
+func (uc *resumeUseCase) UpdateUserExperiences(
 	userId, resumeId string,
 	updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput,
 ) (updateUserEducationsResum *entity.Resume, err error) {
@@ -451,7 +451,7 @@ func (uc *resumeUseCase) UpdateUserExperiencesResume(
 	return res, nil
 }
 
-func (uc *resumeUseCase) DeleteResume(resumeId string) (str string, err error) {
+func (uc *resumeUseCase) Delete(resumeId string) (str string, err error) {
 	res, err := uc.resumeRepo.DeleteById(resumeId)
 
 	if err != nil {
@@ -461,7 +461,7 @@ func (uc *resumeUseCase) DeleteResume(resumeId string) (str string, err error) {
 	return res, nil
 }
 
-func (uc *resumeUseCase) DeleteUserExperienceInResume(resumeId, userExperienceId string) (str string, err error) {
+func (uc *resumeUseCase) DeleteUserExperience(resumeId, userExperienceId string) (str string, err error) {
 
 	userExperienceDB, err := uc.userExperienceRepo.GetById(userExperienceId)
 
@@ -483,7 +483,7 @@ func (uc *resumeUseCase) DeleteUserExperienceInResume(resumeId, userExperienceId
 	return res, nil
 }
 
-func (uc *resumeUseCase) DeleteUserEducationInResume(resumeId, userEducationId string) (str string, err error) {
+func (uc *resumeUseCase) DeleteUserEducation(resumeId, userEducationId string) (str string, err error) {
 	userEducationDB, err := uc.userEducationRepo.GetById(userEducationId)
 
 	if err != nil {
@@ -783,15 +783,12 @@ func getCreateAndUpdateUserEducations(
 }
 
 func setGender(gender string) string {
-	if gender != "" {
-		if gender == "MALE" {
-			return gender
-		} else if gender == "FEMALE" {
-			return gender
-		} else {
-			return ""
-		}
+	switch {
+	case gender == "MALE":
+		return gender
+	case gender == "FEMALE":
+		return gender
+	default:
+		return ""
 	}
-
-	return ""
 }
