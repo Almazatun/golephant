@@ -1,0 +1,25 @@
+ResumeStatusesPath:
+  get:
+    tags:
+    - Resume status
+    summary: Statuses
+    security:
+        - cookieAuth: []
+    responses:
+      '200':
+        schema:
+            type: array
+            items:
+              $ref: "#/definitions/ResumeStatus"
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+definitions:
+  ResumeStatus:
+    type: object
+    properties:
+      title:
+        type: string
+    xml:
+      name: "ResumeStatus"

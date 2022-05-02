@@ -1,0 +1,29 @@
+SpecializationsPath:
+  get:
+    tags:
+    - Specialization
+    summary: Specializations
+    security:
+        - cookieAuth: []
+    responses:
+      '200':
+        schema:
+            type: array
+            items:
+              $ref: "#/definitions/Specialization"
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+definitions:
+  Specialization:
+    type: object
+    properties:
+      title:
+        type: string
+      types:
+        type: array
+        items:
+          type: string
+    xml:
+      name: "Specialization"

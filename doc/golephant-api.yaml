@@ -17,6 +17,12 @@ paths:
     $ref: './resources/user.yaml#AuthMePath'
   /resume/user/{id}:
     $ref: './resources/resum.yaml#CreateResumePathWithID'
+  /specializations:
+    $ref: './resources/specialization.yaml#SpecializationsPath'
+  /resumeStatuses:
+    $ref: './resources/resume_status.yaml#ResumeStatusesPath'
+  /positionTypes:
+    $ref: './resources/position_type.yaml#PositionTypesPath'
 # 1) Cookie
 components:
   securitySchemes:
