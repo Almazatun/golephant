@@ -29,9 +29,9 @@ func NewRouter(h Handler) *mux.Router {
 
 	// Company Address
 	company.Handle("/{companyId}/address",
-		middleware.Authentication(http.HandlerFunc(h.CompanyHandler.AddCompanyAddress))).Methods("POST")
+		middleware.Authentication(http.HandlerFunc(h.CompanyHandler.AddAddress))).Methods("POST")
 	company.Handle("/{companyId}/address/{companyAddressId}",
-		middleware.Authentication(http.HandlerFunc(h.CompanyHandler.DeleteCompanyAddress))).Methods("DELETE")
+		middleware.Authentication(http.HandlerFunc(h.CompanyHandler.DeleteAddress))).Methods("DELETE")
 
 	// Resumes
 	router.Handle("/resumes/{userId}", middleware.Authentication(http.HandlerFunc(h.ResumeHandler.List))).Methods("GET")

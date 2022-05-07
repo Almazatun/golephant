@@ -22,7 +22,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-type GenerateJWT struct {
+type JWT struct {
 	Token          string
 	ExperationTime time.Time
 }
@@ -57,7 +57,7 @@ func IsValidJWTStr(tokenStr string) (res bool, err error) {
 	return true, nil
 }
 
-func GenerateJWTStr(email string) (res *GenerateJWT, err error) {
+func GenerateJWTStr(email string) (res *JWT, err error) {
 	experationTimeJWT := time.Now().Add(time.Minute * 60)
 	claims := Claims{
 		Email: email,
@@ -73,6 +73,6 @@ func GenerateJWTStr(email string) (res *GenerateJWT, err error) {
 		return nil, err
 	}
 
-	return &GenerateJWT{Token: tokenString, ExperationTime: experationTimeJWT}, nil
+	return &JWT{Token: tokenString, ExperationTime: experationTimeJWT}, nil
 
 }

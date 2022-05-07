@@ -18,8 +18,8 @@ type companyHandler struct {
 type CompanyHandler interface {
 	Register(w http.ResponseWriter, r *http.Request)
 	LogIn(w http.ResponseWriter, r *http.Request)
-	AddCompanyAddress(w http.ResponseWriter, r *http.Request)
-	DeleteCompanyAddress(w http.ResponseWriter, r *http.Request)
+	AddAddress(w http.ResponseWriter, r *http.Request)
+	DeleteAddress(w http.ResponseWriter, r *http.Request)
 }
 
 func NewCompanyHandler(
@@ -84,7 +84,7 @@ func (h *companyHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(res.LogInEntityData)
 }
 
-func (h *companyHandler) AddCompanyAddress(w http.ResponseWriter, r *http.Request) {
+func (h *companyHandler) AddAddress(w http.ResponseWriter, r *http.Request) {
 	var createCompanyAddressInput input.CreateCompanyAddressInput
 	params := mux.Vars(r)
 	err := json.NewDecoder(r.Body).Decode(&createCompanyAddressInput)
@@ -95,7 +95,7 @@ func (h *companyHandler) AddCompanyAddress(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	res, err := h.companyUseCase.AddCompanyAddress(
+	res, err := h.companyUseCase.AddAddress(
 		params["companyId"],
 		createCompanyAddressInput,
 	)
@@ -110,10 +110,10 @@ func (h *companyHandler) AddCompanyAddress(w http.ResponseWriter, r *http.Reques
 	json.NewEncoder(w).Encode(res)
 }
 
-func (h *companyHandler) DeleteCompanyAddress(w http.ResponseWriter, r *http.Request) {
+func (h *companyHandler) DeleteAddress(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
-	res, err := h.companyUseCase.DeleteCompanyAddress(
+	res, err := h.companyUseCase.DeleteAddress(
 		params["companyId"],
 		params["companyAddressId"],
 	)

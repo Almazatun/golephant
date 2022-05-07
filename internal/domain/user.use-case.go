@@ -24,9 +24,24 @@ type userUseCase struct {
 type UserUseCase interface {
 	Register(registerUserInput input.RegisterUserInput) (user *entity.User, err error)
 	LogIn(logInInput input.LogInUserInput) (res *_type.ResLogIn[entity.User], err error)
-	UpdateData(userId string, updateUserDataInput input.UpdateUserDataInput) (user *entity.User, err error)
+	UpdateData(
+		userId string,
+		updateUserDataInput input.UpdateUserDataInput,
+	) (user *entity.User, err error)
 	GetLinkResetPassword(userId string) (str *string, err error)
-	ResetPassword(userId, resetPasswordToken, newPassword string) (str *string, err error)
+	ResetPassword(
+		userId, resetPasswordToken, newPassword string,
+	) (str *string, err error)
+	fillUserToRegister(
+		registerUserInput input.RegisterUserInput,
+	) (registerUser entity.User)
+	fillUserDataToUpdate(
+		userDB *entity.User,
+		updateUserDataInput input.UpdateUserDataInput,
+	) (updateUserData *entity.User, err error)
+	isEmptyUpdateUserInput(
+		updateUserDataInput input.UpdateUserDataInput,
+	) bool
 }
 
 func NewUserUseCase(
@@ -48,7 +63,7 @@ func (uc *userUseCase) Register(registerUserInput input.RegisterUserInput) (user
 		return nil, e
 	}
 
-	registerUser := registerUserColums(registerUserInput)
+	registerUser := uc.fillUserToRegister(registerUserInput)
 
 	// Hashing user password
 	hashedPassword, err := util.HashPassword(registerUserInput.Password)
@@ -108,7 +123,7 @@ func (uc *userUseCase) LogIn(logInInput input.LogInUserInput) (res *_type.ResLog
 
 func (uc *userUseCase) UpdateData(userId string, updateUserDataInput input.UpdateUserDataInput) (user *entity.User, err error) {
 
-	if isEmptyUpdateUserInput(updateUserDataInput) {
+	if uc.isEmptyUpdateUserInput(updateUserDataInput) {
 		return nil, nil
 	}
 
@@ -118,7 +133,7 @@ func (uc *userUseCase) UpdateData(userId string, updateUserDataInput input.Updat
 		return nil, err
 	}
 
-	updateUserData, err := updateUserColums(userDB, updateUserDataInput)
+	updateUserData, err := uc.fillUserDataToUpdate(userDB, updateUserDataInput)
 
 	if err != nil {
 		return nil, err
@@ -194,7 +209,9 @@ func (uc *userUseCase) ResetPassword(userId, resetPasswordToken, newPassword str
 	return &res, nil
 }
 
-func registerUserColums(registerUserInput input.RegisterUserInput) (registerUser entity.User) {
+func (uc *userUseCase) fillUserToRegister(
+	registerUserInput input.RegisterUserInput,
+) (registerUser entity.User) {
 
 	if registerUserInput.Email != "" {
 		registerUser.Email = registerUserInput.Email
@@ -215,7 +232,10 @@ func registerUserColums(registerUserInput input.RegisterUserInput) (registerUser
 	return registerUser
 }
 
-func updateUserColums(userDB *entity.User, updateUserDataInput input.UpdateUserDataInput) (updateUserData *entity.User, err error) {
+func (uc *userUseCase) fillUserDataToUpdate(
+	userDB *entity.User,
+	updateUserDataInput input.UpdateUserDataInput,
+) (updateUserData *entity.User, err error) {
 
 	if updateUserDataInput.Email != "" {
 		userDB.Email = updateUserDataInput.Email
@@ -243,6 +263,6 @@ func updateUserColums(userDB *entity.User, updateUserDataInput input.UpdateUserD
 	return userDB, nil
 }
 
-func isEmptyUpdateUserInput(updateUserDataInput input.UpdateUserDataInput) bool {
+func (uc *userUseCase) isEmptyUpdateUserInput(updateUserDataInput input.UpdateUserDataInput) bool {
 	return (input.UpdateUserDataInput{}) == updateUserDataInput
 }

@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	repository "github.com/Almazatun/golephant/internal/infrastucture"
@@ -27,13 +26,16 @@ type CompanyUseCase interface {
 	LogIn(
 		logInCompanyInput input.LogInCompanyInput,
 	) (res *_type.ResLogIn[entity.Company], err error)
-	AddCompanyAddress(
+	AddAddress(
 		companyId string,
 		createCompanyAddressInput input.CreateCompanyAddressInput,
 	) (companyDB *entity.Company, err error)
-	DeleteCompanyAddress(
+	DeleteAddress(
 		companyId, companyAddressId string,
 	) (str string, err error)
+	validateAddress(
+		addresses []entity.CompanyAddress,
+		createAddressInput input.CreateCompanyAddressInput) error
 }
 
 func NewCompanyUseCase(
@@ -116,39 +118,20 @@ func (uc *companyUseCase) LogIn(logInCompanyInput input.LogInCompanyInput) (res 
 		LogInEntityData:   *company}, nil
 }
 
-func (uc *companyUseCase) AddCompanyAddress(
+func (uc *companyUseCase) AddAddress(
 	companyId string,
 	createCompanyAddressInput input.CreateCompanyAddressInput,
 ) (companyDB *entity.Company, err error) {
 	company, err := uc.companyRepo.GetById(companyId)
-	fmt.Println(company.CompanyAddresses)
+
 	if err != nil {
 		return nil, err
 	}
 
-	for _, v := range company.CompanyAddresses {
-		if createCompanyAddressInput.IsBaseAddress == v.IsBaseAddress &&
-			util.TrimWhiteSpace(createCompanyAddressInput.Title) == v.Title {
-			newErr := errors.New("In company already exist address with " + createCompanyAddressInput.Title)
-			return nil, newErr
-		}
+	e := uc.validateAddress(company.CompanyAddresses, createCompanyAddressInput)
 
-		if createCompanyAddressInput.IsBaseAddress {
-			if v.IsBaseAddress {
-				newErr := errors.New("In company already exist base address with " + v.Title)
-				return nil, newErr
-			}
-		}
-
-		if util.TrimWhiteSpace(createCompanyAddressInput.Title) == v.Title {
-			newErr := errors.New("In company already exist address with " + v.Title)
-			return nil, newErr
-		}
-
-	}
-
-	if err != nil {
-		return nil, err
+	if e != nil {
+		return nil, e
 	}
 
 	createCompanyAddress := entity.CompanyAddress{
@@ -168,7 +151,7 @@ func (uc *companyUseCase) AddCompanyAddress(
 	return updateCompanyDB, nil
 }
 
-func (uc *companyUseCase) DeleteCompanyAddress(
+func (uc *companyUseCase) DeleteAddress(
 	companyId, companyAddressId string,
 ) (str string, err error) {
 	companyAddress, err := uc.companyAddressRepo.GetById(companyAddressId)
@@ -185,4 +168,33 @@ func (uc *companyUseCase) DeleteCompanyAddress(
 	res, err := uc.companyAddressRepo.DeleteById(companyAddressId)
 
 	return res, nil
+}
+
+func (uc *companyUseCase) validateAddress(
+	addresses []entity.CompanyAddress,
+	createAddressInput input.CreateCompanyAddressInput,
+) error {
+	var err error
+
+	for _, v := range addresses {
+		if createAddressInput.IsBaseAddress == v.IsBaseAddress &&
+			util.TrimWhiteSpace(createAddressInput.Title) == v.Title {
+			newErr := errors.New("In company already exist address with " + createAddressInput.Title)
+			err = newErr
+		}
+
+		if createAddressInput.IsBaseAddress {
+			if v.IsBaseAddress {
+				newErr := errors.New("In company already exist base address with " + v.Title)
+				err = newErr
+			}
+		}
+
+		if util.TrimWhiteSpace(createAddressInput.Title) == v.Title {
+			newErr := errors.New("In company already exist address with " + v.Title)
+			err = newErr
+		}
+	}
+
+	return err
 }
