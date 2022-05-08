@@ -1,4 +1,4 @@
-CreateResumePathWithID:
+CreatePathWithID:
   post:
     tags:
     - Resume
@@ -28,6 +28,243 @@ CreateResumePathWithID:
         description: Bad request.
       '5XX':
         description: Unexpected error.
+ListPathWithID:
+  post:
+    tags:
+    - Resume
+    summary: Resumes
+    parameters:
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+    security:
+        - cookieAuth: []
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '../schemas/resume.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+DeletePathWithID:
+  delete:
+    tags:
+    - Resume
+    summary: Delete resume
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+    security:
+        - cookieAuth: []
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              type: string
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+UpdateBasicInfoPathWithID:
+  put:
+    tags:
+    - Resume
+    summary: Update basic info resume
+    parameters:
+      - in: path
+        name: resumeId
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/UpdateBasicInfoResume'
+    security:
+        - cookieAuth: []
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              $ref: '../schemas/resume.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+UpdateAboutMePathWithID:
+  put:
+    tags:
+    - Resume
+    summary: Update basic info resume
+    parameters:
+      - in: path
+        name: resumeId
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/UpdateAboutMeResume'
+    security:
+        - cookieAuth: []
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              $ref: '../schemas/resume.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+UpdateCitizenshipPathWithID:
+  put:
+    tags:
+    - Resume
+    summary: Update basic info resume
+    parameters:
+      - in: path
+        name: resumeId
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/UpdateCitizenshipResume'
+    security:
+        - cookieAuth: []
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              $ref: '../schemas/resume.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+UpdateDesiredPositionPathWithID:
+  put:
+    tags:
+    - Resume
+    summary: Update basic info resume
+    parameters:
+      - in: path
+        name: resumeId
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/UpdateDesiredPositionResume'
+    security:
+        - cookieAuth: []
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              $ref: '../schemas/resume.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+UpdateTagsPathWithID:
+  put:
+    tags:
+    - Resume
+    summary: Update basic info resume
+    parameters:
+      - in: path
+        name: resumeId
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+      - in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+          #uuid
+          example: "00000000-0000-0000-0000-000000000000"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/UpdateTagsResume'
+    security:
+        - cookieAuth: []
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              $ref: '../schemas/resume.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
 definitions:
   CreateResume:
     type: object
@@ -43,6 +280,9 @@ definitions:
         type: string
       last_name:
         type: string
+      date_of_birght:
+      # year-month-day
+        type: string
       gender:
         type: string
         enum: [FEMALE, MALE]
@@ -54,6 +294,76 @@ definitions:
           $ref: '#/definitions/UserExperience'
     xml:
       name: "CreateResume"
+  UpdateBasicInfoResume:
+    type: object
+    required:
+      - first_name
+      - last_name
+      - date_of_birght
+      - gender
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      date_of_birght:
+      # year-month-day
+        type: string
+      gender:
+        type: string
+        enum: [FEMALE, MALE]
+    xml:
+      name: "UpdateBasicInfoResume"
+  UpdateAboutMeResume:
+    type: object
+    required:
+      - about_me
+    properties:
+      about_me:
+        type: string
+        minLength: 1
+        maxLength: 300
+    xml:
+      name: "UpdateAboutMeResume"
+  UpdateCitizenshipResume:
+    type: object
+    required:
+      - city
+      - subway_station
+    properties:
+      city:
+        type: string
+      subway_station:
+        type: string
+    xml:
+      name: "UpdateCitizenshipResume"
+  UpdateDesiredPositionResume:
+    type: object
+    required:
+      - desired_position
+      - specialization
+      - work_mode
+    properties:
+      desired_position:
+        type: string
+      specialization:
+        type: string
+      work_mode:
+        type: string
+    xml:
+      name: "UpdateDesiredPositionResume"
+  UpdateTagsResume:
+    type: object
+    required:
+      - tags
+    properties:
+      tags:
+        type: array
+        items:
+          type: string
+          enum: [Backend, Frontend, DevOps, Software engineer, Data scientist, Designer]
+    xml:
+      name: "UpdateTagsResume"
   UserExperience:
     type: object
     required:

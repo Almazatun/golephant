@@ -7,6 +7,7 @@ servers:
 paths:
   /helloWorld:
     $ref: './resources/hello-world.yaml#HelloWorld'
+    # user
   /user/register:
     $ref: './resources/user.yaml#UserRegisterPath'
   /user/login:
@@ -15,12 +16,30 @@ paths:
     $ref: './resources/user.yaml#UserUpdateDataPathWithID'
   /user/authMe:
     $ref: './resources/user.yaml#AuthMePath'
+    # resume
   /resume/user/{id}:
-    $ref: './resources/resum.yaml#CreateResumePathWithID'
+    $ref: './resources/resum.yaml#CreatePathWithID'
+  /resumes/{userId}:
+    $ref: './resources/resum.yaml#ListPathWithID'
+  /resume/{id}:
+    $ref: './resources/resum.yaml#DeletePathWithID'
+  /resume/{resumeId}/user/{userId}/basicInfo:
+    $ref: './resources/resum.yaml#UpdateBasicInfoPathWithID'
+  /resume/{resumeId}/user/{userId}/aboutMe:
+    $ref: './resources/resum.yaml#UpdateAboutMePathWithID'
+  /resume/{resumeId}/user/{userId}/citizenship:
+    $ref: './resources/resum.yaml#UpdateCitizenshipPathWithID'
+  /resume/{resumeId}/user/{userId}/desiredPosition:
+    $ref: './resources/resum.yaml#UpdateDesiredPositionPathWithID'
+  /resume/{resumeId}/user/{userId}/tags:
+    $ref: './resources/resum.yaml#UpdateTagsPathWithID'
+    # specialization
   /specializations:
     $ref: './resources/specialization.yaml#SpecializationsPath'
+    # resume status
   /resumeStatuses:
     $ref: './resources/resume_status.yaml#ResumeStatusesPath'
+    # position types
   /positionTypes:
     $ref: './resources/position_type.yaml#PositionTypesPath'
 # 1) Cookie
