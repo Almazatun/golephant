@@ -26,7 +26,7 @@ func (h *specializationHandler) List(w http.ResponseWriter, r *http.Request) {
 	res, err := h.specializationRepo.List()
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return

@@ -35,7 +35,7 @@ func (h *companyHandler) Register(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&registerCompanyInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -44,7 +44,7 @@ func (h *companyHandler) Register(w http.ResponseWriter, r *http.Request) {
 	company, err := h.companyUseCase.Register(registerCompanyInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -58,7 +58,7 @@ func (h *companyHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&logInCompanyInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -66,7 +66,7 @@ func (h *companyHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	res, err := h.companyUseCase.LogIn(logInCompanyInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -90,7 +90,7 @@ func (h *companyHandler) AddAddress(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&createCompanyAddressInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -101,7 +101,7 @@ func (h *companyHandler) AddAddress(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -119,7 +119,7 @@ func (h *companyHandler) DeleteAddress(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusBadRequest)
 		return

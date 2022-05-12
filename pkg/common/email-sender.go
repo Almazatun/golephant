@@ -50,7 +50,7 @@ func SendEmail(to, ressetPasswordToken string) {
 	// Sending email.
 	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, reveiver, []byte(msg))
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		return
 	}
 

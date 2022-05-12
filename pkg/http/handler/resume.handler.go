@@ -48,7 +48,7 @@ func (h *resumeHandler) List(w http.ResponseWriter, r *http.Request) {
 	res, err := h.resumeRepository.ListByUserId(params["userId"])
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -71,7 +71,7 @@ func (h *resumeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	res, err := h.resumeUseCase.Create(params["userId"], createResumeInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -100,7 +100,7 @@ func (h *resumeHandler) UpdateBasicInfo(w http.ResponseWriter, r *http.Request) 
 	)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -128,7 +128,7 @@ func (h *resumeHandler) UpdateAboutMe(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -156,7 +156,7 @@ func (h *resumeHandler) UpdateCitizenship(w http.ResponseWriter, r *http.Request
 	)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -184,7 +184,7 @@ func (h *resumeHandler) UpdateTags(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -212,7 +212,7 @@ func (h *resumeHandler) UpdateUserEducation(w http.ResponseWriter, r *http.Reque
 	)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -240,7 +240,7 @@ func (h *resumeHandler) UpdateUserExperiences(w http.ResponseWriter, r *http.Req
 	)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -268,7 +268,7 @@ func (h *resumeHandler) UpdateDesiredPosition(w http.ResponseWriter, r *http.Req
 	)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -284,7 +284,7 @@ func (h *resumeHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	res, err := h.resumeUseCase.Delete(params["resumeId"])
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -302,7 +302,7 @@ func (h *resumeHandler) DeleteUserEducation(w http.ResponseWriter, r *http.Reque
 	)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -320,7 +320,7 @@ func (h *resumeHandler) DeleteUserExperience(w http.ResponseWriter, r *http.Requ
 	)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return

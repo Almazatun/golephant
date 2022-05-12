@@ -1,13 +1,13 @@
 package logger
 
 import (
-	"fmt"
+	"log"
 )
 
 func Info(message string) {
-	fmt.Println("-------------------- logger -------------------- \n", message)
+	log.Println("-------------------- Info -------------------- \n", message)
 }
 
-func InfoError(err error) {
-	fmt.Println("-------------------- err msg -------------------- \n", err)
+func Error(err error) {
+	log.Println("-------------------- Err -------------------- \n", err)
 }

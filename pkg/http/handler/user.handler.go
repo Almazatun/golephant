@@ -39,7 +39,7 @@ func (h *userHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&registerUserInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -48,7 +48,7 @@ func (h *userHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 	user, err := h.userUseCase.Register(registerUserInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -62,7 +62,7 @@ func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&logInUserInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -70,7 +70,7 @@ func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 	res, err := h.userUseCase.LogIn(logInUserInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		HttpResponseBody(w, err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -94,13 +94,14 @@ func (h *userHandler) AuthMe(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		if err == http.ErrNoCookie {
+			logger.Error(err)
 			newErr := errors.New(error_message.UNAUTHORIZED)
 			HttpResponseBody(w, newErr)
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
 
-		logger.InfoError(err)
+		logger.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -122,7 +123,7 @@ func (h *userHandler) AuthMe(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		logger.InfoError(err)
+		logger.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -144,7 +145,7 @@ func (h *userHandler) UpdateUserData(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&updateUserDataInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -152,7 +153,7 @@ func (h *userHandler) UpdateUserData(w http.ResponseWriter, r *http.Request) {
 	res, err := h.userUseCase.UpdateData(params["userId"], updateUserDataInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -166,7 +167,7 @@ func (h *userHandler) GetLinkResetPassword(w http.ResponseWriter, r *http.Reques
 	res, err := h.userUseCase.GetLinkResetPassword(params["userId"])
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -181,7 +182,7 @@ func (h *userHandler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&resetUserPasswordInput)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -193,7 +194,7 @@ func (h *userHandler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if err != nil {
-		logger.InfoError(err)
+		logger.Error(err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

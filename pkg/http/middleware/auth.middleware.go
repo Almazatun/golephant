@@ -22,7 +22,7 @@ func Authentication(next http.Handler) http.Handler {
 				return
 			}
 
-			logger.InfoError(err)
+			logger.Error(err)
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -32,7 +32,7 @@ func Authentication(next http.Handler) http.Handler {
 		res, err := jwt_gl.IsValidJWTStr(tokenString)
 
 		if err != nil && !res {
-			logger.InfoError(err)
+			logger.Error(err)
 			handler.HttpResponseBody(w, err)
 			w.WriteHeader(http.StatusBadRequest)
 			return
