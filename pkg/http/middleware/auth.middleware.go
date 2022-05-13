@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/Almazatun/golephant/pkg/common"
 	error_message "github.com/Almazatun/golephant/pkg/common/error-message"
-	handler "github.com/Almazatun/golephant/pkg/http/handler"
 	jwt_gl "github.com/Almazatun/golephant/pkg/jwt_gl"
 	logger "github.com/Almazatun/golephant/pkg/logger"
 )
@@ -17,13 +17,12 @@ func Authentication(next http.Handler) http.Handler {
 		if err != nil {
 			if err == http.ErrNoCookie {
 				newErr := errors.New(error_message.UNAUTHORIZED)
-				handler.HttpResponseBody(w, newErr)
-				w.WriteHeader(http.StatusUnauthorized)
+				common.JSONError(w, newErr, http.StatusUnauthorized)
 				return
 			}
 
 			logger.Error(err)
-			w.WriteHeader(http.StatusBadRequest)
+			common.JSONError(w, err, http.StatusBadRequest)
 			return
 		}
 
@@ -33,8 +32,7 @@ func Authentication(next http.Handler) http.Handler {
 
 		if err != nil && !res {
 			logger.Error(err)
-			handler.HttpResponseBody(w, err)
-			w.WriteHeader(http.StatusBadRequest)
+			common.JSONError(w, err, http.StatusBadRequest)
 			return
 		}
 

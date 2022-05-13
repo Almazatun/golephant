@@ -3,10 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 
 	usecase "github.com/Almazatun/golephant/internal/domain"
+	"github.com/Almazatun/golephant/pkg/common"
 	error_message "github.com/Almazatun/golephant/pkg/common/error-message"
 	"github.com/Almazatun/golephant/pkg/http/presentation/input"
 	jwt_gl "github.com/Almazatun/golephant/pkg/jwt_gl"
@@ -40,8 +40,7 @@ func (h *userHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -49,8 +48,7 @@ func (h *userHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -71,8 +69,7 @@ func (h *userHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -96,13 +93,12 @@ func (h *userHandler) AuthMe(w http.ResponseWriter, r *http.Request) {
 		if err == http.ErrNoCookie {
 			logger.Error(err)
 			newErr := errors.New(error_message.UNAUTHORIZED)
-			HttpResponseBody(w, newErr)
-			w.WriteHeader(http.StatusUnauthorized)
+			common.JSONError(w, newErr, http.StatusUnauthorized)
 			return
 		}
 
 		logger.Error(err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -117,14 +113,12 @@ func (h *userHandler) AuthMe(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
 			newErr := errors.New(error_message.UNAUTHORIZED)
-			HttpResponseBody(w, newErr)
-
-			w.WriteHeader(http.StatusUnauthorized)
+			common.JSONError(w, newErr, http.StatusUnauthorized)
 			return
 		}
 
 		logger.Error(err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -146,7 +140,7 @@ func (h *userHandler) UpdateUserData(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -154,7 +148,7 @@ func (h *userHandler) UpdateUserData(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -168,7 +162,7 @@ func (h *userHandler) GetLinkResetPassword(w http.ResponseWriter, r *http.Reques
 
 	if err != nil {
 		logger.Error(err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -183,7 +177,7 @@ func (h *userHandler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -195,7 +189,7 @@ func (h *userHandler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -204,17 +198,4 @@ func (h *userHandler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 
 func HelloWord(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("Hello World")
-}
-
-func HttpResponseBody(w http.ResponseWriter, err error) {
-	resp := make(map[string]string)
-
-	w.WriteHeader(http.StatusBadRequest)
-	w.Header().Set("Content-Type", "application/json")
-	resp["message"] = err.Error()
-	jsonResp, err := json.Marshal(resp)
-	if err != nil {
-		log.Fatalf("Error happened in JSON marshal. Err: %s", err)
-	}
-	w.Write(jsonResp)
 }

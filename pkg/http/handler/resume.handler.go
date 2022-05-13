@@ -7,6 +7,7 @@ import (
 
 	usecase "github.com/Almazatun/golephant/internal/domain"
 	repository "github.com/Almazatun/golephant/internal/infrastucture"
+	"github.com/Almazatun/golephant/pkg/common"
 	"github.com/Almazatun/golephant/pkg/http/presentation/input"
 	logger "github.com/Almazatun/golephant/pkg/logger"
 	"github.com/gorilla/mux"
@@ -49,8 +50,7 @@ func (h *resumeHandler) List(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -72,8 +72,7 @@ func (h *resumeHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -89,7 +88,7 @@ func (h *resumeHandler) UpdateBasicInfo(w http.ResponseWriter, r *http.Request) 
 	fmt.Println(updateBasicInfoResumeInput)
 
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -101,8 +100,7 @@ func (h *resumeHandler) UpdateBasicInfo(w http.ResponseWriter, r *http.Request) 
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -129,8 +127,7 @@ func (h *resumeHandler) UpdateAboutMe(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -157,8 +154,7 @@ func (h *resumeHandler) UpdateCitizenship(w http.ResponseWriter, r *http.Request
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -185,8 +181,7 @@ func (h *resumeHandler) UpdateTags(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -213,8 +208,7 @@ func (h *resumeHandler) UpdateUserEducation(w http.ResponseWriter, r *http.Reque
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -241,8 +235,7 @@ func (h *resumeHandler) UpdateUserExperiences(w http.ResponseWriter, r *http.Req
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -269,8 +262,7 @@ func (h *resumeHandler) UpdateDesiredPosition(w http.ResponseWriter, r *http.Req
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -285,8 +277,7 @@ func (h *resumeHandler) Delete(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -303,8 +294,7 @@ func (h *resumeHandler) DeleteUserEducation(w http.ResponseWriter, r *http.Reque
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -321,8 +311,7 @@ func (h *resumeHandler) DeleteUserExperience(w http.ResponseWriter, r *http.Requ
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 

@@ -27,13 +27,13 @@ type Mail struct {
 	Body    string
 }
 
-func SendEmail(to, ressetPasswordToken string) {
+func SendEmail(to, content string) {
 	// Receiver
 	var reveiver []string
 	reveiver = append(reveiver, to)
 
 	subject := "Simple HTML mail"
-	body := `<a><b>` + frontendBaseUrl + `\` + ressetPasswordToken + `</b></p>`
+	body := `<a><b>` + frontendBaseUrl + `\` + content + `</b></p>`
 
 	// Request
 	request := Mail{

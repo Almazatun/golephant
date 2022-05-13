@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	repository "github.com/Almazatun/golephant/internal/infrastucture"
+	"github.com/Almazatun/golephant/pkg/common"
 	logger "github.com/Almazatun/golephant/pkg/logger"
 )
 
@@ -27,8 +28,7 @@ func (h *specializationHandler) List(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 

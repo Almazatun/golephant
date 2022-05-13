@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	usecase "github.com/Almazatun/golephant/internal/domain"
+	"github.com/Almazatun/golephant/pkg/common"
 	"github.com/Almazatun/golephant/pkg/http/presentation/input"
 	jwt_gl "github.com/Almazatun/golephant/pkg/jwt_gl"
 	logger "github.com/Almazatun/golephant/pkg/logger"
@@ -36,8 +37,7 @@ func (h *companyHandler) Register(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -45,8 +45,7 @@ func (h *companyHandler) Register(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusInternalServerError)
+		common.JSONError(w, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -59,7 +58,7 @@ func (h *companyHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -67,8 +66,7 @@ func (h *companyHandler) LogIn(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -102,8 +100,7 @@ func (h *companyHandler) AddAddress(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
@@ -120,8 +117,7 @@ func (h *companyHandler) DeleteAddress(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		logger.Error(err)
-		HttpResponseBody(w, err)
-		w.WriteHeader(http.StatusBadRequest)
+		common.JSONError(w, err, http.StatusBadRequest)
 		return
 	}
 
