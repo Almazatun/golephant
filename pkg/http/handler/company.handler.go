@@ -21,6 +21,9 @@ type CompanyHandler interface {
 	LogIn(w http.ResponseWriter, r *http.Request)
 	AddAddress(w http.ResponseWriter, r *http.Request)
 	DeleteAddress(w http.ResponseWriter, r *http.Request)
+	AddPosition(w http.ResponseWriter, r *http.Request)
+	UpdatePositionStatus(w http.ResponseWriter, r *http.Request)
+	DeletePosition(w http.ResponseWriter, r *http.Request)
 }
 
 func NewCompanyHandler(
@@ -107,12 +110,72 @@ func (h *companyHandler) AddAddress(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(res)
 }
 
+func (h *companyHandler) AddPosition(w http.ResponseWriter, r *http.Request) {
+
+	var createPositionInput input.CreatePositionInput
+	params := mux.Vars(r)
+	err := json.NewDecoder(r.Body).Decode(&createPositionInput)
+
+	if err != nil {
+		logger.Error(err)
+		common.JSONError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	res, err := h.companyUseCase.AddPosition(
+		params["companyId"],
+		createPositionInput,
+	)
+
+	if err != nil {
+		logger.Error(err)
+		common.JSONError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
+}
+
 func (h *companyHandler) DeleteAddress(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	res, err := h.companyUseCase.DeleteAddress(
 		params["companyId"],
 		params["companyAddressId"],
+	)
+
+	if err != nil {
+		logger.Error(err)
+		common.JSONError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
+}
+
+func (h *companyHandler) UpdatePositionStatus(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	res, err := h.companyUseCase.UpdatePositionStatus(
+		params["companyId"],
+		params["positionId"],
+	)
+
+	if err != nil {
+		logger.Error(err)
+		common.JSONError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
+}
+
+func (h *companyHandler) DeletePosition(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	res, err := h.companyUseCase.DeletePosition(
+		params["companyId"],
+		params["positionId"],
 	)
 
 	if err != nil {

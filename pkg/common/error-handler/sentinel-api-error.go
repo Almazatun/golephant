@@ -52,6 +52,11 @@ func ErrorMessageHandler(err error) sentineApiError {
 			status: http.StatusNotFound,
 			err:    err,
 		}
+	case error_message.POSITION_NOT_FOUND:
+		return sentineApiError{
+			status: http.StatusNotFound,
+			err:    err,
+		}
 	case error_message.BAD_REGUEST:
 		return sentineApiError{
 			status: http.StatusBadRequest,

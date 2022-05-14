@@ -41,6 +41,10 @@ func main() {
 	positionTypeRepository := repository.NewPositionTypeRepo()
 	positionTypeHandler := handler.NewPositionTypeHandler(positionTypeRepository)
 
+	// Position
+	positionRepository := repository.NewPositionRepo(DB)
+	positionUseCase := usecase.NewPositionUseCase(positionRepository)
+
 	// Specialization
 	specializationRepository := repository.NewSpecializationRepo()
 	specializationHandler := handler.NewSpecializationHandler(specializationRepository)
@@ -69,6 +73,8 @@ func main() {
 	companyUseCase := usecase.NewCompanyUseCase(
 		companyRepository,
 		companyAddressRepository,
+		positionRepository,
+		positionUseCase,
 	)
 	companyHandler := handler.NewCompanyHandler(companyUseCase)
 

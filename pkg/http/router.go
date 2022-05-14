@@ -27,6 +27,16 @@ func NewRouter(h Handler) *mux.Router {
 	company.HandleFunc("/register", h.CompanyHandler.Register).Methods("POST")
 	company.HandleFunc("/login", h.CompanyHandler.LogIn).Methods("PUT")
 
+	// Company Position
+	company.Handle("/{companyId}/position",
+		middleware.Authentication(http.HandlerFunc(h.CompanyHandler.AddPosition))).Methods("POST")
+
+	company.Handle("/{companyId}/position/{positionId}/status",
+		middleware.Authentication(http.HandlerFunc(h.CompanyHandler.UpdatePositionStatus))).Methods("PUT")
+
+	company.Handle("/{companyId}/position/{positionId}",
+		middleware.Authentication(http.HandlerFunc(h.CompanyHandler.DeletePosition))).Methods("DELETE")
+
 	// Company Address
 	company.Handle("/{companyId}/address",
 		middleware.Authentication(http.HandlerFunc(h.CompanyHandler.AddAddress))).Methods("POST")

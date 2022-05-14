@@ -17,6 +17,8 @@ import (
 type companyUseCase struct {
 	companyRepo        repository.CompanyRepo
 	companyAddressRepo repository.CompanyAddressRepo
+	positionRepo       repository.PositionRepo
+	positionUseCase    PositionUseCase
 }
 
 type CompanyUseCase interface {
@@ -30,21 +32,38 @@ type CompanyUseCase interface {
 		companyId string,
 		createCompanyAddressInput input.CreateCompanyAddressInput,
 	) (companyDB *entity.Company, err error)
+	AddPosition(
+		companyId string,
+		createPositionInput input.CreatePositionInput,
+	) (companyDB *entity.Company, err error)
 	DeleteAddress(
 		companyId, companyAddressId string,
+	) (str string, err error)
+	UpdatePositionStatus(
+		companyId, positionId string,
+	) (positionDB *entity.Position, err error)
+	DeletePosition(
+		companyId, positionId string,
 	) (str string, err error)
 	validateAddress(
 		addresses []entity.CompanyAddress,
 		createAddressInput input.CreateCompanyAddressInput) error
+	fillPositionDataToCreate(
+		createPositionInput input.CreatePositionInput,
+	) (position entity.Position)
 }
 
 func NewCompanyUseCase(
 	companyRepo repository.CompanyRepo,
 	companyAddressRepo repository.CompanyAddressRepo,
+	positionRepo repository.PositionRepo,
+	positionUseCase PositionUseCase,
 ) CompanyUseCase {
 	return &companyUseCase{
 		companyRepo:        companyRepo,
 		companyAddressRepo: companyAddressRepo,
+		positionRepo:       positionRepo,
+		positionUseCase:    positionUseCase,
 	}
 }
 
@@ -170,6 +189,63 @@ func (uc *companyUseCase) DeleteAddress(
 	return res, nil
 }
 
+func (uc *companyUseCase) AddPosition(
+	companyId string,
+	createPositionInput input.CreatePositionInput,
+) (companyDB *entity.Company, err error) {
+	v := validator.New()
+	e := v.Struct(createPositionInput)
+
+	if e != nil {
+		return nil, e
+	}
+
+	company, err := uc.companyRepo.GetById(companyId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	company.Positions = append(
+		company.Positions,
+		uc.fillPositionDataToCreate(createPositionInput),
+	)
+
+	res, err := uc.companyRepo.Save(*company)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (uc *companyUseCase) UpdatePositionStatus(
+	companyId, positionId string,
+) (positionDB *entity.Position, err error) {
+	position, err := uc.
+		positionUseCase.
+		UpdateStatus(companyId, positionId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return position, nil
+}
+
+func (uc *companyUseCase) DeletePosition(
+	companyId, positionId string,
+) (str string, err error) {
+	res, err := uc.positionUseCase.Delete(companyId, positionId)
+
+	if err != nil {
+		return "", err
+	}
+
+	return res, nil
+}
+
 func (uc *companyUseCase) validateAddress(
 	addresses []entity.CompanyAddress,
 	createAddressInput input.CreateCompanyAddressInput,
@@ -197,4 +273,34 @@ func (uc *companyUseCase) validateAddress(
 	}
 
 	return err
+}
+
+func (uc *companyUseCase) fillPositionDataToCreate(createPositionInput input.CreatePositionInput) (position entity.Position) {
+
+	if len(createPositionInput.Requirements) >= 1 {
+		position.Requirements = createPositionInput.Requirements
+	}
+
+	if len(createPositionInput.Responsibilities) >= 1 {
+		position.Responsibilities = createPositionInput.Responsibilities
+	}
+
+	if createPositionInput.PositionType != "" {
+		position.PositionType = createPositionInput.PositionType
+	}
+
+	if createPositionInput.Description != "" {
+		position.Description = createPositionInput.Description
+	}
+
+	if createPositionInput.Salary > 0 {
+		position.Salary = &createPositionInput.Salary
+	}
+
+	now := time.Now()
+
+	position.UpdateTime = now
+	position.CreationTime = now
+
+	return position
 }
