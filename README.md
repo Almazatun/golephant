@@ -64,6 +64,30 @@ You can see all the documented endpoints in UI
 | GET_LINK_RESET_PASSWORD | POST | BASE_URL/user/:userId/resetPassword |
 | RESET_PASSWORD | PUT | BASE_URL/user/:userId/resetPassword/:token |
 
+### Company
+
+| Description | http | path |
+|:--:|:--:|:--|
+| REGISTER | POST | BASE_URL/company/register |
+| LOGIN  | PUT | BASE_URL/company/login |
+
+### Company position
+
+| Description | http | path |
+|:--:|:--:|:--|
+| ADD | POST | BASE_URL/company/:companyId/position  |
+| UPDATE_RESPONSOBILITIES  | PUT | BASE_URL/company/:companyId/position/:positionId/reponsobilities  |
+| UPDATE_REQUIREMENTS  | PUT | BASE_URL/company/:companyId/position/:positionId/requirements  |
+| UPDATE  | PUT | BASE_URL/company/:companyId/position/:positionId  |
+| UPDATE_STATUS  | PUT | BASE_URL/company/:companyId/position/:positionId/status  |
+| DELETE  | DELETE | BASE_URL/company/:companyId/position/:positionId  |
+
+### Company address
+
+| Description | http | path |
+|:--:|:--:|:--|
+| ADD | POST | BASE_URL/company/:companyId/address  |
+| DELETE  | DELETE | BASE_URL/company/:companyId/address/:companyAddressId  |
 ### Resume
 
 | Description | http | path |
