@@ -23,6 +23,9 @@ type CompanyHandler interface {
 	DeleteAddress(w http.ResponseWriter, r *http.Request)
 	AddPosition(w http.ResponseWriter, r *http.Request)
 	UpdatePositionStatus(w http.ResponseWriter, r *http.Request)
+	UpdatePositionResponsibilities(w http.ResponseWriter, r *http.Request)
+	UpdatePositionRequirements(w http.ResponseWriter, r *http.Request)
+	UpdatePosition(w http.ResponseWriter, r *http.Request)
 	DeletePosition(w http.ResponseWriter, r *http.Request)
 }
 
@@ -125,6 +128,87 @@ func (h *companyHandler) AddPosition(w http.ResponseWriter, r *http.Request) {
 	res, err := h.companyUseCase.AddPosition(
 		params["companyId"],
 		createPositionInput,
+	)
+
+	if err != nil {
+		logger.Error(err)
+		common.JSONError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
+}
+
+func (h *companyHandler) UpdatePositionResponsibilities(w http.ResponseWriter, r *http.Request) {
+
+	var updatePositionResponsobilitesInput input.UpdatePositionResponsobilitesInput
+	params := mux.Vars(r)
+	err := json.NewDecoder(r.Body).Decode(&updatePositionResponsobilitesInput)
+
+	if err != nil {
+		logger.Error(err)
+		common.JSONError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	res, err := h.companyUseCase.UpdatePositionResponsibilities(
+		params["companyId"],
+		params["positionId"],
+		updatePositionResponsobilitesInput,
+	)
+
+	if err != nil {
+		logger.Error(err)
+		common.JSONError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
+}
+
+func (h *companyHandler) UpdatePositionRequirements(w http.ResponseWriter, r *http.Request) {
+
+	var updatePositionRequirementsInput input.UpdatePositionRequirementsInput
+	params := mux.Vars(r)
+	err := json.NewDecoder(r.Body).Decode(&updatePositionRequirementsInput)
+
+	if err != nil {
+		logger.Error(err)
+		common.JSONError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	res, err := h.companyUseCase.UpdatePositionRequirements(
+		params["companyId"],
+		params["positionId"],
+		updatePositionRequirementsInput,
+	)
+
+	if err != nil {
+		logger.Error(err)
+		common.JSONError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(w).Encode(res)
+}
+
+func (h *companyHandler) UpdatePosition(w http.ResponseWriter, r *http.Request) {
+
+	var updatePositionInput input.UpdatePositionInput
+	params := mux.Vars(r)
+	err := json.NewDecoder(r.Body).Decode(&updatePositionInput)
+
+	if err != nil {
+		logger.Error(err)
+		common.JSONError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	res, err := h.companyUseCase.UpdatePosition(
+		params["companyId"],
+		params["positionId"],
+		updatePositionInput,
 	)
 
 	if err != nil {

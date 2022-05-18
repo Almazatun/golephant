@@ -42,6 +42,18 @@ type CompanyUseCase interface {
 	UpdatePositionStatus(
 		companyId, positionId string,
 	) (positionDB *entity.Position, err error)
+	UpdatePositionResponsibilities(
+		companyId, positionId string,
+		updatePositionResponsobilitesInput input.UpdatePositionResponsobilitesInput,
+	) (positionDB *entity.Position, err error)
+	UpdatePositionRequirements(
+		companyId, positionId string,
+		updatePositionRequirementsInput input.UpdatePositionRequirementsInput,
+	) (positionDB *entity.Position, err error)
+	UpdatePosition(
+		companyId, positionId string,
+		updatePositionInput input.UpdatePositionInput,
+	) (positionDB *entity.Position, err error)
 	DeletePosition(
 		companyId, positionId string,
 	) (str string, err error)
@@ -218,6 +230,59 @@ func (uc *companyUseCase) AddPosition(
 	}
 
 	return res, nil
+}
+
+func (uc *companyUseCase) UpdatePosition(
+	companyId, positionId string,
+	updatePositionInput input.UpdatePositionInput,
+) (positionDB *entity.Position, err error) {
+
+	position, err := uc.positionUseCase.Update(
+		companyId,
+		positionId,
+		updatePositionInput,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return position, nil
+
+}
+
+func (uc *companyUseCase) UpdatePositionResponsibilities(
+	companyId, positionId string,
+	updatePositionResponsobilitesInput input.UpdatePositionResponsobilitesInput,
+) (positionDB *entity.Position, err error) {
+	position, err := uc.positionUseCase.UpdateResponsibilities(
+		companyId,
+		positionId,
+		updatePositionResponsobilitesInput,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return position, nil
+}
+
+func (uc *companyUseCase) UpdatePositionRequirements(
+	companyId, positionId string,
+	updatePositionRequirementsInput input.UpdatePositionRequirementsInput,
+) (positionDB *entity.Position, err error) {
+	position, err := uc.positionUseCase.UpdateRequirements(
+		companyId,
+		positionId,
+		updatePositionRequirementsInput,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return position, nil
 }
 
 func (uc *companyUseCase) UpdatePositionStatus(
