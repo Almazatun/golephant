@@ -1,0 +1,340 @@
+RegisterPath:
+  post:
+    tags:
+    - Company
+    summary: Register
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/RegisterCompany'
+            example:
+              email: ibm@gmail.com
+              password: 1234567
+    #without cookie
+    security: [] 
+    responses:
+      '200':
+        description: Successfuly register company. Company email.
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+LogInPath:
+  put:
+    tags:
+    - Company
+    summary: LogIn
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/LogInCompany'
+            example:
+              email: ibm@gmail.com
+              password: 1234567
+    security: [] 
+    responses:
+      '200':
+        description: >
+            Successfully authenticated.
+            The session ID is returned in a cookie named `Token`. You need to include this cookie in subsequent requests.
+        headers: 
+            Set-Cookie:
+              schema: 
+                type: string
+                example: Token=abcde12345; Path=/; HttpOnly
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/company.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+AddCompanyAdressPathWithID:
+  post:
+    tags:
+    - Company
+    summary: Add company address
+    parameters:
+    - in: path
+      name: companyId
+      required: true
+      schema:
+        type: string
+        #uuid
+        example: "00000000-0000-0000-0000-000000000000"
+    security:
+        - cookieAuth: []
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/AddCompanyAddress'
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              $ref: '../schemas/company.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+DeleteCompanyAdressPathWithID:
+  post:
+    tags:
+    - Company
+    summary: Delete company address
+    parameters:
+    - in: path
+      name: companyId
+      required: true
+      schema:
+        type: string
+        #uuid
+        example: "00000000-0000-0000-0000-000000000000"
+    - in: path
+      name: companyAddressId
+      required: true
+      schema:
+        type: string
+        #uuid
+        example: "00000000-0000-0000-0000-000000000000"
+    security:
+        - cookieAuth: []
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              $ref: '../schemas/company.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+AddPositionPathWithID:
+  post:
+    tags:
+    - Company
+    summary: Add position
+    parameters:
+    - in: path
+      name: companyId
+      required: true
+      schema:
+        type: string
+        #uuid
+        example: "00000000-0000-0000-0000-000000000000"
+    security:
+        - cookieAuth: []
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/AddPosition'
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              $ref: '../schemas/company.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+DeletePositionPathWithID:
+  delete:
+    tags:
+    - Company
+    summary: Add position
+    parameters:
+    - in: path
+      name: companyId
+      required: true
+      schema:
+        type: string
+        #uuid
+        example: "00000000-0000-0000-0000-000000000000"
+    - in: path
+      name: positionId
+      required: true
+      schema:
+        type: string
+        #uuid
+        example: "00000000-0000-0000-0000-000000000000"
+    security:
+        - cookieAuth: []
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/AddPosition'
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              $ref: '../schemas/company.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+UpdatePositionResponsobilitiesPathWithID:
+  put:
+    tags:
+    - Company
+    summary: Add position
+    parameters:
+    - in: path
+      name: companyId
+      required: true
+      schema:
+        type: string
+        #uuid
+        example: "00000000-0000-0000-0000-000000000000"
+    - in: path
+      name: positionId
+      required: true
+      schema:
+        type: string
+        #uuid
+        example: "00000000-0000-0000-0000-000000000000"
+    security:
+        - cookieAuth: []
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/UpdatePositionResponsobilities'
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              $ref: '../schemas/position.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+UpdatePositionRequirementsPathWithID:
+  put:
+    tags:
+    - Company
+    summary: Add position
+    parameters:
+    - in: path
+      name: companyId
+      required: true
+      schema:
+        type: string
+        #uuid
+        example: "00000000-0000-0000-0000-000000000000"
+    - in: path
+      name: positionId
+      required: true
+      schema:
+        type: string
+        #uuid
+        example: "00000000-0000-0000-0000-000000000000"
+    security:
+        - cookieAuth: []
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/UpdatePositionRequirements'
+    responses:
+      '200':
+         content:
+          application/json:
+            schema:
+              $ref: '../schemas/position.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+definitions:
+  RegisterCompany:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    xml:
+      name: "RegisterCompany"
+  LogInCompany:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    xml:
+      name: "LogInCompany"
+  AddCompanyAddress:
+    type: object
+    required:
+      - address
+      - is_base_adress
+    properties:
+      address:
+        type: string
+      is_base_adress:
+        type: boolean
+    xml:
+      name: "AddCompanyAddress"
+  AddPosition:
+    type: object
+    required:
+      - description
+      - requirements
+      - responsibilities
+      - position_type
+    properties:
+      description:
+        type: string
+      requirements:
+        type: array
+        items:
+          type: string
+      responsibilities:
+        type: array
+        items:
+          type: string
+      position_type:
+        type: string
+      salary:
+        type: number
+    xml:
+      name: "AddPosition"
+  UpdatePositionResponsobilities:
+    type: object
+    required:
+      - responsobilities
+    properties:
+      responsobilities:
+        type: array
+        items:
+          type: string
+    xml:
+      name: "UpdatePositionResponsobilities"
+  UpdatePositionRequirements:
+    type: object
+    required:
+      - requirements
+    properties:
+      requirements:
+        type: array
+        items:
+          type: string
+    xml:
+      name: "UpdatePositionRequirements"

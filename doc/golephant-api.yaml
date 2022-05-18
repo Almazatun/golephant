@@ -42,6 +42,24 @@ paths:
     # position types
   /positionTypes:
     $ref: './resources/position_type.yaml#PositionTypesPath'
+    # company
+  /company/register:
+    $ref: './resources/company.yaml#RegisterPath'
+  /company/login:
+    $ref: './resources/company.yaml#LogInPath'
+  /company/{companyId}/address:
+    $ref: './resources/company.yaml#AddCompanyAdressPathWithID'
+  /company/{companyId}/address/{companyAddressId}:
+    $ref: './resources/company.yaml#DeleteCompanyAdressPathWithID'
+     # company position
+  /company/{companyId}/position:
+    $ref: './resources/company.yaml#AddPositionPathWithID'
+  /company/{companyId}/position/{positionId}:
+    $ref: './resources/company.yaml#DeletePositionPathWithID'
+  /company/{companyId}/position/{positionId}/reponsobilities:
+    $ref: './resources/company.yaml#UpdatePositionResponsobilitiesPathWithID'
+  /company/{companyId}/position/{positionId}/requirements:
+    $ref: './resources/company.yaml#UpdatePositionRequirementsPathWithID'
 # 1) Cookie
 components:
   securitySchemes:

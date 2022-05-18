@@ -1,0 +1,10 @@
+type: object
+properties:
+  company_address_id:
+    type: string
+  title:
+    type: string
+  is_base_adress:
+    type: boolean
+  company_id:
+    type: string

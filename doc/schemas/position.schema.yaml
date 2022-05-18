@@ -1,0 +1,26 @@
+type: object
+properties:
+  position_id:
+    type: string
+  description:
+    type: string
+  requirements:
+    type: array
+    items:
+      type: string
+  responsibilities:
+    type: array
+    items: 
+      type: string
+  creation_time:
+    type: string
+  update_time:
+    type: string
+  salary:
+    type:
+      - number
+      - 'null'
+  company_id:
+    type: string
+  position_type:
+    type: string

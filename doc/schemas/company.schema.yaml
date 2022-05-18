@@ -1,0 +1,24 @@
+type: object
+properties:
+  company_id:
+    type: string
+  title:
+    type: string
+  email:
+    type: string
+  password:
+    type: string
+  creation_time:
+    type: string
+  update_time:
+    type: string
+  phone:
+    type: string
+  CompanyAddresses:
+    type: array
+    items:
+      $ref: './company_address.schema.yaml'
+  Positions:
+    type: array
+    items:
+      $ref: './positions.schema.yaml'
