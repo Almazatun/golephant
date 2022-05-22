@@ -78,6 +78,12 @@ func main() {
 	)
 	companyHandler := handler.NewCompanyHandler(companyUseCase)
 
+	// Auth
+	authHandler := handler.NewAuthHandler(
+		companyUseCase,
+		userUseCase,
+	)
+
 	handlers := router.Handler{
 		UserHandler:           userHandler,
 		ResumeHandler:         resumeHandler,
@@ -85,6 +91,7 @@ func main() {
 		PositionTypeHandler:   positionTypeHandler,
 		SpecializationHandler: specializationHandler,
 		ResumeStatusHandler:   resumeStatusHandler,
+		AuthHandler:           authHandler,
 	}
 
 	router := router.NewRouter(handlers)

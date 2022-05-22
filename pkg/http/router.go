@@ -17,15 +17,22 @@ type Handler struct {
 	PositionTypeHandler   handler.PositionTypeHandler
 	SpecializationHandler handler.SpecializationHandler
 	ResumeStatusHandler   handler.ResumeStatusHandler
+	AuthHandler           handler.AuthHandler
 }
 
 func NewRouter(h Handler) *mux.Router {
 	router := mux.NewRouter()
 
+	// Auth
+	auth := router.PathPrefix("/auth").Subrouter()
+	auth.HandleFunc("/register/company", h.AuthHandler.RegisterCompany).Methods("POST")
+	auth.HandleFunc("/login/company", h.AuthHandler.LogInCompany).Methods("PUT")
+	auth.HandleFunc("/register/user", h.AuthHandler.RegisterUser).Methods("POST")
+	auth.HandleFunc("/login/user", h.AuthHandler.LogInUser).Methods("PUT")
+	auth.HandleFunc("/me", h.AuthHandler.Me).Methods("PUT")
+
 	// Company
 	company := router.PathPrefix("/company").Subrouter()
-	company.HandleFunc("/register", h.CompanyHandler.Register).Methods("POST")
-	company.HandleFunc("/login", h.CompanyHandler.LogIn).Methods("PUT")
 
 	// Company Position
 	company.Handle("/{companyId}/position",
@@ -69,9 +76,6 @@ func NewRouter(h Handler) *mux.Router {
 
 	//User
 	user := router.PathPrefix("/user").Subrouter()
-	user.HandleFunc("/register", h.UserHandler.RegisterUser).Methods("POST")
-	user.HandleFunc("/login", h.UserHandler.LogIn).Methods("PUT")
-	user.HandleFunc("/authMe", h.UserHandler.AuthMe).Methods("POST")
 	user.Handle("/{userId}", middleware.Authentication(http.HandlerFunc(h.UserHandler.UpdateUserData))).Methods("PATCH")
 
 	// User reset password
