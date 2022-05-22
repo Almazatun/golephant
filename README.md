@@ -53,14 +53,21 @@ Browse to http://localhost:3002
 You can see all the documented endpoints in UI
 ## Endpoints
 
+### Auth
+
+| Description | http | path |
+|:--:|:--:|:--|
+| REGISTER_COMPANY | POST | BASE_URL/auth/register/company |
+| LOGIN_COMPANY  | PUT | BASE_URL/auth/login/company |
+| REGISTER_USER | POST | BASE_URL/auth/register/user |
+| LOGIN_USER  | PUT | BASE_URL/auth/login/user |
+| ME  | PUT | BASE_URL/auth/me |
+
 ### User
 
 | Description | http | path |
 |:--:|:--:|:--|
-| REGISTER | POST | BASE_URL/user/register |
-| LOGIN  | PUT | BASE_URL/user/login |
 | UPDATE_USER_DATA | PATCH | BASE_URL/user/:userId |
-| AUTH_ME | POST | BASE_URL/authMe/:userId |
 | GET_LINK_RESET_PASSWORD | POST | BASE_URL/user/:userId/resetPassword |
 | RESET_PASSWORD | PUT | BASE_URL/user/:userId/resetPassword/:token |
 
@@ -68,8 +75,7 @@ You can see all the documented endpoints in UI
 
 | Description | http | path |
 |:--:|:--:|:--|
-| REGISTER | POST | BASE_URL/company/register |
-| LOGIN  | PUT | BASE_URL/company/login |
+
 
 ### Company position
 
@@ -101,14 +107,14 @@ You can see all the documented endpoints in UI
 | DESIRED_POSITION | PUT | BASE_URL/resume/:resumeId/user/:userId/desiredPosition |
 | TAGS | PUT | BASE_URL/resume/:resumeId/user/:userId/tags |
 
-### User Education
+### User education in resume
 
 | Description | http | path |
 |:--:|:--:|:--|
 | CREATE_AND_UPDATE | PUT | BASE_URL/resume/:resumeId/user/:userId/userEducation |
 | DELETE | DELETE | BASE_URL/resume/:resumeId/userEducation/:userEducationId |
 
-### User Experiences
+### User experiences in resume
 
 | Description | http | path |
 |:--:|:--:|:--|
