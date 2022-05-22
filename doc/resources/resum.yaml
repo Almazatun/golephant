@@ -29,7 +29,7 @@ CreatePathWithID:
       '5XX':
         description: Unexpected error.
 ListPathWithID:
-  post:
+  get:
     tags:
     - Resume
     summary: Resumes
@@ -84,7 +84,7 @@ UpdateBasicInfoPathWithID:
   put:
     tags:
     - Resume
-    summary: Update basic info resume
+    summary: Update basic info
     parameters:
       - in: path
         name: resumeId
@@ -121,7 +121,7 @@ UpdateAboutMePathWithID:
   put:
     tags:
     - Resume
-    summary: Update basic info resume
+    summary: Update about me
     parameters:
       - in: path
         name: resumeId
@@ -158,7 +158,7 @@ UpdateCitizenshipPathWithID:
   put:
     tags:
     - Resume
-    summary: Update basic info resume
+    summary: Update citizenship
     parameters:
       - in: path
         name: resumeId
@@ -195,7 +195,7 @@ UpdateDesiredPositionPathWithID:
   put:
     tags:
     - Resume
-    summary: Update basic info resume
+    summary: Update desired position
     parameters:
       - in: path
         name: resumeId
@@ -232,7 +232,7 @@ UpdateTagsPathWithID:
   put:
     tags:
     - Resume
-    summary: Update basic info resume
+    summary: Update tags
     parameters:
       - in: path
         name: resumeId

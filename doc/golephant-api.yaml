@@ -7,15 +7,20 @@ servers:
 paths:
   /helloWorld:
     $ref: './resources/hello-world.yaml#HelloWorld'
+    # auth
+  /auth/register/company:
+    $ref: './resources/auth.yaml#RegisterCompanyPath'
+  /auth/register/user:
+    $ref: './resources/auth.yaml#RegisterUserPath'
+  /auth/login/company:
+    $ref: './resources/auth.yaml#LogInCompanyPath'
+  /auth/login/user:
+    $ref: './resources/auth.yaml#LogInUserPath'
+  /auth/me:
+    $ref: './resources/auth.yaml#AuthMePath'
     # user
-  /user/register:
-    $ref: './resources/user.yaml#UserRegisterPath'
-  /user/login:
-    $ref: './resources/user.yaml#UserLogInPath'
   /user/{id}:
     $ref: './resources/user.yaml#UserUpdateDataPathWithID'
-  /user/authMe:
-    $ref: './resources/user.yaml#AuthMePath'
     # resume
   /resume/user/{id}:
     $ref: './resources/resum.yaml#CreatePathWithID'
@@ -43,10 +48,6 @@ paths:
   /positionTypes:
     $ref: './resources/position_type.yaml#PositionTypesPath'
     # company
-  /company/register:
-    $ref: './resources/company.yaml#RegisterPath'
-  /company/login:
-    $ref: './resources/company.yaml#LogInPath'
   /company/{companyId}/address:
     $ref: './resources/company.yaml#AddCompanyAdressPathWithID'
   /company/{companyId}/address/{companyAddressId}:

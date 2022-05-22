@@ -1,0 +1,175 @@
+RegisterCompanyPath:
+  post:
+    tags:
+    - Auth
+    summary: Register company
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/RegisterCompany'
+            example:
+              email: ibm@gmail.com
+              password: 1234567
+    #without cookie
+    security: [] 
+    responses:
+      '200':
+        description: Successfuly register company. Company email.
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+LogInCompanyPath:
+  put:
+    tags:
+    - Auth
+    summary: Login company
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/LogInCompany'
+            example:
+              email: ibm@gmail.com
+              password: 1234567
+    security: [] 
+    responses:
+      '200':
+        description: >
+            Successfully authenticated.
+            The session ID is returned in a cookie named `Token`. You need to include this cookie in subsequent requests.
+        headers: 
+            Set-Cookie:
+              schema: 
+                type: string
+                example: Token=abcde12345; Path=/; HttpOnly
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/company.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+RegisterUserPath:
+  post:
+    tags:
+    - Auth
+    summary: Register user
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/RegisterUser'
+            example:
+              email: person@gmail.com
+              password: 1234567
+    #without cookie
+    security: [] 
+    responses:
+      '200':
+        description: Successfuly register user. User email.
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+LogInUserPath:
+  put:
+    tags:
+    - Auth
+    summary: LogIn user
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/definitions/LogInUser'
+            example:
+              email: person@gmail.com
+              password: 1234567
+    security: []
+    responses:
+      '200':
+        description: >
+            Successfully authenticated.
+            The session ID is returned in a cookie named `Token`. You need to include this cookie in subsequent requests.
+        headers: 
+            Set-Cookie:
+              schema: 
+                type: string
+                example: Token=abcde12345; Path=/; HttpOnly
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/user.schema.yaml'
+      '400':
+        description: Bad request.
+      '5XX':
+        description: Unexpected error.
+AuthMePath:
+  put:
+    tags:
+    - Auth
+    summary: Auth me
+    security:
+        - cookieAuth: []
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/user.schema.yaml'
+      '400':
+        description: Message Unauthorized
+      '5XX':
+        description: Unexpected error.
+definitions:
+  RegisterCompany:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    xml:
+      name: "RegisterCompany"
+  LogInCompany:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    xml:
+      name: "LogInCompany"
+  RegisterUser:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    xml:
+      name: "RegisterUser"
+  LogInUser:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    xml:
+      name: "LogInUser"

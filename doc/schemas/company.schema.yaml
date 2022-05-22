@@ -21,4 +21,4 @@ properties:
   Positions:
     type: array
     items:
-      $ref: './positions.schema.yaml'
+      $ref: './position.schema.yaml'

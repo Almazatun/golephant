@@ -1,57 +1,3 @@
-UserRegisterPath:
-  post:
-    tags:
-    - User
-    summary: Register
-    requestBody:
-      content:
-        application/json:
-          schema:
-            $ref: '#/definitions/RegisterUser'
-            example:
-              email: person@gmail.com
-              password: 1234567
-    #without cookie
-    security: [] 
-    responses:
-      '200':
-        description: Successfuly register user. User email.
-      '400':
-        description: Bad request.
-      '5XX':
-        description: Unexpected error.
-UserLogInPath:
-  put:
-    tags:
-    - User
-    summary: LogIn
-    requestBody:
-      content:
-        application/json:
-          schema:
-            $ref: '#/definitions/UserLogIn'
-            example:
-              email: person@gmail.com
-              password: 1234567
-    security: []
-    responses:
-      '200':
-        description: >
-            Successfully authenticated.
-            The session ID is returned in a cookie named `Token`. You need to include this cookie in subsequent requests.
-        headers: 
-            Set-Cookie:
-              schema: 
-                type: string
-                example: Token=abcde12345; Path=/; HttpOnly
-        content:
-          application/json:
-            schema:
-              $ref: '../schemas/user.schema.yaml'
-      '400':
-        description: Bad request.
-      '5XX':
-        description: Unexpected error.
 UserUpdateDataPathWithID:
   patch:
     tags:
@@ -86,49 +32,7 @@ UserUpdateDataPathWithID:
         description: Bad request.
       '5XX':
         description: Unexpected error.
-AuthMePath:
-  post:
-    tags:
-    - User
-    summary: Auth me
-    security:
-        - cookieAuth: []
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              $ref: '../schemas/user.schema.yaml'
-      '400':
-        description: Message Unauthorized
-      '5XX':
-        description: Unexpected error.
 definitions:
-  RegisterUser:
-    type: object
-    required:
-      - email
-      - password
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-    xml:
-      name: "RegisterUser"
-  UserLogIn:
-    type: object
-    required:
-      - email
-      - password
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-    xml:
-      name: "UserLogIn"
   UpdateUserData:
     type: object
     properties:
