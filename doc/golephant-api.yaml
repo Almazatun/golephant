@@ -19,24 +19,24 @@ paths:
   /auth/me:
     $ref: './resources/auth.yaml#AuthMePath'
     # user
-  /user/{id}:
+  /users/{id}:
     $ref: './resources/user.yaml#UserUpdateDataPathWithID'
     # resume
-  /resume/user/{id}:
+  /resumes/users/{id}:
     $ref: './resources/resum.yaml#CreatePathWithID'
   /resumes/{userId}:
     $ref: './resources/resum.yaml#ListPathWithID'
-  /resume/{id}:
+  /resumes/{id}:
     $ref: './resources/resum.yaml#DeletePathWithID'
-  /resume/{resumeId}/user/{userId}/basicInfo:
+  /resumes/{resumeId}/users/{userId}/basicInfo:
     $ref: './resources/resum.yaml#UpdateBasicInfoPathWithID'
-  /resume/{resumeId}/user/{userId}/aboutMe:
+  /resumes/{resumeId}/users/{userId}/aboutMe:
     $ref: './resources/resum.yaml#UpdateAboutMePathWithID'
-  /resume/{resumeId}/user/{userId}/citizenship:
+  /resumes/{resumeId}/users/{userId}/citizenship:
     $ref: './resources/resum.yaml#UpdateCitizenshipPathWithID'
-  /resume/{resumeId}/user/{userId}/desiredPosition:
+  /resumes/{resumeId}/users/{userId}/desiredPosition:
     $ref: './resources/resum.yaml#UpdateDesiredPositionPathWithID'
-  /resume/{resumeId}/user/{userId}/tags:
+  /resumes/{resumeId}/users/{userId}/tags:
     $ref: './resources/resum.yaml#UpdateTagsPathWithID'
     # specialization
   /specializations:
@@ -48,18 +48,18 @@ paths:
   /positionTypes:
     $ref: './resources/position_type.yaml#PositionTypesPath'
     # company
-  /company/{companyId}/address:
+  /companies/{companyId}/addressess:
     $ref: './resources/company.yaml#AddCompanyAdressPathWithID'
-  /company/{companyId}/address/{companyAddressId}:
+  /companies/{companyId}/addressess/{companyAddressId}:
     $ref: './resources/company.yaml#DeleteCompanyAdressPathWithID'
      # company position
-  /company/{companyId}/position:
+  /companies/{companyId}/positions:
     $ref: './resources/company.yaml#AddPositionPathWithID'
-  /company/{companyId}/position/{positionId}:
+  /companies/{companyId}/positions/{positionId}:
     $ref: './resources/company.yaml#DeletePositionPathWithID'
-  /company/{companyId}/position/{positionId}/reponsobilities:
+  /companies/{companyId}/positions/{positionId}/reponsobilities:
     $ref: './resources/company.yaml#UpdatePositionResponsobilitiesPathWithID'
-  /company/{companyId}/position/{positionId}/requirements:
+  /companies/{companyId}/positions/{positionId}/requirements:
     $ref: './resources/company.yaml#UpdatePositionRequirementsPathWithID'
 # 1) Cookie
 components:

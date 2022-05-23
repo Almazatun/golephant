@@ -81,7 +81,7 @@ DeletePathWithID:
       '5XX':
         description: Unexpected error.
 UpdateBasicInfoPathWithID:
-  put:
+  patch:
     tags:
     - Resume
     summary: Update basic info
@@ -118,7 +118,7 @@ UpdateBasicInfoPathWithID:
       '5XX':
         description: Unexpected error.
 UpdateAboutMePathWithID:
-  put:
+  patch:
     tags:
     - Resume
     summary: Update about me
@@ -155,7 +155,7 @@ UpdateAboutMePathWithID:
       '5XX':
         description: Unexpected error.
 UpdateCitizenshipPathWithID:
-  put:
+  patch:
     tags:
     - Resume
     summary: Update citizenship
@@ -192,7 +192,7 @@ UpdateCitizenshipPathWithID:
       '5XX':
         description: Unexpected error.
 UpdateDesiredPositionPathWithID:
-  put:
+  patch:
     tags:
     - Resume
     summary: Update desired position
@@ -274,7 +274,7 @@ definitions:
       - date_of_birght
       - gender
       - is_have_experience
-      - user_experiences
+      - user_experience
     properties:
       first_name:
         type: string
@@ -288,7 +288,7 @@ definitions:
         enum: [FEMALE, MALE]
       is_have_experience:
         type: boolean
-      user_experiences:
+      user_experience:
         type: array
         items:
           $ref: '#/definitions/UserExperience'
