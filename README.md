@@ -67,9 +67,9 @@ You can see all the documented endpoints in UI
 
 | Description | http | path |
 |:--:|:--:|:--|
-| UPDATE_USER_DATA | PATCH | BASE_URL/user/:userId |
-| GET_LINK_RESET_PASSWORD | POST | BASE_URL/user/:userId/resetPassword |
-| RESET_PASSWORD | PUT | BASE_URL/user/:userId/resetPassword/:token |
+| UPDATE_USER_DATA | PATCH | BASE_URL/users/:userId |
+| GET_LINK_RESET_PASSWORD | POST | BASE_URL/users/:userId/resetPassword |
+| RESET_PASSWORD | PUT | BASE_URL/users/:userId/resetPassword/:token |
 
 ### Company
 
@@ -81,44 +81,44 @@ You can see all the documented endpoints in UI
 
 | Description | http | path |
 |:--:|:--:|:--|
-| ADD | POST | BASE_URL/company/:companyId/position  |
-| UPDATE_RESPONSOBILITIES  | PUT | BASE_URL/company/:companyId/position/:positionId/reponsobilities  |
-| UPDATE_REQUIREMENTS  | PUT | BASE_URL/company/:companyId/position/:positionId/requirements  |
-| UPDATE  | PUT | BASE_URL/company/:companyId/position/:positionId  |
-| UPDATE_STATUS  | PUT | BASE_URL/company/:companyId/position/:positionId/status  |
-| DELETE  | DELETE | BASE_URL/company/:companyId/position/:positionId  |
+| ADD | POST | BASE_URL/companies/:companyId/position  |
+| UPDATE_RESPONSOBILITIES  | PUT | BASE_URL/companies/:companyId/positions/:positionId/reponsobilities  |
+| UPDATE_REQUIREMENTS  | PUT | BASE_URL/companies/:companyId/positions/:positionId/requirements  |
+| UPDATE  | PATCH | BASE_URL/companies/:companyId/positions/:positionId  |
+| UPDATE_STATUS  | PATCH | BASE_URL/companies/:companyId/positions/:positionId/status  |
+| DELETE  | DELETE | BASE_URL/companies/:companyId/positions/:positionId  |
 
 ### Company address
 
 | Description | http | path |
 |:--:|:--:|:--|
-| ADD | POST | BASE_URL/company/:companyId/address  |
-| DELETE  | DELETE | BASE_URL/company/:companyId/address/:companyAddressId  |
+| ADD | POST | BASE_URL/companies/:companyId/address  |
+| DELETE  | DELETE | BASE_URL/companies/:companyId/addressess/:companyAddressId  |
 ### Resume
 
 | Description | http | path |
 |:--:|:--:|:--|
-| LIST | GET | BASE_URL/resumes/user/:userId |
-| CREATE | POST | BASE_URL/resume/user/:userId |
-| DELETE  | PUT | BASE_URL/resume/:resumeId|
-| BASIC_INFO | PUT | BASE_URL/resume/:resumeId/user/:userId/basicInfo |
-| ABOUT_ME | PUT | BASE_URL/resume/:resumeId/user/:userId/aboutMe |
-| CITIZENSHIP | PUT | BASE_URL/resume/:resumeId/user/:userId/citizenship |
-| DESIRED_POSITION | PUT | BASE_URL/resume/:resumeId/user/:userId/desiredPosition |
-| TAGS | PUT | BASE_URL/resume/:resumeId/user/:userId/tags |
+| LIST | GET | BASE_URL/resumes/users/:userId |
+| CREATE | POST | BASE_URL/resumes/users/:userId |
+| DELETE  | PUT | BASE_URL/resumes/:resumeId|
+| BASIC_INFO | PATCH | BASE_URL/resumes/:resumeId/users/:userId/basicInfo |
+| ABOUT_ME | PATCH | BASE_URL/resumes/:resumeId/users/:userId/aboutMe |
+| CITIZENSHIP | PATCH | BASE_URL/resumes/:resumeId/users/:userId/citizenship |
+| DESIRED_POSITION | PATCH | BASE_URL/resume/:resumeId/users/:userId/desiredPosition |
+| TAGS | PUT | BASE_URL/resumes/:resumeId/users/:userId/tags |
 
 ### User education in resume
 
 | Description | http | path |
 |:--:|:--:|:--|
-| CREATE_AND_UPDATE | PUT | BASE_URL/resume/:resumeId/user/:userId/userEducation |
-| DELETE | DELETE | BASE_URL/resume/:resumeId/userEducation/:userEducationId |
+| CREATE_AND_UPDATE | PUT | BASE_URL/resumes/:resumeId/users/:userId/userEducation |
+| DELETE | DELETE | BASE_URL/resumes/:resumeId/userEducation/:userEducationId |
 
 ### User experiences in resume
 
 | Description | http | path |
 |:--:|:--:|:--|
-| CREATE_AND_UPDATE | PUT | BASE_URL/resume/:resumeId/user/:userId/userExperiences |
-| DELETE | DELETE | BASE_URL/resume/:resumeId/userExperience/:userExperienceId |
+| CREATE_AND_UPDATE | PUT | BASE_URL/resumes/:resumeId/users/:userId/userExperiences |
+| DELETE | DELETE | BASE_URL/resumes/:resumeId/userExperience/:userExperienceId |
 ### UML diagram
 <img src="./assets/uml-golephant.png">
