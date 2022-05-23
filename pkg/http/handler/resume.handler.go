@@ -26,7 +26,7 @@ type ResumeHandler interface {
 	UpdateCitizenship(w http.ResponseWriter, r *http.Request)
 	UpdateTags(w http.ResponseWriter, r *http.Request)
 	UpdateUserEducation(w http.ResponseWriter, r *http.Request)
-	UpdateUserExperiences(w http.ResponseWriter, r *http.Request)
+	UpdateUserExperience(w http.ResponseWriter, r *http.Request)
 	UpdateDesiredPosition(w http.ResponseWriter, r *http.Request)
 	Delete(w http.ResponseWriter, r *http.Request)
 	DeleteUserEducation(w http.ResponseWriter, r *http.Request)
@@ -190,10 +190,10 @@ func (h *resumeHandler) UpdateTags(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *resumeHandler) UpdateUserEducation(w http.ResponseWriter, r *http.Request) {
-	var updateUserEducationsResumeInput input.UpdateUserEducationsResumeInput
+	var updateUserEducationResumeInput input.UpdateUserEducationResumeInput
 	params := mux.Vars(r)
 
-	err := json.NewDecoder(r.Body).Decode(&updateUserEducationsResumeInput)
+	err := json.NewDecoder(r.Body).Decode(&updateUserEducationResumeInput)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -203,7 +203,7 @@ func (h *resumeHandler) UpdateUserEducation(w http.ResponseWriter, r *http.Reque
 	res, err := h.resumeUseCase.UpdateUserEducation(
 		params["userId"],
 		params["resumeId"],
-		updateUserEducationsResumeInput,
+		updateUserEducationResumeInput,
 	)
 
 	if err != nil {
@@ -216,21 +216,21 @@ func (h *resumeHandler) UpdateUserEducation(w http.ResponseWriter, r *http.Reque
 
 }
 
-func (h *resumeHandler) UpdateUserExperiences(w http.ResponseWriter, r *http.Request) {
-	var updateUserExperiencesResumeInput input.UpdateUserExperiencesResumeInput
+func (h *resumeHandler) UpdateUserExperience(w http.ResponseWriter, r *http.Request) {
+	var updateUserExperienceResumeInput input.UpdateUserExperienceResumeInput
 	params := mux.Vars(r)
 
-	err := json.NewDecoder(r.Body).Decode(&updateUserExperiencesResumeInput)
+	err := json.NewDecoder(r.Body).Decode(&updateUserExperienceResumeInput)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	res, err := h.resumeUseCase.UpdateUserExperiences(
+	res, err := h.resumeUseCase.UpdateUserExperience(
 		params["userId"],
 		params["resumeId"],
-		updateUserExperiencesResumeInput,
+		updateUserExperienceResumeInput,
 	)
 
 	if err != nil {

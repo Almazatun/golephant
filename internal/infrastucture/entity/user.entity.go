@@ -15,5 +15,5 @@ type User struct {
 	UpdateTime   time.Time `json:"update_time" gorm:"type:date; not NULL"`
 	Mobile       string    `json:"mobile" gorm:"type:varchar(30); default:NULL"`
 	Status       string    `json:"status" gorm:"type:text; default:0"`
-	Resume       []Resume  `gorm:"ForeignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Resumes       []Resume  `gorm:"ForeignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }

@@ -30,8 +30,8 @@ func (r *resumeRepository) ListByUserId(userId string) (resumeDB *[]entity.Resum
 	var list []entity.Resume
 
 	result := r.db.
-		Preload("UserEducations").
-		Preload("UserExperiences").
+		Preload("UserEducation").
+		Preload("UserExperience").
 		// Preload("User").
 		Find(&list, "user_id = ?", userId)
 
@@ -75,8 +75,8 @@ func (r *resumeRepository) GetById(resumeId string) (resumeDB *entity.Resume, er
 	var resume entity.Resume
 
 	result := r.db.
-		Preload("UserEducations").
-		Preload("UserExperiences").
+		Preload("UserEducation").
+		Preload("UserExperience").
 		// Preload("User").
 		First(&resume, "resume_id = ?", resumeId)
 
@@ -94,8 +94,8 @@ func (r *resumeRepository) Save(resume entity.Resume) (resumeDB *entity.Resume, 
 	var result entity.Resume
 
 	res := r.db.Save(&result).
-		Preload("UserEducations").
-		Preload("UserExperiences")
+		Preload("UserEducation").
+		Preload("UserExperience")
 
 	e := res.Error
 
