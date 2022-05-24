@@ -6,8 +6,8 @@ import (
 	"github.com/google/uuid"
 )
 
-type UserExperience struct {
-	UserExperienceID uuid.UUID `json:"user_experience_id" gorm:"type:uuid;default:uuid_generate_v4();primary_key"`
+type ResumeExperience struct {
+	ResumeExperienceID uuid.UUID `json:"resume_experience_id" gorm:"type:uuid;default:uuid_generate_v4();primary_key"`
 	StartDate        time.Time `json:"start_date"`
 	EndDate          time.Time `json:"end_date"`
 	CompanyName      string    `json:"company_name" gorm:"type:varchar(100); not NULL"`

@@ -25,6 +25,6 @@ type Resume struct {
 	UpdateTime      time.Time      `json:"update_time" gorm:"type:date; not NULL"`
 	UserID          uuid.UUID      `json:"user_id" gorm:"not NULL; index:idx_member"`
 	User            User
-	UserExperience []UserExperience `gorm:"ForeignKey:ResumeID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	UserEducation  []UserEducation  `gorm:"ForeignKey:ResumeID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Experience      []ResumeExperience `gorm:"ForeignKey:ResumeID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Education       []ResumeEducation  `gorm:"ForeignKey:ResumeID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
