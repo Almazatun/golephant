@@ -106,17 +106,17 @@ func NewRouter(h Handler) *mux.Router {
 	resume.Handle("/{resumeId}/users/{userId}/tags",
 		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateTags))).Methods("PUT")
 
-	// User education in resume
+	//  Education in resume
 	resume.Handle("/{resumeId}/users/{userId}/userEducation",
-		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateUserEducation))).Methods("PUT")
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateEducation))).Methods("PUT")
 	resume.Handle("/{resumeId}/userEducation/{userEducationId}",
-		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteUserEducation))).Methods("DELETE")
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteEducation))).Methods("DELETE")
 
-	// User experience in resume
+	// Experience in resume
 	resume.Handle("/{resumeId}/users/{userId}/userExperience",
-		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateUserExperience))).Methods("PUT")
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.UpdateExperience))).Methods("PUT")
 	resume.Handle("/{resumeId}/userExperience/{userExperienceId}",
-		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteUserExperience))).Methods("DELETE")
+		middleware.Authentication(http.HandlerFunc(h.ResumeHandler.DeleteExperience))).Methods("DELETE")
 
 	// Test
 	router.HandleFunc("/helloWorld", handler.HelloWord).Methods("GET")

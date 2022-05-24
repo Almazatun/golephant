@@ -6,5 +6,5 @@ type CreateResumeInput struct {
 	DateOfBirght     string `json:"date_of_birght" validate:"required"`
 	Gender           string `json:"gender" validate:"required"`
 	IsHaveExperience bool   `json:"is_have_experience"`
-	UserExperience  []UserExperienceInput
+	Experience       []ResumeExperienceInput
 }

@@ -25,12 +25,12 @@ type ResumeHandler interface {
 	UpdateAboutMe(w http.ResponseWriter, r *http.Request)
 	UpdateCitizenship(w http.ResponseWriter, r *http.Request)
 	UpdateTags(w http.ResponseWriter, r *http.Request)
-	UpdateUserEducation(w http.ResponseWriter, r *http.Request)
-	UpdateUserExperience(w http.ResponseWriter, r *http.Request)
+	UpdateEducation(w http.ResponseWriter, r *http.Request)
+	UpdateExperience(w http.ResponseWriter, r *http.Request)
 	UpdateDesiredPosition(w http.ResponseWriter, r *http.Request)
 	Delete(w http.ResponseWriter, r *http.Request)
-	DeleteUserEducation(w http.ResponseWriter, r *http.Request)
-	DeleteUserExperience(w http.ResponseWriter, r *http.Request)
+	DeleteEducation(w http.ResponseWriter, r *http.Request)
+	DeleteExperience(w http.ResponseWriter, r *http.Request)
 }
 
 func NewResumeHandler(
@@ -189,21 +189,21 @@ func (h *resumeHandler) UpdateTags(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (h *resumeHandler) UpdateUserEducation(w http.ResponseWriter, r *http.Request) {
-	var updateUserEducationResumeInput input.UpdateUserEducationResumeInput
+func (h *resumeHandler) UpdateEducation(w http.ResponseWriter, r *http.Request) {
+	var updateResumeEducationInput input.UpdateResumeEducationInput
 	params := mux.Vars(r)
 
-	err := json.NewDecoder(r.Body).Decode(&updateUserEducationResumeInput)
+	err := json.NewDecoder(r.Body).Decode(&updateResumeEducationInput)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	res, err := h.resumeUseCase.UpdateUserEducation(
+	res, err := h.resumeUseCase.UpdateEducation(
 		params["userId"],
 		params["resumeId"],
-		updateUserEducationResumeInput,
+		updateResumeEducationInput,
 	)
 
 	if err != nil {
@@ -216,21 +216,21 @@ func (h *resumeHandler) UpdateUserEducation(w http.ResponseWriter, r *http.Reque
 
 }
 
-func (h *resumeHandler) UpdateUserExperience(w http.ResponseWriter, r *http.Request) {
-	var updateUserExperienceResumeInput input.UpdateUserExperienceResumeInput
+func (h *resumeHandler) UpdateExperience(w http.ResponseWriter, r *http.Request) {
+	var updateResumeExperienceInput input.UpdateResumeExperienceInput
 	params := mux.Vars(r)
 
-	err := json.NewDecoder(r.Body).Decode(&updateUserExperienceResumeInput)
+	err := json.NewDecoder(r.Body).Decode(&updateResumeExperienceInput)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	res, err := h.resumeUseCase.UpdateUserExperience(
+	res, err := h.resumeUseCase.UpdateExperience(
 		params["userId"],
 		params["resumeId"],
-		updateUserExperienceResumeInput,
+		updateResumeExperienceInput,
 	)
 
 	if err != nil {
@@ -284,10 +284,10 @@ func (h *resumeHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(res)
 }
 
-func (h *resumeHandler) DeleteUserEducation(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) DeleteEducation(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
-	res, err := h.resumeUseCase.DeleteUserEducation(
+	res, err := h.resumeUseCase.DeleteEducation(
 		params["resumeId"],
 		params["userEducationId"],
 	)
@@ -301,10 +301,10 @@ func (h *resumeHandler) DeleteUserEducation(w http.ResponseWriter, r *http.Reque
 	json.NewEncoder(w).Encode(res)
 }
 
-func (h *resumeHandler) DeleteUserExperience(w http.ResponseWriter, r *http.Request) {
+func (h *resumeHandler) DeleteExperience(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
-	res, err := h.resumeUseCase.DeleteUserExperience(
+	res, err := h.resumeUseCase.DeleteExperience(
 		params["resumeId"],
 		params["userExperienceId"],
 	)

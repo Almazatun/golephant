@@ -31,11 +31,13 @@ func main() {
 	)
 	userHandler := handler.NewUserHandler(userUseCase)
 
-	// UserEducation
-	userEducationRepository := repository.NewUserEducationRepo(DB)
+	// Resume education
+	resumeEducationRepository := repository.NewResumeEducationRepo(DB)
+	resumeEducationUseCase := usecase.NewResumeEducationUseCase()
 
-	// UserExperience
-	userExperienceRepository := repository.NewUserExperienceRepo(DB)
+	// Resume experience
+	resumeExperienceRepository := repository.NewResumeExperienceRepo(DB)
+	resumeExperienceUseCase := usecase.NewResumeExperienceUseCase()
 
 	// Position type
 	positionTypeRepository := repository.NewPositionTypeRepo()
@@ -58,8 +60,11 @@ func main() {
 	resumeUseCase := usecase.NewResumeUseCase(
 		resumeRepository,
 		userRepository,
-		userEducationRepository,
-		userExperienceRepository,
+		resumeEducationRepository,
+		resumeExperienceRepository,
+		// use cases
+		resumeEducationUseCase,
+		resumeExperienceUseCase,
 	)
 	resumeHandler := handler.NewResumeHandler(
 		resumeUseCase,
