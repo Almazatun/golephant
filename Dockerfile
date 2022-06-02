@@ -8,7 +8,11 @@ COPY go.sum .
 
 COPY .env /app
 
-RUN go mod download
+COPY Makefile /app
+
+RUN apk update && apk add make
+
+RUN make install
 
 COPY . .
 
